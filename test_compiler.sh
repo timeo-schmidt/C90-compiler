@@ -75,15 +75,18 @@ for d in test/compiler_test_cases/*/ ; do
         compiler_target_file=$(echo "test/test_run_results$base_dir" | sed 's/\.c//g')
         mkdir -p test/test_run_results$(dirname $base_dir)
         echo "[Test] Compiling testcase to MIPS:    $testcase_file"
-
+        echo "bin/c_compiler -S $testcase_file -o ${compiler_target_file}.s"
+        echo "mips-linux-gnu-gcc -mfp32 -o "${compiler_target_file}.o" -c ${compiler_target_file}.s"
+        echo "mips-linux-gnu-gcc -mfp32 -static -o $compiler_target_file "${compiler_target_file}.o" $driver_file"
+        echo "qemu-system-mips $compiler_target_file"
         # Compiling the testcase using the C to MIPS compiler under test
-        bin/c_compiler -S $testcase_file -o ${compiler_target_file}.mipsasm
+        bin/c_compiler -S $testcase_file -o ${compiler_target_file}.s
         # Assembling the MIPS Assembly using gcc
-        mips-linux-gnu-gcc -mfp32 -o "${compiler_target_file}.o" -c ${compiler_target_file}.mipsasm
+        mips-linux-gnu-gcc -mfp32 -o "${compiler_target_file}.o" -c ${compiler_target_file}.s
         # Linking the MIPS-Assembled object file with the driver file using gcc
-        mips-linux-gnu-gcc -mfp32 -o $compiler_target_file "${compiler_target_file}.o" $driver_file
+        mips-linux-gnu-gcc -mfp32 -static -o $compiler_target_file "${compiler_target_file}.o" $driver_file
         # Simulating the assembled code on MIPS using the qemu mips emulator
-        qemu-system-mips $compiler_target_file
+        qemu-mips $compiler_target_file
         # If the test has passed, then the exit code should be zero
         if [[ $? -ne 0 ]]; then
             echo "[Test] Test-case FAILED!"
