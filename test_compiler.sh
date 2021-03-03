@@ -74,7 +74,7 @@ for d in test/compiler_test_cases/*/ ; do
         base_dir=$(echo "$testcase_file" | sed 's/test\/compiler_test_cases//')
         compiler_target_file=$(echo "test/test_run_results$base_dir" | sed 's/\.c//g')
         mkdir -p test/test_run_results$(dirname $base_dir)
-
+        echo "[Test] Running test for:  testcase_file$"
         # Compiling the testcase using the C to MIPS compiler under test
         bin/c_compiler -S $testcase_file -o ${compiler_target_file}.s
         # Assembling the MIPS Assembly using gcc
