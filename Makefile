@@ -11,4 +11,5 @@ bin/compiler : src/compiler.cpp
 
 clean :
 	rm -f src/*.o
-	rm -f bin/*
+	rm -rf bin/*
+	rm -rf test/test_run_results/*
