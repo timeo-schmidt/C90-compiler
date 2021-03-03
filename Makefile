@@ -1,4 +1,3 @@
-  
 CPPFLAGS += -std=c++17 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include
 
@@ -21,9 +20,11 @@ bin/c_compiler : src/compiler/compiler.o src/parser/parser.tab.o src/lexer/lexer
 bin/compiler : src/compiler/compiler.cpp
 	mkdir -p bin
 	g++ $(CPPFLAGS) -o bin/compiler $^
-	
+
 clean :
 	rm -f src/*.o
 	rm -f bin/*
 	rm src/*/*.tab.cpp
 	rm src/*/*.yy.cpp
+	rm -rf bin/*
+	rm -rf test/test_run_results/*
