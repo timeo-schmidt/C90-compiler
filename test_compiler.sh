@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# If this is set to 1, the compiler will use GCC for cross-compilation instead of our compiler
-USE_GCC=1
+# Check if the desired compiler is gcc, this flag is passed to test test cases.
+if [[ $1 == "gcc" ]]; then
+    echo "[Test] Using GCC to compile tests. Only the test-cases will be tested!"
+    USE_GCC=1
+else
+    USE_GCC=0
+fi
 
 # This is the script that tests our compiler on all the test cases
 # This file is mostly copied from the langproc lab section 3
@@ -91,3 +96,5 @@ done
 echo "########################################"
 echo "[Report] Passed ${PASSED} out of ${CHECKED}".
 echo ""
+
+# For Timeo: If wrong bison installation is used, run: export PATH="/usr/local/opt/bison/bin:$PATH"
