@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# If this is set to 1, the compiler will use GCC for cross-compilation instead of our compiler
+USE_GCC=1
+
 # This is the script that tests our compiler on all the test cases
 # This file is mostly copied from the langproc lab section 3
 
@@ -43,25 +46,8 @@ echo "========================================="
 PASSED=0
 CHECKED=0
 
-# The testing strategy:
-# 1 Go through all folders in the test_compiler_test_cases;
-# 2 The test works like this:
-
-    # I run the compiler on the test program, like so:
-    #
-    # bin/c_compiler -S test_program.c -o test_program.s
-    # I then use GCC to assemble the generated assembly program (test_program.s), like so:
-    #
-    # mips-linux-gnu-gcc -mfp32 -o test_program.o -c test_program.s
-    # I then use GCC to link the generated object file (test_program.o) with the driver program (test_program_driver.c), to produce an executable (test_program), like so:
-    #
-    # mips-linux-gnu-gcc -mfp32 -static -o test_program test_program.o test_program_driver.c
-    # I then use QEMU to simulate the executable on MIPS, like so:
-    #
-    # qemu-mips test_program
-    # This command should produce the exit code 0.
+# Clearing test folder
 rm -rf test/test_run_results
-
 mkdir -p test/test_run_results
 
 # go through the test_cases directories
@@ -75,12 +61,20 @@ for d in test/compiler_test_cases/*/ ; do
         compiler_target_file=$(echo "test/test_run_results$base_dir" | sed 's/\.c//g')
         mkdir -p test/test_run_results$(dirname $base_dir)
         echo "[Test] Running test for:  $testcase_file"
-        # Compiling the testcase using the C to MIPS compiler under test
-        bin/c_compiler -S $testcase_file -o ${compiler_target_file}.s
-        # Assembling the MIPS Assembly using gcc
-        mips-linux-gnu-gcc -mfp32 -o "${compiler_target_file}.o" -c ${compiler_target_file}.s
-        # Linking the MIPS-Assembled object file with the driver file using gcc
-        mips-linux-gnu-gcc -mfp32 -static -o $compiler_target_file "${compiler_target_file}.o" $driver_file
+
+        if [[ $USE_GCC -ne 0 ]]; then
+            echo "Using GCC to compile the test-cases"
+            mips-linux-gnu-gcc -mfp32 -static -o $compiler_target_file $testcase_file $driver_file
+        else
+            # Compiling the testcase using the C to MIPS compiler under test
+            bin/c_compiler -S $testcase_file -o ${compiler_target_file}.s
+            # Assembling the MIPS Assembly using gcc
+            mips-linux-gnu-gcc -mfp32 -o "${compiler_target_file}.o" -c ${compiler_target_file}.s
+            # Linking the MIPS-Assembled object file with the driver file using gcc
+            mips-linux-gnu-gcc -mfp32 -static -o $compiler_target_file "${compiler_target_file}.o" $driver_file
+            # Simulating the assembled code on MIPS using the qemu mips emulator
+        fi
+
         # Simulating the assembled code on MIPS using the qemu mips emulator
         qemu-mips $compiler_target_file
         # If the test has passed, then the exit code should be zero
