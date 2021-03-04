@@ -1,6 +1,8 @@
 #ifndef ast_unary_hpp
 #define ast_unary_hpp
 
+#include "reg_alloc.hpp"
+
 #include <string>
 #include <iostream>
 

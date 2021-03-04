@@ -1,8 +1,11 @@
 #ifndef ast_primitives_hpp
 #define ast_primitives_hpp
 
+#include "reg_alloc.hpp"
+
 #include <string>
 #include <iostream>
+
 
 class Variable
     : public Expression

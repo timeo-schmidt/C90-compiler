@@ -1,16 +1,12 @@
 #ifndef ast_operators_hpp
 #define ast_operators_hpp
 
+#include "reg_alloc.hpp"
+
 #include <string>
 #include <iostream>
 #include <cmath>
 
-static int makeNameUnq=0;
-
-static std::string makeName(std::string base)
-{
-    return "_"+base+"_"+std::to_string(makeNameUnq++);
-}
 
 class Operator
     : public Expression

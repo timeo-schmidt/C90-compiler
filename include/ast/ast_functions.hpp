@@ -2,6 +2,7 @@
 #define ast_functions_hpp
 
 #include "ast_expression.hpp"
+#include "reg_alloc.hpp"
 
 #include <cmath>
 

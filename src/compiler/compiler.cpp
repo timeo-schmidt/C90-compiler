@@ -6,7 +6,8 @@ int main(int argc, char *argv[])
 {
    const Expression *parsed=parseAST();
 
-    std::cout<<"its coming"<<std::endl;
+    std::cout<<std::endl<<"--- Assembly Code with infinate registers ---"<<std::endl<<std::endl;
+
     parsed->codegen();
     
 }
