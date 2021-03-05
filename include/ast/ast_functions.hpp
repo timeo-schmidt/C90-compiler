@@ -41,6 +41,10 @@ public:
         throw std::runtime_error("FunctionOperator::evaluate is not implemented.");
     }
 
+     virtual void codegen(
+         std::string destReg,
+         std::map<std::string,double> &bindings
+    ) const { throw std::runtime_error("Not implemented."); }
     
 };
 

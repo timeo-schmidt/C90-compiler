@@ -16,6 +16,8 @@
 [-]                         { return T_MINUS; }
 [/]                         { return T_DIVIDE;}
 
+[=]                         { return T_EQUALS;}
+
 [(]                         { return T_LBRACKET; }
 [)]                         { return T_RBRACKET; }
 
@@ -25,6 +27,8 @@ sqrt                        { return T_SQRT; }
 
 [0-9]+([.][0-9]*)?          { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 [a-z]+                      { yylval.string=new std::string(yytext); return T_VARIABLE; }
+[A-Z]+                      { yylval.string=new std::string(yytext); return T_TYPE; }
+
 
 
 [ \t\r\n]+		            {;}
