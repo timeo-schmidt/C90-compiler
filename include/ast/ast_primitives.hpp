@@ -58,6 +58,16 @@ public:
     {
         return value;
     }
+
+       virtual void codegen(
+         std::string destReg,
+         std::map<std::string,double> &bindings
+
+     ) const override
+     {
+        std::cout<<"const "<<destReg<<" "<<value<<std::endl;
+     }
+
 };
 
 

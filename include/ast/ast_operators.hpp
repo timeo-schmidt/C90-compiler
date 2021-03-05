@@ -66,11 +66,19 @@ public:
         return vl+vr;
     }
 
-     virtual void codegen() const override
+     virtual void codegen(
+         std::string destReg,
+         std::map<std::string,double> &bindings
+
+     ) const override
     {
         std::string srcRegA = makeName("srcRegA");
         std::string srcRegB = makeName("srcRegB");
-        std::cout<<"add "<<"destReg"<<" "<<srcRegA<<" "<<srcRegB<<std::endl;
+
+        getLeft()->codegen(srcRegA, bindings);
+        getRight()->codegen(srcRegB, bindings);
+
+        std::cout<<"add "<<destReg<<" "<<srcRegA<<" "<<srcRegB<<std::endl;
     }
 };
 
@@ -92,6 +100,21 @@ public:
         double vl=getLeft()->evaluate(bindings);
         double vr=getRight()->evaluate(bindings);
         return vl-vr;
+    }
+
+     virtual void codegen(
+         std::string destReg,
+         std::map<std::string,double> &bindings
+
+     ) const override
+    {
+        std::string srcRegA = makeName("srcRegA");
+        std::string srcRegB = makeName("srcRegB");
+
+        getLeft()->codegen(srcRegA, bindings);
+        getRight()->codegen(srcRegB, bindings);
+
+        std::cout<<"sub "<<destReg<<" "<<srcRegA<<" "<<srcRegB<<std::endl;
     }
 };
 

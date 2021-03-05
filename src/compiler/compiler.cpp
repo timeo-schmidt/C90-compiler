@@ -8,6 +8,15 @@ int main(int argc, char *argv[])
 
     std::cout<<std::endl<<"--- Assembly Code with infinate registers ---"<<std::endl<<std::endl;
 
-    parsed->codegen();
+    std::map<std::string,double> bindings;
+
+    bindings.insert(std::pair<std::string, double>("3", 3));
+    bindings.insert(std::pair<std::string, double>("-", 0));
+    bindings.insert(std::pair<std::string, double>("5", 5));
+
+
+
+
+    parsed->codegen("reg0", bindings);
     
 }

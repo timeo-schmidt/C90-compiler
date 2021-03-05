@@ -41,10 +41,6 @@ public:
         throw std::runtime_error("FunctionOperator::evaluate is not implemented.");
     }
 
-    virtual void codegen() const override
-    {
-        throw std::runtime_error("FunctionOperator::evaluate is not implemented.");
-    }
     
 };
 

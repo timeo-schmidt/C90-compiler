@@ -29,7 +29,10 @@ public:
     ) const
     { throw std::runtime_error("Not implemented."); }
 
-    virtual void codegen() const { throw std::runtime_error("Not implemented."); }
+    virtual void codegen(
+         std::string destReg,
+         std::map<std::string,double> &bindings
+    ) const { throw std::runtime_error("Not implemented."); }
 };
 
 
