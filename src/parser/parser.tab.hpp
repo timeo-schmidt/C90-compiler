@@ -66,14 +66,16 @@ extern int yydebug;
     T_PLUS = 260,
     T_MINUS = 261,
     T_EXPONENT = 262,
-    T_LBRACKET = 263,
-    T_RBRACKET = 264,
-    T_LOG = 265,
-    T_EXP = 266,
-    T_SQRT = 267,
-    T_NUMBER = 268,
-    T_VARIABLE = 269,
-    U_MINUS = 270
+    T_EQUALS = 263,
+    T_LBRACKET = 264,
+    T_RBRACKET = 265,
+    T_LOG = 266,
+    T_EXP = 267,
+    T_SQRT = 268,
+    T_NUMBER = 269,
+    T_VARIABLE = 270,
+    T_TYPE = 271,
+    U_MINUS = 272
   };
 #endif
 
@@ -88,7 +90,7 @@ union YYSTYPE
   double number;
   std::string *string;
 
-#line 92 "src/parser/parser.tab.hpp" /* yacc.c:1909  */
+#line 94 "src/parser/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

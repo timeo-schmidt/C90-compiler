@@ -72,13 +72,20 @@ public:
 
      ) const override
     {
-        std::string srcRegA = makeName("srcRegA");
+       /* std::string srcRegA = makeName("srcRegA");
         std::string srcRegB = makeName("srcRegB");
 
         getLeft()->codegen(srcRegA, bindings);
         getRight()->codegen(srcRegB, bindings);
 
         std::cout<<"add "<<destReg<<" "<<srcRegA<<" "<<srcRegB<<std::endl;
+
+        */
+
+       std::cout << "f:" << std::endl;
+       std::cout<< "add " << "$v0,$a0,$a1" << std::endl;
+       std::cout<< "jr $ra " << std::endl;
+
     }
 };
 
