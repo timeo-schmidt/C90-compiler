@@ -13,6 +13,12 @@ bin/generateAST : src/generateAST.o src/C90_parser.tab.o src/C90_lexer.yy.o
 	mkdir -p bin
 	g++ $(CPPFLAGS) -o bin/generateAST $^
 
+bin/c_compiler : src/compile.o src/C90_parser.tab.o src/C90_lexer.yy.o src/C90_parser.tab.o
+	mkdir -p bin
+	g++ $(CPPFLAGS) -o bin/compiler $^ 
+
+
+
 clean :
 	rm -rf src/*.o
 	rm -rf bin/*
