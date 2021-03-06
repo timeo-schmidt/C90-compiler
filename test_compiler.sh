@@ -39,8 +39,8 @@ echo "[Build] Cleaning the temporaries and outputs"
 make clean
 
 echo "========================================"
-echo "[Build] Force building compiler"
-make -B bin/c_compiler
+echo "[Build] Running make all"
+make all
 if [[ "$?" -ne "0" ]]; then
     echo "[Build] Error while building compiler."
     exit 1;

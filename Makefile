@@ -1,33 +1,22 @@
-CPPFLAGS += -std=c++17 -W -Wall -g -Wno-unused-parameter
+CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include
 
-$(OBJS): %.o : %.cpp
+all : bin/generateAST
 
-src/parser/parser.tab.cpp src/parser/parser.tab.hpp : src/parser/parser.y
-	bison -v -d src/parser/parser.y -o src/parser/parser.tab.cpp
+src/C90_parser.tab.cpp src/C90_parser.tab.hpp : src/C90_parser.y
+	bison -v -d src/C90_parser.y -o src/C90_parser.tab.cpp
 
-src/lexer/lexer.yy.cpp : src/lexer/lexer.flex src/parser/parser.tab.hpp
-	flex -o src/lexer/lexer.yy.cpp  src/lexer/lexer.flex
+src/C90_lexer.yy.cpp : src/C90_lexer.flex src/C90_parser.tab.hpp
+	flex -o src/C90_lexer.yy.cpp  src/C90_lexer.flex
 
-bin/print_canonical : src/parser/testing/print_canonical.o src/lexer/lexer.yy.o src/parser/parser.tab.o
+bin/generateAST : src/generateAST.o src/C90_parser.tab.o src/C90_lexer.yy.o
 	mkdir -p bin
-	g++ $(CPPFLAGS) -o bin/print_canonical $^
-
-bin/c_compiler : src/compiler/compiler.o src/lexer/lexer.yy.o src/parser/parser.tab.o
-	mkdir -p bin
-	g++ $(CPPFLAGS) -o bin/compiler $^
-
-bin/compiler : src/compiler/compiler.cpp
-	mkdir -p bin
-	g++ $(CPPFLAGS) -o bin/compiler $^
+	g++ $(CPPFLAGS) -o bin/generateAST $^
 
 clean :
 	rm -rf src/*.o
-	rm -rf src/compiler/*.o
-	rm -rf src/parser/*.o
-	rm -rf src/parser/*.output
 	rm -rf bin/*
-	rm -rf src/*/*.tab.cpp
-	rm -rf src/*/*.yy.cpp
-	rm -rf bin/*
-	rm -rf test/test_run_results/*
+	rm -rf src/*.tab.cpp
+	rm -rf src/*.tab.hpp
+	rm -rf src/*.output
+	rm -rf src/*.yy.cpp

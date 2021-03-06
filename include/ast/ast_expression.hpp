@@ -1,39 +1,28 @@
 #ifndef ast_expression_hpp
 #define ast_expression_hpp
 
-#include "reg_alloc.hpp"
-
-#include <string>
-#include <iostream>
-#include <map>
-
-#include <memory>
+#include "ast_node.hpp"
 
 
-class Expression;
-
-typedef const Expression *ExpressionPtr;
-
-class Expression
+class Expr
+    : public Node
 {
 public:
-    virtual ~Expression()
-    {}
+    std::string kind;
+    Expr *left;
+    Expr *right;
+    const char *name;
+    int integer_value;
+    std::string string_literal;
 
-    // Tell and expression to print itself to the given stream
-    virtual void print(std::ostream &dst) const =0;
-
-    // Evaluate the tree using the given mapping of variables to numbers
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const
-    { throw std::runtime_error("Not implemented."); }
-
-    virtual void codegen(
-         std::string destReg,
-         std::map<std::string,double> &bindings
-    ) const { throw std::runtime_error("Not implemented."); }
+    Expr(std::string kind_in, Expr *left_in, Expr *right_in, const char *name_in, int integer_value_in, std::string string_literal_in) {
+        kind=kind_in;
+        left=left_in;
+        right=right_in;
+        name=name_in;
+        integer_value=integer_value_in;
+        string_literal=string_literal_in;
+    }
 };
-
 
 #endif
