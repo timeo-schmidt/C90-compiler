@@ -3,19 +3,44 @@
 
 #include "ast_node.hpp"
 
+/*
+
+Usage of the Expr class:
+
+    --> document the use of various expression types here.
+
+    Examples:
+        !x
+        f(a,b,c)
+        a==b
+        a++
+        5
+        "abc"
+
+    Kinds:
+        EXPR_ADD
+        EXPR_SUB
+        EXPR_MUL
+        EXPR_DIV
+        EXPR_NOT
+        EXPR_NAME
+        EXPR_CONSTANT
+        EXPR_STRING_LITERAL
+
+*/
 
 class Expr
     : public Node
 {
 public:
-    std::string kind;
+    std::string *kind;
     Expr *left;
     Expr *right;
-    const char *name;
-    int integer_value;
-    std::string string_literal;
+    std::string *name;
+    double integer_value;
+    std::string *string_literal;
 
-    Expr(std::string kind_in, Expr *left_in, Expr *right_in, const char *name_in, int integer_value_in, std::string string_literal_in) {
+    Expr(std::string *kind_in, Expr *left_in, Expr *right_in, std::string *name_in, double integer_value_in, std::string *string_literal_in) {
         kind=kind_in;
         left=left_in;
         right=right_in;

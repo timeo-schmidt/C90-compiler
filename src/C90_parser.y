@@ -4,7 +4,8 @@
   #include <cassert>
   #include <string>
 
-  extern const Node *g_root; // A way of getting the AST out
+  typedef std::vector<Decl *> Program;
+  extern Program g_root;
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -39,19 +40,21 @@
 
 
 %type <number> constant_type CONSTANT
-%type <string> identifier_type IDENTIFIER string_literal_type STRING_LITERAL direct_declarator type_specifier
-%type <type> declaration_specifiers
-%type <decl> external_declaration declaration function_definition
+%type <string> identifier_type IDENTIFIER string_literal_type STRING_LITERAL direct_declarator type_specifier declarator
+%type <type> declaration_specifiers declaration
+%type <decl> external_declaration function_definition
+%type <expr> primary_expression postfix_expression unary_expression
+%type <stmt> compound_statement
 
-%start program_root
+%start program_start
 
 %%
 
 primary_expression
-    : identifier_type
-	| constant_type
-	| string_literal_type
-	| '(' expression ')'
+    : identifier_type       { $$=new Expr("EXPR_NAME", nullptr, nullptr, $1, 0.0, nullptr); }
+	| constant_type         { $$=new Expr("EXPR_CONSTANT", nullptr, nullptr, nullptr, $1, nullptr); }
+	| string_literal_type   { $$=new Expr("EXPR_STRING_LITERAL", nullptr, nullptr, nullptr, 0.0, $1); }
+	| '(' expression ')'    { ; }
 	;
 
 constant_type
@@ -196,7 +199,7 @@ constant_expression
 
 declaration
     : declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';'
+	| declaration_specifiers init_declarator_list ';'  { $$= }
 	;
 
 declaration_specifiers
@@ -301,18 +304,18 @@ type_qualifier
 	;
 
 declarator
-    : pointer direct_declarator
+    : pointer direct_declarator                         { $$=new std::string("pointers_not_implemented"); }
 	| direct_declarator
 	;
 
 direct_declarator
     : identifier_type                                   { $$=$1; }
-	| '(' declarator ')'                                { $$=new std::string("placeholder"); }
-	| direct_declarator '[' constant_expression ']'     { $$=new std::string("placeholder"); }
-	| direct_declarator '[' ']'                         { $$=new std::string("placeholder"); }
-	| direct_declarator '(' parameter_type_list ')'     { $$=new std::string("placeholder"); }
-	| direct_declarator '(' identifier_list ')'         { $$=new std::string("placeholder"); }
-	| direct_declarator '(' ')'                         { $$=new std::string("placeholder"); }
+	| '(' declarator ')'                                { ; }
+	| direct_declarator '[' constant_expression ']'     { ; }
+	| direct_declarator '[' ']'                         { ; }
+	| direct_declarator '(' parameter_type_list ')'     { ; }
+	| direct_declarator '(' identifier_list ')'         { ; }
+	| direct_declarator '(' ')'                         { $$=$1; }
 	;
 
 pointer
@@ -326,7 +329,6 @@ type_qualifier_list
     : type_qualifier
 	| type_qualifier_list type_qualifier
 	;
-
 
 parameter_type_list
     : parameter_list
@@ -398,21 +400,23 @@ labeled_statement
 	| DEFAULT ':' statement
 	;
 
+/* A compount statement is a Stmt */
 compound_statement
-    : '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
+    : '{' '}'                                   { $$=new Stmt(); }
+	| '{' statement_list '}'                    { $$=new Stmt(); }
+	| '{' declaration_list '}'                  { $$=$2; }
+	| '{' declaration_list statement_list '}'   { $$=new Stmt(); }
 	;
 
+/* Returns the root Stmt of the Stmt list */
 declaration_list
-    : declaration
-	| declaration_list declaration
+    : declaration                               { $$=$1; }
+	| declaration declaration_list              { $$=$1; $1->next=$2 }
 	;
 
 statement_list
-    : statement
-	| statement_list statement
+    : statement                     { $$=$1; }
+    | statement_list statement      { $$=$2; /* Implement the linked list */ }
 	;
 
 expression_statement
@@ -441,9 +445,9 @@ jump_statement
 	| RETURN expression ';'
 	;
 
-program_root
-    : external_declaration
-	| program_root external_declaration
+program_start
+    : external_declaration                  { g_root.push_back($1); }
+	| program_start external_declaration    { g_root.push_back($2); }
 	;
 
 external_declaration
@@ -452,19 +456,18 @@ external_declaration
 	;
 
 function_definition
-    : declaration_specififers declarator declaration_list compound_statement    { $$=new Decl(); }
-	| declaration_specifiers declarator compound_statement                      { $$=new Decl(); }
-	| declarator declaration_list compound_statement                            { $$=new Decl(); }
-	| declarator compound_statement                                             { $$=new Decl(); }
+    : declaration_specifiers declarator declaration_list compound_statement     { ; }
+	| declaration_specifiers declarator compound_statement                      { $$=new Decl($2, $1, nullptr, nullptr, nullptr); }
+	| declarator declaration_list compound_statement                            { ; }
+	| declarator compound_statement                                             { ; }
 	;
 
 %%
 
-const Node *g_root; // Definition of variable (to match declaration earlier)
+Program g_root;
 
-const Node *parseAST()
+Program parseAST()
 {
-    g_root=0;
     yyparse();
     return g_root;
 }

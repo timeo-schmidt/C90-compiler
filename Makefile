@@ -1,4 +1,4 @@
-CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
+CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter -Wdeprecated-register
 CPPFLAGS += -I include
 
 all : bin/generateAST
@@ -15,7 +15,7 @@ bin/generateAST : src/generateAST.o src/C90_parser.tab.o src/C90_lexer.yy.o
 
 bin/c_compiler : src/compile.o src/C90_parser.tab.o src/C90_lexer.yy.o src/C90_parser.tab.o
 	mkdir -p bin
-	g++ $(CPPFLAGS) -o bin/compiler $^ 
+	g++ $(CPPFLAGS) -o bin/compiler $^
 
 
 
