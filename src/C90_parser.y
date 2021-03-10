@@ -1,10 +1,10 @@
 %code requires{
   #include "ast.hpp"
-
+  
   #include <cassert>
   #include <string>
 
-  typedef std::vector<Decl *> Program;
+  typedef std::vector<Node *> Program;
   extern Program g_root;
 
   //! This is to fix problems when generating C++
@@ -17,11 +17,8 @@
 
 // Represents the value associated with any kind of AST node.
 %union{
-    Decl *decl;
-    Stmt *stmt;
-    Expr *expr;
+    Node *node;
     type *type;
-    param_list *param_list;
     std::string *string;
     double number;
 }
@@ -39,21 +36,19 @@
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <number> constant_type CONSTANT
-%type <string> identifier_type IDENTIFIER string_literal_type STRING_LITERAL direct_declarator type_specifier declarator
-%type <type> declaration_specifiers declaration
-%type <decl> external_declaration function_definition
-%type <expr> primary_expression postfix_expression unary_expression
-%type <stmt> compound_statement
+%type <node> external_declaration function_definition declarator direct_declarator
+%type <type> declaration_specifiers
+%type <string> STRING_LITERAL IDENTIFIER type_specifier identifier_type string_literal_type
+%type <number> CONSTANT constant_type
 
 %start program_start
 
 %%
 
 primary_expression
-    : identifier_type       { $$=new Expr("EXPR_NAME", nullptr, nullptr, $1, 0.0, nullptr); }
-	| constant_type         { $$=new Expr("EXPR_CONSTANT", nullptr, nullptr, nullptr, $1, nullptr); }
-	| string_literal_type   { $$=new Expr("EXPR_STRING_LITERAL", nullptr, nullptr, nullptr, 0.0, $1); }
+    : identifier_type       { ; }
+	| constant_type         { ; }
+	| string_literal_type   { ; }
 	| '(' expression ')'    { ; }
 	;
 
@@ -199,16 +194,16 @@ constant_expression
 
 declaration
     : declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';'  { $$= }
+	| declaration_specifiers init_declarator_list ';'  { ; }
 	;
 
 declaration_specifiers
-    : storage_class_specifier                           { $$=new type("NOT_IMPLEMENTED", nullptr, nullptr); }
-	| storage_class_specifier declaration_specifiers    { $$=new type("NOT_IMPLEMENTED", nullptr, nullptr); }
+    : storage_class_specifier                           { ; }
+	| storage_class_specifier declaration_specifiers    { ; }
 	| type_specifier                                    { $$=new type(*($1), nullptr, nullptr); }
-	| type_specifier declaration_specifiers             { $$=new type("NOT_IMPLEMENTED", nullptr, nullptr); }
-	| type_qualifier                                    { $$=new type("NOT_IMPLEMENTED", nullptr, nullptr); }
-	| type_qualifier declaration_specifiers             { $$=new type("NOT_IMPLEMENTED", nullptr, nullptr); }
+	| type_specifier declaration_specifiers             { ; }
+	| type_qualifier                                    { ; }
+	| type_qualifier declaration_specifiers             { ; }
 	;
 
 init_declarator_list
@@ -304,18 +299,18 @@ type_qualifier
 	;
 
 declarator
-    : pointer direct_declarator                         { $$=new std::string("pointers_not_implemented"); }
-	| direct_declarator
+    : pointer direct_declarator                         { ; }
+	| direct_declarator                                 { $$=$1; }
 	;
 
 direct_declarator
-    : identifier_type                                   { $$=$1; }
+    : identifier_type                                   { $$=generate_identifier($1); }
+    | identifier_type '(' ')'                           { $$=generate_identifier($1); } /* Check later! */
 	| '(' declarator ')'                                { ; }
 	| direct_declarator '[' constant_expression ']'     { ; }
 	| direct_declarator '[' ']'                         { ; }
 	| direct_declarator '(' parameter_type_list ')'     { ; }
 	| direct_declarator '(' identifier_list ')'         { ; }
-	| direct_declarator '(' ')'                         { $$=$1; }
 	;
 
 pointer
@@ -400,23 +395,21 @@ labeled_statement
 	| DEFAULT ':' statement
 	;
 
-/* A compount statement is a Stmt */
 compound_statement
-    : '{' '}'                                   { $$=new Stmt(); }
-	| '{' statement_list '}'                    { $$=new Stmt(); }
-	| '{' declaration_list '}'                  { $$=$2; }
-	| '{' declaration_list statement_list '}'   { $$=new Stmt(); }
+    : '{' '}'                                   { ; }
+	| '{' statement_list '}'                    { ; }
+	| '{' declaration_list '}'                  { ; }
+	| '{' declaration_list statement_list '}'   { ; }
 	;
 
-/* Returns the root Stmt of the Stmt list */
 declaration_list
-    : declaration                               { $$=$1; }
-	| declaration declaration_list              { $$=$1; $1->next=$2 }
+    : declaration                               { ; }
+	| declaration declaration_list              { ; }
 	;
 
 statement_list
-    : statement                     { $$=$1; }
-    | statement_list statement      { $$=$2; /* Implement the linked list */ }
+    : statement                     { ; }
+    | statement_list statement      { ; }
 	;
 
 expression_statement
@@ -457,7 +450,7 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement     { ; }
-	| declaration_specifiers declarator compound_statement                      { $$=new Decl($2, $1, nullptr, nullptr, nullptr); }
+	| declaration_specifiers declarator compound_statement                      { $$=generate_function_definition($1, $2, nullptr); }
 	| declarator declaration_list compound_statement                            { ; }
 	| declarator compound_statement                                             { ; }
 	;

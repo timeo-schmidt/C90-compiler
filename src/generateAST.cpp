@@ -12,7 +12,7 @@ void print_tree(Program prog) {
 int main()
 {
 
-    typedef std::vector<Decl *> Program;
+    typedef std::vector<Node *> Program;
 
     // Parse the AST
     Program ast=parseAST();
