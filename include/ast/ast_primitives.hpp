@@ -32,6 +32,21 @@ public:
         // If the binding does not exist, this will throw an error
         return bindings.at(id);
     }    
+
+    virtual void codegen(
+         std::string destReg,
+         stackData stack,
+         std::map<std::string,double> &bindings,
+         std::map<std::string,double> &variables
+    ) const
+    {
+    // find variable stack location
+    double location = variables.at("a");
+
+    // load into register 
+    std::cout << "lw "<< destReg << ", "<< location << "($sp)" << std::endl;
+    }
+
 };
 
 class Number
@@ -59,14 +74,15 @@ public:
         return value;
     }
 
-       virtual void codegen(
+     virtual void codegen(
          std::string destReg,
-         std::map<std::string,double> &bindings
+         stackData stack,
+         std::map<std::string,double> &bindings,
+         std::map<std::string,double> &variables
+    ) const { 
 
-     ) const override
-     {
-        std::cout<<"const "<<destReg<<" "<<value<<std::endl;
-     }
+            std::cout << "addiu " << destReg << ", $0, " << getValue() << std::endl;
+    }
 
 };
 

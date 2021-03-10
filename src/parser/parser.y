@@ -21,7 +21,7 @@
 }
 
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT T_EQUALS
-%token T_LBRACKET T_RBRACKET
+%token T_LBRACKET T_RBRACKET T_OPEN T_CLOSE
 %token T_LOG T_EXP T_SQRT 
 %token T_NUMBER T_VARIABLE T_TYPE
 
@@ -57,7 +57,9 @@ TERM : TERM T_TIMES TERM                    { $$ = new MulOperator($1, $3); }
      | TERM T_EXPONENT TERM                 { $$ = new ExpOperator($1, $3); }
 
 DECLARATION : TYPE VARIABLE T_EQUALS TERM   { $$ = new VarDeclaration( $1, $2, $4, $4); }
- 
+            | VARIABLE T_LBRACKET T_RBRACKET T_OPEN EXPR T_CLOSE  { $$ = new FuncDeclaration($1, $1, $5, $5); }
+            | VARIABLE T_LBRACKET T_RBRACKET T_OPEN  T_CLOSE  { $$ = new FuncDeclaration($1, $1, nullptr, nullptr); }
+            
 
 
 

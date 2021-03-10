@@ -44,6 +44,13 @@ public:
         right->print(dst);
         dst<<" )";
     }
+
+    virtual void codegen(
+         std::string destReg,
+         stackData stack,
+         std::map<std::string,double> &bindings,
+         std::map<std::string,double> &variables
+    ) const { throw std::runtime_error("Not implemented."); }
 };
 
 class AddOperator
@@ -66,26 +73,21 @@ public:
         return vl+vr;
     }
 
-     virtual void codegen(
+    virtual void codegen(
          std::string destReg,
-         std::map<std::string,double> &bindings
+         stackData stack,
+         std::map<std::string,double> &bindings,
+         std::map<std::string,double> &variables
+    ) const { 
 
-     ) const override
-    {
-       /* std::string srcRegA = makeName("srcRegA");
-        std::string srcRegB = makeName("srcRegB");
+            // Getting left side of addition 
+            getLeft()->codegen("$s0", stack, bindings, variables);
+            // Getting left side of addition 
+            getRight()->codegen("$s1", stack, bindings, variables);
+            // Loading in variables 
 
-        getLeft()->codegen(srcRegA, bindings);
-        getRight()->codegen(srcRegB, bindings);
-
-        std::cout<<"add "<<destReg<<" "<<srcRegA<<" "<<srcRegB<<std::endl;
-
-        */
-
-       std::cout << "f:" << std::endl;
-       std::cout<< "add " << "$v0,$a0,$a1" << std::endl;
-       std::cout<< "jr $ra " << std::endl;
-
+            // getting sum and storing in memory 
+            std::cout << "add " << destReg <<", $s1, $s0" << std::endl;
     }
 };
 
@@ -111,18 +113,10 @@ public:
 
      virtual void codegen(
          std::string destReg,
-         std::map<std::string,double> &bindings
-
-     ) const override
-    {
-        std::string srcRegA = makeName("srcRegA");
-        std::string srcRegB = makeName("srcRegB");
-
-        getLeft()->codegen(srcRegA, bindings);
-        getRight()->codegen(srcRegB, bindings);
-
-        std::cout<<"sub "<<destReg<<" "<<srcRegA<<" "<<srcRegB<<std::endl;
-    }
+         stackData stack,
+         std::map<std::string,double> &bindings,
+         std::map<std::string,double> &variables
+    ) const { throw std::runtime_error("Not implemented."); }
 };
 
 

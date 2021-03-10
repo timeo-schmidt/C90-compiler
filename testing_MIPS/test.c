@@ -1,7 +1,8 @@
-int f(int x, int y);
+int f();
 
 int main()
 {
     
-    return (!(f(6, 2)==8));
+    return !(f()==4);
+
 }

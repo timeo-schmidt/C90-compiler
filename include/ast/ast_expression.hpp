@@ -9,6 +9,14 @@
 
 #include <memory>
 
+struct stackData
+{
+	int32_t stackSize;
+	int32_t stackOffset;
+};
+
+
+
 
 class Expression;
 
@@ -31,7 +39,9 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         std::map<std::string,double> &bindings
+         stackData stack,
+         std::map<std::string,double> &bindings,
+         std::map<std::string,double> &variables
     ) const { throw std::runtime_error("Not implemented."); }
 };
 

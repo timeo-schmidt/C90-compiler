@@ -20,6 +20,8 @@
 
 [(]                         { return T_LBRACKET; }
 [)]                         { return T_RBRACKET; }
+[{]                         { return T_OPEN;}
+[}]                         { return T_CLOSE;}
 
 log                         { return T_LOG; }
 exp                         { return T_EXP; }
