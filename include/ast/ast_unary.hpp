@@ -32,6 +32,14 @@ public:
         expr->print(dst);
         dst << " )";
     }
+
+    virtual void codegen(
+         std::string destReg,
+         stackData stack,
+         std::map<std::string,double> &bindings,
+	     std::unordered_map<std::string,struct varData> &variables
+    ) const { throw std::runtime_error("Not implemented."); } 
+
 };
 
 class NegOperator

@@ -68,7 +68,7 @@ public:
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { throw std::runtime_error("Not implemented."); } 
+    ) const =0; 
 
 
 
