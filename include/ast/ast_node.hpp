@@ -3,6 +3,10 @@
 
 #include <string>
 #include <iostream>
+#include <unordered_map>
+#include <map>
+
+
 
 // Auxillary struct types
 struct type {
@@ -26,6 +30,21 @@ struct param_list {
     }
 };
 
+struct stackData
+{
+	int32_t stackSize;   // Stores size of stack frame, need to find way of determining this
+	int32_t stackOffset; // Stores offset value of the lowest free memory 
+};
+
+struct varData
+{
+	int32_t offset;   
+	int32_t memSize;
+};
+
+
+
+
 class Node;
 
 typedef const Node *NodePtr;
@@ -40,73 +59,21 @@ class Node
 {
 public:
 
-    kind_t kind;
-    std::string *name;
-    struct type *type;
-    Node *next;
-
-    // Stmt
-    Node *decl;
-    Node *init_expr;
-    Node *expr;
-    Node *next_expr;
-    Node *body;
-    Node *else_body;
-
-    // Expr
-    Node *left;
-    Node *right;
-
-    // Decl
-    Node *value;
-    Node *code;
-
-
-    double integer_value;
-    std::string *string_literal;
-
     virtual ~Node() {}
 
-    Node(
-        kind_t kind_in,
-        std::string *name_in,
-        struct type *type_in,
-        Node *next_in,
-        Node *decl_in,
-        Node *init_expr_in,
-        Node *expr_in,
-        Node *next_expr_in,
-        Node *body_in,
-        Node *else_body_in,
-        Node *left_in,
-        Node *right_in,
-        Node *value_in,
-        Node *code_in,
-        double integer_value_in,
-        std::string *string_literal_in
-    ){
-        kind=kind_in;
-        name=name_in;
-        type=type_in;
-        next=next_in;
-        decl=decl_in;
-        init_expr=init_expr_in;
-        expr=expr_in;
-        next_expr=next_expr_in;
-        body=body_in;
-        else_body=else_body_in;
-        left=left_in;
-        right=right_in;
-        value=value_in;
-        code=code_in;
-        integer_value=integer_value_in;
-        string_literal=string_literal_in;
-    }
-    Node() {}
+    virtual void print(std::ostream &dst) const =0;
+
+    virtual void codegen(
+         std::string destReg,
+         stackData stack,
+         std::map<std::string,double> &bindings,
+	     std::unordered_map<std::string,struct varData> &variables
+    ) const { throw std::runtime_error("Not implemented."); } 
+
+
+
 };
 
-Node *generate_identifier(std::string *name);
 
-Node *generate_function_definition(type *type, Node* name, Node *code);
 
 #endif

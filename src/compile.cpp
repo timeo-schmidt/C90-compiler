@@ -2,21 +2,29 @@
 
 #include <fstream>
 
+
+
+
 int main(int argc, char *argv[])
 {
-   const Node *parsed=parseAST();
+  typedef std::vector< Node *> Program;
 
-    //std::cout<<std::endl<<"--- Assembly Code with infinate registers ---"<<std::endl<<std::endl;
+    // Parse the AST
+    Program ast=parseAST();
+
+
+
 
     std::map<std::string,double> bindings;
+    std::unordered_map<std::string,struct varData> variables;
 
-    bindings.insert(std::pair<std::string, double>("3", 3));
-    bindings.insert(std::pair<std::string, double>("-", 0));
-    bindings.insert(std::pair<std::string, double>("5", 5));
+    struct stackData stack; 
+    stack.stackSize = -64; 
+	stack.stackOffset = 0;
 
+for(auto const& decl_node: ast) {
+         (decl_node->codegen("$s5", stack, bindings, variables));
+    }
 
-
-
-    parsed->CodeGen("reg0", bindings);
     
 }

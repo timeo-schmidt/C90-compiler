@@ -18,12 +18,12 @@
 // Represents the value associated with any kind of AST node.
 %union{
     Node *node;
-    type *type;
+    struct type *type;
     std::string *string;
     double number;
 }
 
-%token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
+%token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF NUMBER
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
 %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
@@ -36,34 +36,33 @@
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration function_definition declarator direct_declarator
-%type <type> declaration_specifiers
-%type <string> STRING_LITERAL IDENTIFIER type_specifier identifier_type string_literal_type
-%type <number> CONSTANT constant_type
+%type <node> external_declaration function_definition declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
+%type <number> CONSTANT 
 
 %start program_start
 
 %%
 
 primary_expression
-    : identifier_type       { ; }
-	| constant_type         { ; }
+    : identifier_type       { $$ = $1; }
+	| constant_type         { $$ = $1; }
 	| string_literal_type   { ; }
 	| '(' expression ')'    { ; }
 	;
 
 constant_type
-    : CONSTANT         { $$=$1; }
+    : CONSTANT         { $$ = new Number( $1 ); }
     ;
 
 identifier_type
-    : IDENTIFIER       { $$=$1; }
+    : IDENTIFIER       { $$ = new Variable( *$1 ); delete $1; }
 
 string_literal_type
-    : STRING_LITERAL   { $$=$1; }
+    : STRING_LITERAL   { ; }
 
 postfix_expression
-    : primary_expression
+    : primary_expression											{ $$=$1; }
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
 	| postfix_expression '(' argument_expression_list ')'
@@ -79,98 +78,98 @@ argument_expression_list
 	;
 
 unary_expression
-    : postfix_expression
+    : postfix_expression									{ $$ = $1; }
 	| INC_OP unary_expression
 	| DEC_OP unary_expression
-	| unary_operator cast_expression
+	| unary_operator cast_expression						{ $$ = new UnaryExpression(*$1, $2); delete $1; }
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
 	;
 
 unary_operator
-    : '&'
-	| '*'
-	| '+'
-	| '-'
-	| '~'
-	| '!'
+    : '&'													{$$=new std::string("&");}
+	| '*'													{$$=new std::string("*");}
+	| '+'													{$$=new std::string("+");}
+	| '-'													{$$=new std::string("-");}
+	| '~'													{$$=new std::string("~");}
+	| '!'													{$$=new std::string("!");}
 	;
 
 cast_expression
-    : unary_expression
-	| '(' type_name ')' cast_expression
+    : unary_expression											{$$ = $1;}
+	| '(' type_name ')' cast_expression							
 	;
 
 multiplicative_expression
-    : cast_expression
-	| multiplicative_expression '*' cast_expression
-	| multiplicative_expression '/' cast_expression
-	| multiplicative_expression '%' cast_expression
+    : cast_expression											{ $$ = $1;}
+	| multiplicative_expression '*' cast_expression 			{ $$ = new MulOperator($1, $3); }
+	| multiplicative_expression '/' cast_expression				{ $$ = new DivOperator($1, $3); }
+	| multiplicative_expression '%' cast_expression				
 	;
 
 additive_expression
-    : multiplicative_expression
-	| additive_expression '+' multiplicative_expression
-	| additive_expression '-' multiplicative_expression
+    : multiplicative_expression									{$$ = $1;}
+	| additive_expression '+' multiplicative_expression 		{$$ = new AddOperator($1, $3);}
+	| additive_expression '-' multiplicative_expression			{$$ = new SubOperator($1, $3);} 
 	;
 
 shift_expression
-    : additive_expression
-	| shift_expression LEFT_OP additive_expression
-	| shift_expression RIGHT_OP additive_expression
+    : additive_expression										{$$ = $1;}
+	| shift_expression LEFT_OP additive_expression				{$$ = new LShiftOperator($1, $3);}
+	| shift_expression RIGHT_OP additive_expression				{$$ = new RShiftOperator($1, $3);}
 	;
 
 relational_expression
-    : shift_expression
-	| relational_expression '<' shift_expression
+    : shift_expression											{$$ = $1;}
+	| relational_expression '<' shift_expression			
 	| relational_expression '>' shift_expression
 	| relational_expression LE_OP shift_expression
 	| relational_expression GE_OP shift_expression
 	;
 
 equality_expression
-    : relational_expression
+    : relational_expression										{$$ = $1;}	
 	| equality_expression EQ_OP relational_expression
 	| equality_expression NE_OP relational_expression
 	;
 
-and_expression
-    : equality_expression
+and_expression													
+    : equality_expression										{$$ = $1;}	
 	| and_expression '&' equality_expression
 	;
 
 exclusive_or_expression
-    : and_expression
+    : and_expression											{$$ = $1;}
 	| exclusive_or_expression '^' and_expression
 	;
 
 inclusive_or_expression
-    : exclusive_or_expression
+    : exclusive_or_expression									{$$ = $1;}
 	| inclusive_or_expression '|' exclusive_or_expression
 	;
 
 logical_and_expression
-    : inclusive_or_expression
+    : inclusive_or_expression									{$$ = $1;}
 	| logical_and_expression AND_OP inclusive_or_expression
 	;
 
 logical_or_expression
-    : logical_and_expression
+    : logical_and_expression									{$$ = $1;}
 	| logical_or_expression OR_OP logical_and_expression
 	;
 
 conditional_expression
-    : logical_or_expression
+    : logical_or_expression														{$$ = $1;}
 	| logical_or_expression '?' expression ':' conditional_expression
 	;
 
 assignment_expression
-    : conditional_expression
+    : conditional_expression													{$$ = $1;}
 	| unary_expression assignment_operator assignment_expression
 	;
 
 assignment_operator
-    : '='
+    : '='															{  $$=new std::string("="); }
 	| MUL_ASSIGN
 	| DIV_ASSIGN
 	| MOD_ASSIGN
@@ -184,36 +183,41 @@ assignment_operator
 	;
 
 expression
-    : assignment_expression
+    : assignment_expression											{$$ = $1;}	
 	| expression ',' assignment_expression
 	;
 
 constant_expression
-    : conditional_expression
+    : conditional_expression										{$$ = $1;}
 	;
 
+
+
+
+
+
 declaration
-    : declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';'  { ; }
+    : declaration_specifiers ';'									 { $$=new VarDecl($1, nullptr, nullptr, nullptr, nullptr); }
+	| declaration_specifiers init_declarator_list ';'  { ; }		 { $$=new VarDecl($1, $2, nullptr, nullptr, nullptr);  }
 	;
 
 declaration_specifiers
     : storage_class_specifier                           { ; }
 	| storage_class_specifier declaration_specifiers    { ; }
-	| type_specifier                                    { $$=new type(*($1), nullptr, nullptr); }
+	| type_specifier                                    { $$=new Variable( *$1 ); delete $1; }
 	| type_specifier declaration_specifiers             { ; }
 	| type_qualifier                                    { ; }
 	| type_qualifier declaration_specifiers             { ; }
 	;
 
 init_declarator_list
-    : init_declarator
+    : init_declarator												{$$ = $1;}
 	| init_declarator_list ',' init_declarator
 	;
 
 init_declarator
-    : declarator
-	| declarator '=' initializer
+    : declarator													{$$ = $1;}
+	| declarator '=' initializer									{$$ = new VarDecl(nullptr, $1, $3, nullptr, nullptr); }
 	;
 
 storage_class_specifier
@@ -304,8 +308,8 @@ declarator
 	;
 
 direct_declarator
-    : identifier_type                                   { $$=generate_identifier($1); }
-    | identifier_type '(' ')'                           { $$=generate_identifier($1); } /* Check later! */
+    : identifier_type                                   { $$= $1; }
+    | identifier_type '(' ')'                           { $$= $1; /* Check later! */} 
 	| '(' declarator ')'                                { ; }
 	| direct_declarator '[' constant_expression ']'     { ; }
 	| direct_declarator '[' ']'                         { ; }
@@ -370,7 +374,7 @@ direct_abstract_declarator
 	;
 
 initializer
-    : assignment_expression
+    : assignment_expression									{ $$ = $1; }
 	| '{' initializer_list '}'
 	| '{' initializer_list ',' '}'
 	;
@@ -383,7 +387,7 @@ initializer_list
 statement
     : labeled_statement
 	| compound_statement
-	| expression_statement
+	| expression_statement									{$$ = $1;}
 	| selection_statement
 	| iteration_statement
 	| jump_statement
@@ -396,25 +400,25 @@ labeled_statement
 	;
 
 compound_statement
-    : '{' '}'                                   { ; }
-	| '{' statement_list '}'                    { ; }
-	| '{' declaration_list '}'                  { ; }
+    : '{' '}'                                   { $$ = new Variable("{ }"); }
+	| '{' statement_list '}'                    { $$ = $2; }
+	| '{' declaration_list '}'                  { $$ = $2; }
 	| '{' declaration_list statement_list '}'   { ; }
 	;
 
 declaration_list
-    : declaration                               { ; }
+    : declaration                               { $$=$1; }
 	| declaration declaration_list              { ; }
 	;
 
 statement_list
-    : statement                     { ; }
+    : statement                     { $$ = $1; }
     | statement_list statement      { ; }
 	;
 
 expression_statement
-    : ';'
-	| expression ';'
+    : ';'							
+	| expression ';'				{$$ = $1;}
 	;
 
 selection_statement
@@ -450,7 +454,7 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement     { ; }
-	| declaration_specifiers declarator compound_statement                      { $$=generate_function_definition($1, $2, nullptr); }
+	| declaration_specifiers declarator compound_statement                      { $$= new FuncDecl($1, $2, nullptr, $3, nullptr); }
 	| declarator declaration_list compound_statement                            { ; }
 	| declarator compound_statement                                             { ; }
 	;
