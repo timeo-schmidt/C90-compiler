@@ -71,7 +71,7 @@ public:
             // Getting left side of addition 
            getLeft()->codegen("$s0", stack, bindings, variables);
             // Getting left side of addition 
-            getLeft()->codegen("$s1", stack, bindings, variables);
+            getRight()->codegen("$s1", stack, bindings, variables);
 
             // getting sum and storing destReg
             std::cout << "add " << destReg <<", $s1, $s0" << std::endl;

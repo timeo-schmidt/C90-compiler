@@ -13,6 +13,7 @@
 class Decl
     : public Node
 {
+
 public:
 
     NodePtr type;
@@ -21,7 +22,7 @@ public:
     NodePtr code;
     NodePtr next;
 
-    protected: 
+ 
     
         Decl( NodePtr _type,  NodePtr _name, NodePtr _value, NodePtr _code, NodePtr _next)
             : type(_type)
@@ -43,10 +44,6 @@ public:
     NodePtr getType() const
     { return type; }
     
-    NodePtr getName() const
-    { return name; }
-
-
     NodePtr getValue() const
     { return value; }
 
@@ -155,9 +152,7 @@ public:
 
         // check if a code is nullptr for f(){} case
 				if(code != nullptr)
-				{ code->codegen(destReg, stack, bindings, variables); }
-
-        std::cout << "move $v0, " << destReg << std::endl;
+				{code->codegen(destReg, stack, bindings, variables); }
 
         std::cout << "nop" << std::endl;
         std::cout << "lw $s0, 4($sp)" << std::endl;
@@ -186,6 +181,7 @@ public:
         std::cout << ".global ";
         name->print(std::cout);
         std::cout << std::endl;
+        
      } 
 
 };
@@ -225,24 +221,93 @@ public:
     ) const { 
 
         //Putting assignment value in $s0
-        if(type != nullptr)
-        { type->codegen("$s0", stack, bindings, variables); }
-        if(value != nullptr)
-        { value->codegen("$s0", stack, bindings, variables); }
-        else
-        { std::cout<< "add $s0, $0, $0 " << std::endl; }
+        
+       // TO DO: impliment the types, then un comment this stuff
+        
+        //if(type != nullptr)
+        //{ type->codegen("$s0", stack, bindings, variables); }
+        
+        if(name != nullptr)
+        { name->codegen("$s0", stack, bindings, variables); }
 
         std::cout << "sw $s0, " << stack.stackOffset << "($sp)" << std::endl;
 
+         // Storing variable name in variables and type TODO
         struct varData a; 
         a.offset = stack.stackOffset; 
         a.memSize = 1;
-        variables["test_name"] = a;
+        variables[name->getName()] = a;
 
         stack.stackOffset += 4;
+
+
 }
+};
 
 
+
+class initDecl
+    : public Node
+{
+public:
+
+    NodePtr declerator;
+    NodePtr initilizer;
+ 
+
+
+    initDecl(NodePtr _declerator, NodePtr _initilizer )
+            : declerator(_declerator)
+            , initilizer(_initilizer) 
+        {}
+
+ 
+
+    virtual ~initDecl() 
+    {
+        delete declerator;
+        delete initilizer;
+    }
+
+    NodePtr getDeclerator() const
+    { return declerator; }
+    
+    NodePtr getInitilizer() const
+    { return initilizer; }
+
+  virtual std::string getName() const override
+    {
+        return declerator->getName();
+    }
+
+  
+   virtual void print(std::ostream &dst) const override
+    { 
+      if(declerator != nullptr)
+      { declerator->print(dst); }
+    }
+
+    virtual void codegen(
+         std::string destReg,
+         stackData stack,
+         std::map<std::string,double> &bindings,
+	     std::unordered_map<std::string,struct varData> &variables
+    ) const { 
+
+
+      // Getting initiliser and loading into $s0
+        if(initilizer != nullptr)
+        { initilizer->codegen("$s0", stack, bindings, variables); }
+        else
+        { std::cout<<"addiu $s0, $0, $0"<<std::endl;}
+
+
+
+
+
+     } 
+
+    
 };
 
 

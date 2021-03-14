@@ -44,7 +44,6 @@ struct varData
 
 
 
-
 class Node;
 
 typedef const Node *NodePtr;
@@ -55,6 +54,9 @@ typedef enum {
 } kind_t;
 
 
+
+
+
 class Node
 {
 public:
@@ -62,6 +64,9 @@ public:
     virtual ~Node() {}
 
     virtual void print(std::ostream &dst) const =0;
+
+    virtual std::string getName() const { throw std::runtime_error("getName() is not implemented."); }
+
 
     virtual void codegen(
          std::string destReg,

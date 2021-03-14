@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-  typedef std::vector< Node *> Program;
+typedef std::vector<Node *> Program;
 
     // Parse the AST
     Program ast=parseAST();
@@ -23,8 +23,12 @@ int main(int argc, char *argv[])
 	stack.stackOffset = 0;
 
 for(auto const& decl_node: ast) {
-         (decl_node->codegen("$s5", stack, bindings, variables));
-    }
+         (decl_node->codegen("$s0", stack, bindings, variables));
+}
+
+// extracting variable information
+//for(const auto& u : variables)
+//{ std::cout<<u.first <<std::endl;}
 
     
 }

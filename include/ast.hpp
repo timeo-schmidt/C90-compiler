@@ -11,8 +11,10 @@
 #include "ast/ast_primitives.hpp"
 #include "ast/ast_type.hpp"
 #include "ast/ast_unary.hpp"
+#include "ast/ast_statement.hpp"
 
 
+#include "ast/unique_name.hpp"
 
 typedef std::vector<Node *> Program;
 

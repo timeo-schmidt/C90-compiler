@@ -22,6 +22,11 @@ public:
         dst<<id;
     }  
 
+    virtual std::string getName() const override
+    {
+        return id;
+    }
+
      virtual void codegen(
          std::string destReg,
          stackData stack,
@@ -32,7 +37,7 @@ public:
             // find variable stack location and TO DO:check size of variable but should check type...
             struct varData info;
             
-           info = variables.at("test_name");
+           info = variables.at(id);
            int32_t location = info.offset;
             // load into register 
             std::cout << "lw "<< destReg << ", "<< location << "($sp)" << std::endl;

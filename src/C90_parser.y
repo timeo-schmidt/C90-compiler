@@ -4,7 +4,7 @@
   #include <cassert>
   #include <string>
 
-  typedef std::vector<Node *> Program;
+typedef std::vector<Node *> Program;
   extern Program g_root;
 
   //! This is to fix problems when generating C++
@@ -36,7 +36,7 @@
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration function_definition declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <node> external_declaration function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
 %type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
 %type <number> CONSTANT 
 
@@ -48,7 +48,7 @@ primary_expression
     : identifier_type       { $$ = $1; }
 	| constant_type         { $$ = $1; }
 	| string_literal_type   { ; }
-	| '(' expression ')'    { ; }
+	| '(' expression ')'    { $$ = $2; }
 	;
 
 constant_type
@@ -217,7 +217,7 @@ init_declarator_list
 
 init_declarator
     : declarator													{$$ = $1;}
-	| declarator '=' initializer									{$$ = new VarDecl(nullptr, $1, $3, nullptr, nullptr); }
+	| declarator '=' initializer									{$$ = new initDecl($1, $3); }
 	;
 
 storage_class_specifier
@@ -400,8 +400,7 @@ labeled_statement
 	;
 
 compound_statement
-    : '{' '}'                                   { $$ = new Variable("{ }"); }
-	| '{' statement_list '}'                    { $$ = $2; }
+    : '{' statement_list '}'                    { $$ = $2; }
 	| '{' declaration_list '}'                  { $$ = $2; }
 	| '{' declaration_list statement_list '}'   { ; }
 	;
@@ -422,8 +421,8 @@ expression_statement
 	;
 
 selection_statement
-    : IF '(' expression ')' statement
-	| IF '(' expression ')' statement ELSE statement
+    : IF '(' expression ')' statement					{ $$ = new IfElseState($3, $5, nullptr);}
+	| IF '(' expression ')' statement ELSE statement	{ $$ = new IfElseState($3, $5, $7);}
 	| SWITCH '(' expression ')' statement
 	;
 
@@ -438,8 +437,8 @@ jump_statement
     : GOTO IDENTIFIER ';'
 	| CONTINUE ';'
 	| BREAK ';'
-	| RETURN ';'
-	| RETURN expression ';'
+	| RETURN ';'							{$$ = new returnState(nullptr);}
+	| RETURN expression ';'					{$$ = new returnState($2);}
 	;
 
 program_start
@@ -448,13 +447,14 @@ program_start
 	;
 
 external_declaration
-    : function_definition
-	| declaration
+    : function_definition					{ $$ = $1;}
+	| declaration							{ $$ = $1;}
 	;
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement     { ; }
 	| declaration_specifiers declarator compound_statement                      { $$= new FuncDecl($1, $2, nullptr, $3, nullptr); }
+	| declaration_specifiers declarator '{' '}'                                 { $$ = new FuncDecl($1, $2, nullptr, nullptr, nullptr); }
 	| declarator declaration_list compound_statement                            { ; }
 	| declarator compound_statement                                             { ; }
 	;
