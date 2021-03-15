@@ -18,9 +18,8 @@ typedef std::vector<Node *> Program;
     std::map<std::string,double> bindings;
     std::unordered_map<std::string,struct varData> variables;
 
-    struct stackData stack; 
-    stack.stackSize = -64; 
-	stack.stackOffset = 0;
+    struct mem stack; 
+    *stack.Size = -56; 
 
 for(auto const& decl_node: ast) {
          (decl_node->codegen("$s0", stack, bindings, variables));

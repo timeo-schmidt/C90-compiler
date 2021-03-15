@@ -29,7 +29,7 @@ public:
 
      virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { 
@@ -40,7 +40,14 @@ public:
            info = variables.at(id);
            int32_t location = info.offset;
             // load into register 
-            std::cout << "lw "<< destReg << ", "<< location << "($sp)" << std::endl;
+            std::cout << "lw $0, "<< location << "($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
+            std::cout << "sw $s0, " << *stack.size << "($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
+
+            *stack.size += 4;
+
+         
     }
 
       
@@ -67,13 +74,19 @@ public:
 
      virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { 
 
             // load into register 
-            std::cout << "addi "<< destReg <<", $0, "<<  value << std::endl;
+            std::cout << "addi $0, $0, "<< value << std::endl;
+            std::cout << "nop" << std::endl;
+            std::cout << "sw $s0, " << *stack.size << "($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
+
+           *stack.size += 4;
+
     }
 
 };

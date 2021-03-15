@@ -56,7 +56,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { throw std::runtime_error("Not implemented."); } 
@@ -89,7 +89,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { 
@@ -98,8 +98,10 @@ public:
 				if(expression != nullptr)
 				{
           expression->codegen(destReg, stack, bindings, variables); 
-
-          std::cout << "move $v0, " << destReg << std::endl;
+          std::cout << "nop" << std::endl;
+          std::cout << "lw $s0, " << (*stack.size - 4) <<"($sp)" << std::endl;
+          std::cout << "nop" << std::endl;
+          std::cout << "move $v0, $s0" << std::endl;
         }
        
         
@@ -136,7 +138,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { 
@@ -147,7 +149,10 @@ public:
 
       // Evaluate condition
       condition->codegen(destReg, stack, bindings, variables);
-      std::cout<<"bnez " << destReg << ", " << ELSE << std::endl;
+      std::cout << "nop" << std::endl;
+      std::cout << "lw $s0, " << (*stack.size - 4) <<"($sp)" << std::endl;
+      std::cout << "nop" << std::endl;
+      std::cout<<"bnez $s0, " << ELSE << std::endl;
       
 
       // If condition is true: evaluate If

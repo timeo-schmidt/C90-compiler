@@ -30,11 +30,6 @@ struct param_list {
     }
 };
 
-struct stackData
-{
-	int32_t stackSize;   // Stores size of stack frame, need to find way of determining this
-	int32_t stackOffset; // Stores offset value of the lowest free memory 
-};
 
 struct varData
 {
@@ -42,7 +37,10 @@ struct varData
 	int32_t memSize;
 };
 
-
+struct mem
+{
+	int32_t * size;   
+};
 
 class Node;
 
@@ -70,7 +68,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const =0; 

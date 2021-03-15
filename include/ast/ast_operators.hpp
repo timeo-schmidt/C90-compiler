@@ -45,7 +45,7 @@ public:
 
      virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { throw std::runtime_error("Not implemented."); } 
@@ -64,17 +64,29 @@ public:
     
      virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { 
+            // Getting left side of addition and loading into register
+           getLeft()->codegen(destReg, stack, bindings, variables);
+            std::cout << "nop" << std::endl;
+            std::cout << "lw $s0, " << (*stack.size - 4) <<"($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
+
             // Getting left side of addition 
-           getLeft()->codegen("$s0", stack, bindings, variables);
-            // Getting left side of addition 
-            getRight()->codegen("$s1", stack, bindings, variables);
+            getRight()->codegen(destReg, stack, bindings, variables);
+            std::cout << "nop" << std::endl;        
+            std::cout << "lw $s1, " << (*stack.size - 4) <<"($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
 
             // getting sum and storing destReg
-            std::cout << "add " << destReg <<", $s1, $s0" << std::endl;
+            std::cout << "add $s3, $s1, $s0" << std::endl;
+            std::cout << "nop" << std::endl;
+            std::cout << "sw $s3, " << *stack.size << "($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
+
+
 
      } 
 
@@ -92,22 +104,31 @@ public:
         : Operator(_left, _right)
     {}
     
-     virtual void codegen(
+  virtual void codegen(
          std::string destReg,
-         stackData stack,
+         struct mem stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { 
+            // Getting left side of addition and loading into register
+           getLeft()->codegen(destReg, stack, bindings, variables);
+            std::cout << "nop" << std::endl;
+            std::cout << "lw $s0, " << (*stack.size - 4) <<"($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
+
             // Getting left side of addition 
-           getLeft()->codegen("$s0", stack, bindings, variables);
-            // Getting left side of addition 
-            getLeft()->codegen("$s1", stack, bindings, variables);
+            getRight()->codegen(destReg, stack, bindings, variables);
+            std::cout << "nop" << std::endl;        
+            std::cout << "lw $s1, " << (*stack.size - 4) <<"($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
 
             // getting sum and storing destReg
-            std::cout << "sub " << destReg <<", $s1, $s0" << std::endl;
+            std::cout << "sub $s3, $s1, $s0" << std::endl;
+            std::cout << "nop" << std::endl;
+            std::cout << "sw $s3, " << *stack.size << "($sp)" << std::endl;
+            std::cout << "nop" << std::endl;
 
-     } 
-
+            *stack.size += 4;
 };
 
 
