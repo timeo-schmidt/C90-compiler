@@ -66,7 +66,10 @@ public:
     virtual void print(std::ostream &dst) const =0;
 
     virtual std::string getName() const { throw std::runtime_error("getName() is not implemented."); }
+
     virtual void draw_tree_node(std::ofstream& dotfile) const { throw std::runtime_error("draw_tree_node() is not implemented."); }
+    virtual std::string setNext() const { throw std::runtime_error("setNext() is not implemented."); }
+
 
 
     virtual void codegen(

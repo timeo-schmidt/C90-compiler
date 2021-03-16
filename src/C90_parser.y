@@ -403,12 +403,12 @@ compound_statement
 
 declaration_list
     : declaration                               { $$=$1; }
-	| declaration declaration_list              { ; }
+	| declaration declaration_list              { $$ = new NextState($1, $2); }
 	;
 
 statement_list
     : statement                     { $$ = $1; }
-    | statement_list statement      { ; }
+    | statement statement_list        { $$ = new NextState($1, $2); }
 	;
 
 expression_statement
