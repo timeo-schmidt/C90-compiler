@@ -5,10 +5,10 @@
 void print_tree(Program prog) {
     std::cout << "PRINTING TREE!" << std::endl;
     std::cout << prog.size() << " top-level declarations found." << std::endl;
-     for(auto const& decl_node: prog) {
-         (decl_node->print(std::cout));
-       }
+    for(auto const& decl_node: prog) {
+        (decl_node->print(std::cout));
     }
+}
 
 // The goal of this function is to output a tree in the .dot format
 void draw_tree(Program prog, std::string file_name="program_ast.dot") {
@@ -34,7 +34,6 @@ int main()
     // Parse the AST
     Program ast=parseAST();
 
-    print_tree(ast);
     draw_tree(ast);
 
     return 0;

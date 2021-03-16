@@ -38,7 +38,7 @@ public:
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { throw std::runtime_error("Not implemented."); } 
+    ) const override { throw std::runtime_error("Not implemented."); }
 
 };
 
@@ -61,23 +61,23 @@ class UnaryExpression
 {
 private:
 
-   std::string ope; 
+   std::string ope;
 
 public:
-    
 
-    UnaryExpression(const std::string _ope, const NodePtr  _expr )
-        : ope(_ope)
-        , Unary(_expr)
+
+    UnaryExpression(const std::string _ope, const NodePtr  _expr ) :
+        Unary(_expr),
+        ope(_ope)
     {}
 
 
     virtual const char *getOpcode() const override
-    { 
-        return ope.c_str(); 
+    {
+        return ope.c_str();
     }
 
-    
+
 };
 
 #endif

@@ -7,7 +7,7 @@
 
 
 class Operator
-    : public Node 
+    : public Node
 {
 private:
     NodePtr  left;
@@ -48,7 +48,7 @@ public:
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { throw std::runtime_error("Not implemented."); } 
+    ) const override { throw std::runtime_error("Not implemented."); }
 };
 
 class AddOperator
@@ -61,22 +61,22 @@ public:
     AddOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
-    
+
      virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { 
-            // Getting left side of addition 
+    ) const override {
+            // Getting left side of addition
            getLeft()->codegen("$s0", stack, bindings, variables);
-            // Getting left side of addition 
+            // Getting left side of addition
             getRight()->codegen("$s1", stack, bindings, variables);
 
             // getting sum and storing destReg
             std::cout << "add " << destReg <<", $s1, $s0" << std::endl;
 
-     } 
+     }
 
 
 };
@@ -91,22 +91,22 @@ public:
     SubOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
-    
+
      virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { 
-            // Getting left side of addition 
+    ) const override {
+            // Getting left side of addition
            getLeft()->codegen("$s0", stack, bindings, variables);
-            // Getting left side of addition 
+            // Getting left side of addition
             getLeft()->codegen("$s1", stack, bindings, variables);
 
             // getting sum and storing destReg
             std::cout << "sub " << destReg <<", $s1, $s0" << std::endl;
 
-     } 
+     }
 
 };
 

@@ -20,7 +20,7 @@ public:
     virtual void print(std::ostream &dst) const override
     {
         dst<<id;
-    }  
+    }
 
     virtual std::string getName() const override
     {
@@ -32,18 +32,18 @@ public:
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { 
+    ) const override {
 
             // find variable stack location and TO DO:check size of variable but should check type...
             struct varData info;
-            
+
            info = variables.at(id);
            int32_t location = info.offset;
-            // load into register 
+            // load into register
             std::cout << "lw "<< destReg << ", "<< location << "($sp)" << std::endl;
     }
 
-      
+
 
 };
 
@@ -70,9 +70,9 @@ public:
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const { 
+    ) const override {
 
-            // load into register 
+            // load into register
             std::cout << "addi "<< destReg <<", $0, "<<  value << std::endl;
     }
 
