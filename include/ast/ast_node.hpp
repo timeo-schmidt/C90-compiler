@@ -5,7 +5,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <map>
-
+#include <fstream>
 
 
 // Auxillary struct types
@@ -33,12 +33,12 @@ struct param_list {
 struct stackData
 {
 	int32_t stackSize;   // Stores size of stack frame, need to find way of determining this
-	int32_t stackOffset; // Stores offset value of the lowest free memory 
+	int32_t stackOffset; // Stores offset value of the lowest free memory
 };
 
 struct varData
 {
-	int32_t offset;   
+	int32_t offset;
 	int32_t memSize;
 };
 
@@ -66,6 +66,7 @@ public:
     virtual void print(std::ostream &dst) const =0;
 
     virtual std::string getName() const { throw std::runtime_error("getName() is not implemented."); }
+    virtual void draw_tree_node(std::ofstream& dotfile) const { throw std::runtime_error("draw_tree_node() is not implemented."); }
 
 
     virtual void codegen(
@@ -73,7 +74,7 @@ public:
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const =0; 
+    ) const =0;
 
 
 

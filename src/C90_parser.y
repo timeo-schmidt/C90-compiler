@@ -1,6 +1,6 @@
 %code requires{
   #include "ast.hpp"
-  
+
   #include <cassert>
   #include <string>
 
@@ -38,7 +38,7 @@ typedef std::vector<Node *> Program;
 
 %type <node> external_declaration function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
 %type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
-%type <number> CONSTANT 
+%type <number> CONSTANT
 
 %start program_start
 
@@ -59,7 +59,7 @@ identifier_type
     : IDENTIFIER       { $$ = new Variable( *$1 ); delete $1; }
 
 string_literal_type
-    : STRING_LITERAL   { ; }
+    : STRING_LITERAL
 
 postfix_expression
     : primary_expression											{ $$=$1; }
@@ -78,10 +78,10 @@ argument_expression_list
 	;
 
 unary_expression
-    : postfix_expression									{ $$ = $1; }
+    : postfix_expression									   { $$ = $1; }
 	| INC_OP unary_expression
 	| DEC_OP unary_expression
-	| unary_operator cast_expression						{ $$ = new UnaryExpression(*$1, $2); delete $1; }
+	| unary_operator cast_expression                           { $$ = new UnaryExpression(*$1, $2); delete $1; }
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
 	;
@@ -97,20 +97,20 @@ unary_operator
 
 cast_expression
     : unary_expression											{$$ = $1;}
-	| '(' type_name ')' cast_expression							
+	| '(' type_name ')' cast_expression
 	;
 
 multiplicative_expression
     : cast_expression											{ $$ = $1;}
 	| multiplicative_expression '*' cast_expression 			{ $$ = new MulOperator($1, $3); }
 	| multiplicative_expression '/' cast_expression				{ $$ = new DivOperator($1, $3); }
-	| multiplicative_expression '%' cast_expression				
+	| multiplicative_expression '%' cast_expression
 	;
 
 additive_expression
     : multiplicative_expression									{$$ = $1;}
 	| additive_expression '+' multiplicative_expression 		{$$ = new AddOperator($1, $3);}
-	| additive_expression '-' multiplicative_expression			{$$ = new SubOperator($1, $3);} 
+	| additive_expression '-' multiplicative_expression			{$$ = new SubOperator($1, $3);}
 	;
 
 shift_expression
@@ -121,20 +121,20 @@ shift_expression
 
 relational_expression
     : shift_expression											{$$ = $1;}
-	| relational_expression '<' shift_expression			
+	| relational_expression '<' shift_expression
 	| relational_expression '>' shift_expression
 	| relational_expression LE_OP shift_expression
 	| relational_expression GE_OP shift_expression
 	;
 
 equality_expression
-    : relational_expression										{$$ = $1;}	
+    : relational_expression										{$$ = $1;}
 	| equality_expression EQ_OP relational_expression
 	| equality_expression NE_OP relational_expression
 	;
 
-and_expression													
-    : equality_expression										{$$ = $1;}	
+and_expression
+    : equality_expression										{$$ = $1;}
 	| and_expression '&' equality_expression
 	;
 
@@ -183,7 +183,7 @@ assignment_operator
 	;
 
 expression
-    : assignment_expression											{$$ = $1;}	
+    : assignment_expression											{$$ = $1;}
 	| expression ',' assignment_expression
 	;
 
@@ -192,22 +192,18 @@ constant_expression
 	;
 
 
-
-
-
-
 declaration
     : declaration_specifiers ';'									 { $$=new VarDecl($1, nullptr, nullptr, nullptr, nullptr); }
-	| declaration_specifiers init_declarator_list ';'  { ; }		 { $$=new VarDecl($1, $2, nullptr, nullptr, nullptr);  }
+	| declaration_specifiers init_declarator_list ';'          		 { $$=new VarDecl($1, $2, nullptr, nullptr, nullptr);  }
 	;
 
 declaration_specifiers
-    : storage_class_specifier                           { ; }
-	| storage_class_specifier declaration_specifiers    { ; }
-	| type_specifier                                    { $$=new Variable( *$1 ); delete $1; }
-	| type_specifier declaration_specifiers             { ; }
-	| type_qualifier                                    { ; }
-	| type_qualifier declaration_specifiers             { ; }
+    : storage_class_specifier
+	| storage_class_specifier declaration_specifiers
+	| type_specifier                                       { $$=new Variable( *$1 ); delete $1; }
+	| type_specifier declaration_specifiers
+	| type_qualifier
+	| type_qualifier declaration_specifiers
 	;
 
 init_declarator_list
@@ -309,7 +305,7 @@ declarator
 
 direct_declarator
     : identifier_type                                   { $$= $1; }
-    | identifier_type '(' ')'                           { $$= $1; /* Check later! */} 
+    | identifier_type '(' ')'                           { $$= $1; /* Check later! */}
 	| '(' declarator ')'                                { ; }
 	| direct_declarator '[' constant_expression ']'     { ; }
 	| direct_declarator '[' ']'                         { ; }
@@ -387,7 +383,7 @@ initializer_list
 statement
     : labeled_statement
 	| compound_statement
-	| expression_statement									{$$ = $1;}
+	| expression_statement									{ $$ = $1; }
 	| selection_statement
 	| iteration_statement
 	| jump_statement
@@ -416,13 +412,13 @@ statement_list
 	;
 
 expression_statement
-    : ';'							
-	| expression ';'				{$$ = $1;}
+    : ';'
+	| expression ';'				{ $$ = $1; }
 	;
 
 selection_statement
-    : IF '(' expression ')' statement					{ $$ = new IfElseState($3, $5, nullptr);}
-	| IF '(' expression ')' statement ELSE statement	{ $$ = new IfElseState($3, $5, $7);}
+    : IF '(' expression ')' statement					{ $$ = new IfElseState($3, $5, nullptr); }
+	| IF '(' expression ')' statement ELSE statement	{ $$ = new IfElseState($3, $5, $7); }
 	| SWITCH '(' expression ')' statement
 	;
 
@@ -437,8 +433,8 @@ jump_statement
     : GOTO IDENTIFIER ';'
 	| CONTINUE ';'
 	| BREAK ';'
-	| RETURN ';'							{$$ = new returnState(nullptr);}
-	| RETURN expression ';'					{$$ = new returnState($2);}
+	| RETURN ';'							{ $$ = new returnState(nullptr); }
+	| RETURN expression ';'					{ $$ = new returnState($2); }
 	;
 
 program_start

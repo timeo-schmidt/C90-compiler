@@ -1,4 +1,5 @@
 #include "ast.hpp"
+#include <fstream>
 
 
 void print_tree(Program prog) {
@@ -6,9 +7,24 @@ void print_tree(Program prog) {
     std::cout << prog.size() << " top-level declarations found." << std::endl;
      for(auto const& decl_node: prog) {
          (decl_node->print(std::cout));
-    }
+       }
     }
 
+// The goal of this function is to output a tree in the .dot format
+void draw_tree(Program prog, std::string file_name="program_ast.dot") {
+
+    std::ofstream dotfile(file_name);
+
+    dotfile << "digraph ast_graph" << std::endl;
+    dotfile << "{" << std::endl;
+
+    for(const auto& node: prog) {
+        node->draw_tree_node(dotfile);
+    }
+
+    dotfile << std::endl << "}";
+    dotfile.close();
+}
 
 int main()
 {
@@ -16,12 +32,10 @@ int main()
     typedef std::vector< Node *> Program;
 
     // Parse the AST
-     Program ast=parseAST();
+    Program ast=parseAST();
 
     print_tree(ast);
-
- //
-   // std::cout<<std::endl;
+    draw_tree(ast);
 
     return 0;
 

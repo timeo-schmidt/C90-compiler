@@ -31,7 +31,7 @@ public:
         arg->print(dst);
         dst<<" )";
     }
-    
+
 };
 
 class LogFunction
@@ -44,7 +44,7 @@ public:
 
     virtual const char *getFunction() const
     { return "log"; }
-    
+
 };
 
 class ExpFunction
