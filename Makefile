@@ -13,7 +13,7 @@ bin/generateAST : src/generateAST.o src/C90_parser.tab.o src/C90_lexer.yy.o src/
 	mkdir -p bin
 	g++ $(CPPFLAGS) -o bin/generateAST $^
 
-bin/c_compiler : src/compile.o src/C90_parser.tab.o src/C90_lexer.yy.o src/C90_parser.tab.o
+bin/c_compiler : src/compile.o src/C90_parser.tab.o src/C90_lexer.yy.o src/C90_parser.tab.o src/implementations/codegen.cpp src/implementations/draw.cpp src/implementations/print.cpp
 	mkdir -p bin
 	g++ $(CPPFLAGS) -o bin/compiler $^
 

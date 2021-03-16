@@ -42,7 +42,8 @@ void FuncDecl::draw_tree_node(std::ofstream& dotfile) const {
     if(next) {
         dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
         next->draw_tree_node(dotfile);
-    }};
+    }
+};
 
 void VarDecl::draw_tree_node(std::ofstream& dotfile) const {
     dotfile << "node[shape=record];" << std::endl;
@@ -127,7 +128,8 @@ void RShiftOperator::draw_tree_node(std::ofstream& dotfile) const {
 //////////////////////////////////////////////
 
 void Variable::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for Variable::");
+    //throw std::runtime_error("draw_tree_node() is not implemented for Variable::");
+    dotfile << "id" << this << "[label=\"{ Variable | {" << this->getId() << "} }\"];" << std::endl;
 };
 
 void Number::draw_tree_node(std::ofstream& dotfile) const {

@@ -66,7 +66,6 @@ public:
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { throw std::runtime_error("codegen() is not implemented."); };
 
-
 };
 
 typedef const Node *NodePtr;
