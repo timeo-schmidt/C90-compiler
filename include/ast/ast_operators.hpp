@@ -39,12 +39,15 @@ public:
     // Function declarations
     virtual void print(std::ostream &dst) const override;
 
-     virtual void codegen(
-         std::string destReg,
-         stackData stack,
-         std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
+    virtual void codegen(
+        std::string destReg,
+        stackData stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
     ) const override { throw std::runtime_error("Not implemented."); }
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 };
 
 class AddOperator
@@ -69,6 +72,8 @@ public:
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 
 };
@@ -95,6 +100,8 @@ public:
         std::unordered_map<std::string,struct varData> &variables
     ) const override;
 
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 };
 
 
@@ -111,6 +118,10 @@ public:
     MulOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    // Function declarations
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 };
 
 class DivOperator
@@ -125,6 +136,9 @@ public:
     DivOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    // Function declarations
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
@@ -141,6 +155,8 @@ public:
         : Operator(_left, _right)
     {}
 
+    // Function declarations
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
@@ -157,6 +173,9 @@ public:
         : Operator(_left, _right)
     {}
 
+    // Function declarations
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 };
 
 class RShiftOperator
@@ -171,6 +190,9 @@ public:
     RShiftOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    // Function declarations
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 

@@ -52,7 +52,6 @@ public:
     // Constructor
     virtual ~Node() {}
 
-
     // Function declarations
     virtual void print(std::ostream &dst) const =0;
 

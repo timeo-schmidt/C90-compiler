@@ -66,7 +66,7 @@ public:
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override { throw std::runtime_error("Not implemented."); }
 
-    virtual void draw_tree_node(std::ofstream& dotfile) const override { throw std::runtime_error("Not implemented."); }
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
@@ -92,6 +92,8 @@ public:
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override;
 
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 };
 
 
@@ -100,11 +102,12 @@ class VarDecl
     : public Decl
 {
 public:
+    // Constructor
     VarDecl(NodePtr _type,  NodePtr _name, NodePtr _value, NodePtr _code, NodePtr _next)
-    : Decl(_type, _name, _value, _code, _next)
-    {}
+        : Decl(_type, _name, _value, _code, _next) {}
 
 
+    // Function declarations
     virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(
@@ -113,6 +116,9 @@ public:
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 
 };
 
@@ -160,6 +166,8 @@ public:
         std::map<std::string,double> &bindings,
         std::unordered_map<std::string,struct varData> &variables
     ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 

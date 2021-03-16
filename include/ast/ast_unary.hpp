@@ -40,6 +40,8 @@ public:
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override;
 
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
 };
 
 class NegOperator
@@ -56,6 +58,10 @@ public:
     virtual const char *getOpcode() const override {
         return "-";
     }
+
+    // Function declarations
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
@@ -80,6 +86,10 @@ public:
     virtual const char *getOpcode() const override {
         return ope.c_str();
     }
+
+    // Function declarations
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
