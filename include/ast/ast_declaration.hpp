@@ -171,4 +171,38 @@ public:
 
 };
 
+class NextState
+    : public Node
+{      
+
+public:
+
+    NodePtr state;
+    NodePtr next;
+
+    NextState(NodePtr _state, NodePtr _next)
+    : state(_state)
+    , next(_next)
+    {}
+
+  virtual ~NextState()
+  {
+    delete state;
+    delete next;
+  }
+
+   // Member function declarations
+    virtual void print(std::ostream &dst) const override;
+
+    virtual void codegen(
+        std::string destReg,
+        stackData stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
 #endif

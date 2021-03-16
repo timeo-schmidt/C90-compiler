@@ -83,8 +83,9 @@ void initDecl::draw_tree_node(std::ofstream& dotfile) const {
     throw std::runtime_error("draw_tree_node() is not implemented for initDecl::");
 };
 
-
-
+void NextState::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("draw_tree_node() is not implemented for Operator::");
+};
 //////////////////////////////////////////////
 // ast_operators.hpp
 //////////////////////////////////////////////

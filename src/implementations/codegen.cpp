@@ -141,6 +141,18 @@ void initDecl::codegen(
         { std::cout<<"addiu $s0, $0, $0"<<std::endl;}
 }
 
+void NextState::codegen(
+    std::string destReg,
+    stackData stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    // Evaluate current statement 
+    state->codegen(destReg, stack, bindings, variables);
+
+    // Evaluate next statement 
+    next->codegen(destReg, stack, bindings, variables);
+}
 
 
 //////////////////////////////////////////////

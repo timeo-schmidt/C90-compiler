@@ -40,6 +40,10 @@ void initDecl::print(std::ostream &dst) const {
         { declarator->print(dst); }
 }
 
+void NextState::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
 
 
 //////////////////////////////////////////////

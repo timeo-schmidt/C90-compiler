@@ -398,17 +398,17 @@ labeled_statement
 compound_statement
     : '{' statement_list '}'                    { $$ = $2; }
 	| '{' declaration_list '}'                  { $$ = $2; }
-	| '{' declaration_list statement_list '}'   { ; }
+	| '{' declaration_list statement_list '}'   { $$ = new NextState($2, $3); }
 	;
 
 declaration_list
     : declaration                               { $$=$1; }
-	| declaration declaration_list              { ; }
+	| declaration declaration_list              { $$ = new NextState($1, $2); }
 	;
 
 statement_list
     : statement                     { $$ = $1; }
-    | statement statement_list        { ; }
+    | statement statement_list      { $$ = new NextState($1, $2); }
 	;
 
 expression_statement
