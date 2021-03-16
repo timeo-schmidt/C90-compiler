@@ -167,6 +167,48 @@ public:
 
 };
 
+class NextState
+    : public Node
+{      
 
+public:
+
+    NodePtr state;
+    NodePtr next;
+
+    NextState(NodePtr _state, NodePtr _next)
+    : state(_state)
+    , next(_next)
+    {}
+
+  virtual ~NextState()
+  {
+    delete state;
+    delete next;
+  }
+ 
+     virtual void print(std::ostream &dst) const override
+    { throw std::runtime_error("Not implemented."); }
+
+    virtual void codegen(
+         std::string destReg,
+         stackData stack,
+         std::map<std::string,double> &bindings,
+	     std::unordered_map<std::string,struct varData> &variables
+    ) const { 
+      
+  
+
+      // Evaluate current statement 
+      state->codegen(destReg, stack, bindings, variables);
+      
+        // Evaluate next statement 
+      next->codegen(destReg, stack, bindings, variables);
+
+     
+        
+     } 
+
+};
 
 #endif
