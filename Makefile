@@ -1,4 +1,4 @@
-CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
+CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter -Wdeprecated-register
 CPPFLAGS += -I include
 
 all : bin/generateAST

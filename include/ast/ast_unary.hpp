@@ -8,37 +8,37 @@ class Unary
     : public Node
 {
 private:
+    // Members
     NodePtr expr;
 protected:
+
+    // Constructor
     Unary(const NodePtr _expr)
         : expr(_expr)
     {}
 public:
+
+    // Destructor
     virtual ~Unary()
     {
         delete expr;
     }
 
+    // Getters & Setters
     virtual const char *getOpcode() const =0;
 
     NodePtr  getExpr() const
-    { return expr; }
+        { return expr; }
 
-    virtual void print(std::ostream &dst) const override
-    {
-        dst << "( ";
-        dst << getOpcode();
-        dst << " ";
-        expr->print(dst);
-        dst << " )";
-    }
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const override { throw std::runtime_error("Not implemented."); }
+    ) const override;
 
 };
 
@@ -46,12 +46,16 @@ class NegOperator
     : public Unary
 {
 public:
+
+    // Constructor
     NegOperator(const NodePtr  _expr)
         : Unary(_expr)
     {}
 
-    virtual const char *getOpcode() const override
-    { return "-"; }
+    // Getters & Setters
+    virtual const char *getOpcode() const override {
+        return "-";
+    }
 
 };
 
@@ -61,22 +65,21 @@ class UnaryExpression
 {
 private:
 
-   std::string ope;
+    // Member
+    std::string ope;
 
 public:
 
-
+    // Constructor
     UnaryExpression(const std::string _ope, const NodePtr  _expr ) :
         Unary(_expr),
         ope(_ope)
     {}
 
-
-    virtual const char *getOpcode() const override
-    {
+    // Getters & Setters
+    virtual const char *getOpcode() const override {
         return ope.c_str();
     }
-
 
 };
 

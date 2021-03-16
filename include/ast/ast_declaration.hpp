@@ -55,7 +55,7 @@ public:
     { return next; }
 
 
-    // Member function declarations (print, draw, codegen)
+    // Function declarations
     virtual void print(std::ostream &dst) const override
     { throw std::runtime_error("Not implemented."); }
 

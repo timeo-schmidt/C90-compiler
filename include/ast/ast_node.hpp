@@ -19,6 +19,7 @@ struct type {
         params=params_in;
     }
 };
+
 struct param_list {
     std::string *name;
     struct type *type;
@@ -43,46 +44,33 @@ struct varData
 };
 
 
-
-class Node;
-
-typedef const Node *NodePtr;
-
-typedef enum {
-    FUNCTION_DEFINITION,    // type, name, code
-    IDENTIFIER_NAME        // name
-} kind_t;
-
-
-
-
-
+// Base Node class
 class Node
 {
 public:
 
+    // Constructor
     virtual ~Node() {}
 
+
+    // Function declarations
     virtual void print(std::ostream &dst) const =0;
 
     virtual std::string getName() const { throw std::runtime_error("getName() is not implemented."); }
 
     virtual void draw_tree_node(std::ofstream& dotfile) const { throw std::runtime_error("draw_tree_node() is not implemented."); }
-    virtual std::string setNext() const { throw std::runtime_error("setNext() is not implemented."); }
-
-
 
     virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const =0;
-
+    ) const { throw std::runtime_error("codegen() is not implemented."); };
 
 
 };
 
+typedef const Node *NodePtr;
 
 
 #endif

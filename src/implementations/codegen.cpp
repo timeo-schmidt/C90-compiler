@@ -3,7 +3,10 @@
 // This file contains all function definitions for the code generation functionality.
 
 
+
+//////////////////////////////////////////////
 // ast_declaration.hpp
+//////////////////////////////////////////////
 
 void FuncDecl::codegen(
      std::string destReg,
@@ -136,4 +139,151 @@ void initDecl::codegen(
         { initializer->codegen("$s0", stack, bindings, variables); }
     else
         { std::cout<<"addiu $s0, $0, $0"<<std::endl;}
+}
+
+
+
+//////////////////////////////////////////////
+// ast_operators.hpp
+//////////////////////////////////////////////
+
+void AddOperator::codegen(
+    std::string destReg,
+    stackData stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+    ) const {
+
+    // Getting left side of addition
+    getLeft()->codegen("$s0", stack, bindings, variables);
+    // Getting left side of addition
+    getRight()->codegen("$s1", stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "add " << destReg <<", $s1, $s0" << std::endl;
+}
+
+void SubOperator::codegen(
+    std::string destReg,
+    stackData stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    // Getting left side of addition
+   getLeft()->codegen("$s0", stack, bindings, variables);
+    // Getting left side of addition
+    getLeft()->codegen("$s1", stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "sub " << destReg <<", $s1, $s0" << std::endl;
+
+}
+
+
+//////////////////////////////////////////////
+// ast_primitives.hpp
+//////////////////////////////////////////////
+
+void Variable::codegen(
+    std::string destReg,
+    stackData stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+
+       // find variable stack location and TO DO:check size of variable but should check type...
+       struct varData info;
+
+      info = variables.at(id);
+      int32_t location = info.offset;
+       // load into register
+       std::cout << "lw "<< destReg << ", "<< location << "($sp)" << std::endl;
+}
+
+void Number::codegen(
+    std::string destReg,
+    stackData stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    // load into register
+    std::cout << "addi "<< destReg <<", $0, "<<  value << std::endl;
+}
+
+
+
+//////////////////////////////////////////////
+// ast_statement.hpp
+//////////////////////////////////////////////
+
+void Statement::codegen(
+     std::string destReg,
+     stackData stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void returnState::codegen(
+     std::string destReg,
+     stackData stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+
+    // check if a expression is nullptr, not sure what to do if its return ; ???
+    if(expression != nullptr) {
+
+        expression->codegen(destReg, stack, bindings, variables);
+        std::cout << "move $v0, " << destReg << std::endl;
+
+    }
+}
+
+void IfElseState::codegen(
+     std::string destReg,
+     stackData stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+
+    // Individual names for jumps
+    std::string ELSE = makeName("ELSE");
+    std::string L = makeName("L1");
+
+    // Evaluate condition
+    condition->codegen(destReg, stack, bindings, variables);
+    std::cout<<"bnez " << destReg << ", " << ELSE << std::endl;
+
+    // If condition is true: evaluate If
+    if(If != nullptr) {
+        If->codegen(destReg, stack, bindings, variables);
+    }
+
+    std::cout << "j " << L << std::endl;
+    std::cout << ELSE << ":" << std::endl;
+
+    // Else branch to another location & evaluate else
+    if(Else != nullptr) {
+        Else->codegen(destReg, stack, bindings, variables);
+    }
+
+    std::cout << L << ":" << std::endl;
+
+ }
+
+
+
+//////////////////////////////////////////////
+// ast_unary.hpp
+//////////////////////////////////////////////
+
+void Unary::codegen(
+     std::string destReg,
+     stackData stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("Not implemented.");
 }

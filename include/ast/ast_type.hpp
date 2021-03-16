@@ -11,41 +11,41 @@
 class Type
     : public Node
 {
+
 public:
 
+    // Members
     NodePtr kind;
     NodePtr subType;
     NodePtr paramList;
 
-    protected: 
-    
-        Type( NodePtr _kind, NodePtr _subType,  NodePtr _paramList)
-            : kind(_kind)
-            , subType( _subType)
-            , paramList(_paramList) 
-        {}
 
-    virtual ~Type() 
+    // Constructors & Destructors
+    Type( NodePtr _kind, NodePtr _subType,  NodePtr _paramList):
+        kind(_kind),
+        subType( _subType),
+        paramList(_paramList)
+    {}
+
+    virtual ~Type()
     {
         delete kind;
         delete subType;
         delete paramList;
     }
 
+    // Getters & Setters
     NodePtr getKind() const
     { return kind; }
 
     NodePtr getSubType() const
     { return subType; }
-    
+
     NodePtr getParamList() const
     { return paramList; }
 
- 
-    virtual void print(std::ostream &dst) const override
-    { 
-        std::cout<<"Kind to be found"<<std::endl;
-    }
+    // Function declarations
+    virtual void print(std::ostream &dst) const override;
 
 };
 

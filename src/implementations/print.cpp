@@ -3,7 +3,12 @@
 // This file contains all function definitions for the text-based print functionality.
 
 
+
+//////////////////////////////////////////////
 // ast_declaration.hpp
+//////////////////////////////////////////////
+
+
 
 void FuncDecl::print(std::ostream &dst) const {
    if(type != nullptr)
@@ -33,4 +38,88 @@ void VarDecl::print(std::ostream &dst) const {
 void initDecl::print(std::ostream &dst) const {
     if(declarator != nullptr)
         { declarator->print(dst); }
+}
+
+
+
+//////////////////////////////////////////////
+// ast_functions.hpp
+//////////////////////////////////////////////
+
+void Function::print(std::ostream &dst) const {
+    dst<<getFunction()<<"( ";
+    arg->print(dst);
+    dst<<" )";
+}
+
+
+
+//////////////////////////////////////////////
+// ast_operators.hpp
+//////////////////////////////////////////////
+
+void Operator::print(std::ostream &dst) const {
+    dst<<"( ";
+    left->print(dst);
+    dst<<" ";
+    dst<<getOpcode();
+    dst<<" ";
+    right->print(dst);
+    dst<<" )";
+}
+
+
+
+//////////////////////////////////////////////
+// ast_primitives.hpp
+//////////////////////////////////////////////
+
+void Variable::print(std::ostream &dst) const {
+    dst<<id;
+}
+
+void Number::print(std::ostream &dst) const {
+    dst<<value;
+}
+
+
+
+//////////////////////////////////////////////
+// ast_statement.hpp
+//////////////////////////////////////////////
+
+void Statement::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void returnState::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void IfElseState::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+
+
+//////////////////////////////////////////////
+// ast_type.hpp
+//////////////////////////////////////////////
+
+void Type::print(std::ostream &dst) const {
+    std::cout<<"Kind to be found"<<std::endl;
+}
+
+
+
+//////////////////////////////////////////////
+// ast_unary.hpp
+//////////////////////////////////////////////
+
+void Unary::print(std::ostream &dst) const {
+    dst << "( ";
+    dst << getOpcode();
+    dst << " ";
+    expr->print(dst);
+    dst << " )";
 }

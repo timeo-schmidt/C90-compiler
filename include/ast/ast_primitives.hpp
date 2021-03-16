@@ -10,40 +10,27 @@ class Variable
 private:
     std::string id;
 public:
+    // Constructors & Destructors
     Variable(const std::string &_id)
         : id(_id)
     {}
 
+    // Getters & Setters
     const std::string getId() const
-    { return id; }
-
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<id;
-    }
+        { return id; }
 
     virtual std::string getName() const override
-    {
-        return id;
-    }
+        { return id; }
+
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
 
      virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-
-            // find variable stack location and TO DO:check size of variable but should check type...
-            struct varData info;
-
-           info = variables.at(id);
-           int32_t location = info.offset;
-            // load into register
-            std::cout << "lw "<< destReg << ", "<< location << "($sp)" << std::endl;
-    }
-
-
+    ) const override;
 
 };
 
@@ -53,28 +40,24 @@ class Number
 private:
     double value;
 public:
+    // Constructor & Destructor
     Number(double _value)
         : value(_value)
     {}
 
+    // Getters & Setters
     double getValue() const
     { return value; }
 
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<value;
-    }
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
 
-     virtual void codegen(
-         std::string destReg,
-         stackData stack,
-         std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-
-            // load into register
-            std::cout << "addi "<< destReg <<", $0, "<<  value << std::endl;
-    }
+    virtual void codegen(
+        std::string destReg,
+        stackData stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
 
 };
 

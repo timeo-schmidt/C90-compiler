@@ -10,27 +10,27 @@ class Function
 {
 private:
     ExpressionPtr arg;
-protected:
+
+public:
+
+    // Constructor & Destructor
     Function(ExpressionPtr _arg)
         : arg(_arg)
     {}
-public:
+
     virtual ~Function()
     {
         delete arg;
     }
 
+    // Getters & Setters
     virtual const char * getFunction() const =0;
 
     ExpressionPtr getArg() const
     { return arg; }
 
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<getFunction()<<"( ";
-        arg->print(dst);
-        dst<<" )";
-    }
+    // Function declarations
+    virtual void print(std::ostream &dst) const override;
 
 };
 
@@ -38,10 +38,13 @@ class LogFunction
     : public Function
 {
 public:
+
+    // Constructor
     LogFunction(ExpressionPtr _arg)
         : Function(_arg)
     {}
 
+    // Getters & Setters
     virtual const char *getFunction() const
     { return "log"; }
 
@@ -51,10 +54,13 @@ class ExpFunction
     : public Function
 {
 public:
+
+    // Constructor
     ExpFunction(ExpressionPtr _arg)
         : Function(_arg)
     {}
 
+    // Getters & Setters
     virtual const char *getFunction() const
     { return "exp"; }
 
@@ -64,10 +70,13 @@ class SqrtFunction
     : public Function
 {
 public:
+
+    // Constructor
     SqrtFunction(ExpressionPtr _arg)
         : Function(_arg)
     {}
 
+    // Getters & Setters
     virtual const char *getFunction() const
     { return "sqrt"; }
 

@@ -12,36 +12,32 @@ class Operator
 private:
     NodePtr  left;
     NodePtr  right;
-protected:
+
+public:
+
+    // Constructor & Destructor
     Operator(NodePtr  _left, NodePtr  _right)
         : left(_left)
         , right(_right)
     {}
-public:
+
     virtual ~Operator()
     {
         delete left;
         delete right;
     }
 
+    // Getters and Setters
     virtual const char *getOpcode() const =0;
 
-    NodePtr  getLeft() const
+    NodePtr getLeft() const
     { return left; }
 
-    NodePtr  getRight() const
+    NodePtr getRight() const
     { return right; }
 
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<"( ";
-        left->print(dst);
-        dst<<" ";
-        dst<<getOpcode();
-        dst<<" ";
-        right->print(dst);
-        dst<<" )";
-    }
+    // Function declarations
+    virtual void print(std::ostream &dst) const override;
 
      virtual void codegen(
          std::string destReg,
@@ -55,28 +51,24 @@ class AddOperator
     : public Operator
 {
 protected:
+    // Getter and Setter
     virtual const char *getOpcode() const override
-    { return "+"; }
+        { return "+"; }
+
 public:
+
+    // Constructors & Destructors
     AddOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
 
+    // Function declarations
      virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-            // Getting left side of addition
-           getLeft()->codegen("$s0", stack, bindings, variables);
-            // Getting left side of addition
-            getRight()->codegen("$s1", stack, bindings, variables);
-
-            // getting sum and storing destReg
-            std::cout << "add " << destReg <<", $s1, $s0" << std::endl;
-
-     }
+    ) const override;
 
 
 };
@@ -85,28 +77,23 @@ class SubOperator
     : public Operator
 {
 protected:
+    // Getters & Setters
     virtual const char *getOpcode() const override
-    { return "-"; }
+        { return "-"; }
+
 public:
+    // Constructors
     SubOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
 
-     virtual void codegen(
-         std::string destReg,
-         stackData stack,
-         std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-            // Getting left side of addition
-           getLeft()->codegen("$s0", stack, bindings, variables);
-            // Getting left side of addition
-            getLeft()->codegen("$s1", stack, bindings, variables);
-
-            // getting sum and storing destReg
-            std::cout << "sub " << destReg <<", $s1, $s0" << std::endl;
-
-     }
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        stackData stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
 
 };
 
@@ -115,9 +102,12 @@ class MulOperator
     : public Operator
 {
 protected:
+    // Getters & Setters
     virtual const char *getOpcode() const override
-    { return "*"; }
+        { return "*"; }
+
 public:
+    // Constructors
     MulOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
@@ -127,9 +117,11 @@ class DivOperator
     : public Operator
 {
 protected:
+    // Getters & Setters
     virtual const char *getOpcode() const override
-    { return "/"; }
+        { return "/"; }
 public:
+    // Constructors
     DivOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
@@ -140,9 +132,11 @@ class ExpOperator
     : public Operator
 {
 protected:
+    // Getters & Setters
     virtual const char *getOpcode() const override
-    { return "^"; }
+        { return "^"; }
 public:
+    // Constructors
     ExpOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
@@ -154,9 +148,11 @@ class LShiftOperator
     : public Operator
 {
 protected:
+    // Getters & Setters
     virtual const char *getOpcode() const override
-    { return "<<"; }
+        { return "<<"; }
 public:
+    // Constructors
     LShiftOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
@@ -167,9 +163,11 @@ class RShiftOperator
     : public Operator
 {
 protected:
+    // Getters & Setters
     virtual const char *getOpcode() const override
-    { return ">>"; }
+        { return ">>"; }
 public:
+    // Constructors
     RShiftOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}

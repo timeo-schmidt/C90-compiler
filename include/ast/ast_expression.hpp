@@ -23,7 +23,6 @@ public:
    virtual void print(std::ostream &dst) const override
     { throw std::runtime_error("Not implemented."); }
 
-   
 };
 
 

@@ -17,6 +17,7 @@ class Statement
 
 public:
 
+    // Members
     NodePtr dec;
     NodePtr expression;
     NodePtr init_expression;
@@ -27,15 +28,24 @@ public:
     NodePtr next;
 
 
-    Statement( NodePtr _dec, NodePtr _expr, NodePtr _init_expression, NodePtr _expression, NodePtr _next_expression, NodePtr _body, NodePtr _else_body, NodePtr _next)
-            : dec(_dec)
-            , expression(_expression)
-            , init_expression(_init_expression)
-            , expr(_expression)
-            , next_expression(_next_expression)
-            , body(_body)
-            , else_body(_else_body)
-            , next(_next)
+    // Constructors & Destructors
+    Statement(  NodePtr _dec,
+                NodePtr _expr,
+                NodePtr _init_expression,
+                NodePtr _expression,
+                NodePtr _next_expression,
+                NodePtr _body,
+                NodePtr _else_body,
+                NodePtr _next):
+
+                dec(_dec),
+                expression(_expression),
+                init_expression(_init_expression),
+                expr(_expression),
+                next_expression(_next_expression),
+                body(_body),
+                else_body(_else_body),
+                next(_next)
         {}
 
     virtual ~Statement()
@@ -51,19 +61,18 @@ public:
     }
 
 
-    virtual void print(std::ostream &dst) const override
-    { throw std::runtime_error("Not implemented."); }
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const override { throw std::runtime_error("Not implemented."); }
+    ) const override;
 
 
 };
-
 
 
 
@@ -73,37 +82,27 @@ class returnState
 
 public:
 
+    // Members
     NodePtr expression;
 
-    returnState( NodePtr _expression)
-    : expression(_expression)
+    // Constructor and Destructor
+    returnState( NodePtr _expression):
+        expression(_expression)
     {}
 
-  virtual ~returnState()
-  {
-    delete expression;
-  }
+    virtual ~returnState() {
+        delete expression;
+    }
 
-     virtual void print(std::ostream &dst) const override
-    { throw std::runtime_error("Not implemented."); }
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-
-        // check if a expression is nullptr, not sure what to do if its return ; ???
-				if(expression != nullptr)
-				{
-          expression->codegen(destReg, stack, bindings, variables);
-
-          std::cout << "move $v0, " << destReg << std::endl;
-        }
-
-
-     }
+         std::unordered_map<std::string,struct varData> &variables
+    ) const override;
 
 };
 
@@ -114,100 +113,33 @@ class IfElseState
 
 public:
 
+    // Members
     NodePtr condition;
     NodePtr If;
     NodePtr Else;
 
-    IfElseState(NodePtr _condition, NodePtr _If, NodePtr _Else)
-    : condition(_condition)
-    , If(_If)
-    , Else(_Else)
+    // Constructors & Destructors
+    IfElseState(NodePtr _condition, NodePtr _If, NodePtr _Else):
+        condition(_condition),
+        If(_If),
+        Else(_Else)
     {}
 
-  virtual ~IfElseState()
-  {
-    delete condition;
-    delete If;
-    delete Else;
-  }
+    virtual ~IfElseState() {
+        delete condition;
+        delete If;
+        delete Else;
+    }
 
-     virtual void print(std::ostream &dst) const override
-    { throw std::runtime_error("Not implemented."); }
+    // Function declarations
+    virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(
          std::string destReg,
          stackData stack,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-
-      // Individual names for jumps
-      std::string ELSE = makeName("ELSE");
-      std::string L = makeName("L1");
-
-      // Evaluate condition
-      condition->codegen(destReg, stack, bindings, variables);
-      std::cout<<"bnez " << destReg << ", " << ELSE << std::endl;
-
-
-      // If condition is true: evaluate If
-      if(If != nullptr)
-      { If->codegen(destReg, stack, bindings, variables); }
-
-      std::cout << "j " << L << std::endl;
-      std::cout << ELSE << ":" << std::endl;
-
-      // Else branch to another location & evaluate else
-      if(Else != nullptr)
-      { Else->codegen(destReg, stack, bindings, variables); }
-
-      std::cout << L << ":" << std::endl;
-
-     }
-
-};
-
-class NextState
-    : public Node
-{
-
-public:
-
-    NodePtr state;
-    NodePtr next;
-
-    NextState(NodePtr _state, NodePtr _next)
-    : state(_state)
-    , next(_next)
-    {}
-
-  virtual ~NextState()
-  {
-    delete state;
-    delete next;
-  }
-
-     virtual void print(std::ostream &dst) const override
-    { throw std::runtime_error("Not implemented."); }
-
-    virtual void codegen(
-         std::string destReg,
-         stackData stack,
-         std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
-    ) const override {
-
-
-
-      // Evaluate current statement
-      state->codegen(destReg, stack, bindings, variables);
-
-        // Evaluate next statement
-      next->codegen(destReg, stack, bindings, variables);
-
-
-
-     }
+    ) const override;
 
 };
 
