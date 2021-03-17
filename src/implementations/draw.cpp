@@ -12,107 +12,98 @@ void Decl::draw_tree_node(std::ofstream& dotfile) const {
 }
 
 void FuncDecl::draw_tree_node(std::ofstream& dotfile) const {
-/*
-    dotfile << "id" << this << "[label=\"{ Decl |{<type> type|<name> name|<value> value|<code> code|<next> next}}\"];" << std::endl;
 
-    if(declarationSpecifiers) {
-        dotfile << "id" << this << ":type -> id" << type << ";" << std::endl;
-        type->draw_tree_node(dotfile);
+    dotfile << "id" << this << "[label=\"{ FuncDecl |{<declarationSpecifiers> declarationSpecifiers|<initDeclarator> initDeclarator|<compoundStatement> compoundStatement}}\"];" << std::endl;
+
+    if(declarationSpecifiers!=nullptr) {
+        dotfile << "id" << this << ":declarationSpecifiers -> id" << declarationSpecifiers << ";" << std::endl;
+        declarationSpecifiers->draw_tree_node(dotfile);
     }
 
-    std::string name = this->getName();
-    if(name.length()!=0) {
-        dotfile << "id" << this << ":name -> id" << declarationSpecifiers << ";" << std::endl;
-        dotfile << "id" << declarationSpecifiers << "[label=\"{ " << declarationSpecifiers << " }\"];" << std::endl;
+    if(initDeclarator!=nullptr) {
+        dotfile << "id" << this << ":initDeclarator -> id" << initDeclarator << ";" << std::endl;
+        initDeclarator->draw_tree_node(dotfile);
     }
 
-    if(value) {
-        dotfile << "id" << this << ":value -> id" << value << ";" << std::endl;
-        value->draw_tree_node(dotfile);
+    if(compoundStatement!=nullptr) {
+        dotfile << "id" << this << ":compoundStatement -> id" << compoundStatement << ";" << std::endl;
+        compoundStatement->draw_tree_node(dotfile);
     }
 
-    if(code) {
-        dotfile << "id" << this << ":code -> id" << code << ";" << std::endl;
-        code->draw_tree_node(dotfile);
-    }
-*/
-
-  throw std::runtime_error("Not implemented.");
 };
 
 void VarDecl::draw_tree_node(std::ofstream& dotfile) const {
-   /* dotfile << "id" << this << "[label=\"{ Decl |{<type> type|<name> name|<value> value|<code> code|<next> next}}\"];" << std::endl;
 
-    if(type) {
-        dotfile << "id" << this << ":type -> id" << type << ";" << std::endl;
-        type->draw_tree_node(dotfile);
+    dotfile << "id" << this << "[label=\"{ VarDecl |{<declarationSpecifiers> declarationSpecifiers|<initDeclarator> initDeclarator|<compoundStatement> compoundStatement}}\"];" << std::endl;
+
+    if(declarationSpecifiers!=nullptr) {
+        dotfile << "id" << this << ":declarationSpecifiers -> id" << declarationSpecifiers << ";" << std::endl;
+        declarationSpecifiers->draw_tree_node(dotfile);
     }
 
-    std::string name = this->getName();
-    if(name.length()!=0) {
-        dotfile << "id" << this << ":name -> id" << name << ";" << std::endl;
-        dotfile << "id" << name << "[label=\"{ " << name << " }\"];" << std::endl;
+    if(initDeclarator!=nullptr) {
+        dotfile << "id" << this << ":initDeclarator -> id" << initDeclarator << ";" << std::endl;
+        initDeclarator->draw_tree_node(dotfile);
     }
 
-    if(value) {
-        dotfile << "id" << this << ":value -> id" << value << ";" << std::endl;
-        value->draw_tree_node(dotfile);
+    if(compoundStatement!=nullptr) {
+        dotfile << "id" << this << ":compoundStatement -> id" << compoundStatement << ";" << std::endl;
+        compoundStatement->draw_tree_node(dotfile);
     }
 
-    if(code) {
-        dotfile << "id" << this << ":code -> id" << code << ";" << std::endl;
-        code->draw_tree_node(dotfile);
-    }
-
-    if(next) {
-        dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
-        next->draw_tree_node(dotfile);
-    }
-*/
-  throw std::runtime_error("Not implemented.");
 };
 
 void initDecl::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for initDecl::");
+
+    dotfile << "id" << this << "[label=\"{ initDecl |{<declarator> declarator|<initializer> initializer}}\"];" << std::endl;
+
+    if(declarator!=nullptr) {
+        dotfile << "id" << this << ":declarator -> id" << declarator << ";" << std::endl;
+        declarator->draw_tree_node(dotfile);
+    }
+
+    if(initializer!=nullptr) {
+        dotfile << "id" << this << ":initializer -> id" << initializer << ";" << std::endl;
+        initializer->draw_tree_node(dotfile);
+    }
+
 };
 
 void NextState::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for NextState::");
+
+    dotfile << "id" << this << "[label=\"{ initDecl |{<state> state|<next> next}}\"];" << std::endl;
+
+    if(state!=nullptr) {
+        dotfile << "id" << this << ":state -> id" << state << ";" << std::endl;
+        state->draw_tree_node(dotfile);
+    }
+
+    if(next!=nullptr) {
+        dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
+        next->draw_tree_node(dotfile);
+    }
+
 };
+
+
+
 //////////////////////////////////////////////
 // ast_operators.hpp
 //////////////////////////////////////////////
 
 void Operator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for Operator::");
-};
 
-void AddOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for AddOperator::");
-};
+    dotfile << "id" << this << "[label=\"{ Operator " << this->getOpcode() << "|{<left> left|<right> right}}\"];" << std::endl;
 
-void SubOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for SubOperator::");
-};
+    if(left!=nullptr) {
+        dotfile << "id" << this << ":left -> id" << left << ";" << std::endl;
+        left->draw_tree_node(dotfile);
+    }
 
-void MulOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for MulOperator::");
-};
-
-void DivOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for DivOperator::");
-};
-
-void ExpOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for ExpOperator::");
-};
-
-void LShiftOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for LShiftOperator::");
-};
-
-void RShiftOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for RShiftOperator::");
+    if(right!=nullptr) {
+        dotfile << "id" << this << ":right -> id" << right << ";" << std::endl;
+        right->draw_tree_node(dotfile);
+    }
 };
 
 
@@ -127,7 +118,7 @@ void Variable::draw_tree_node(std::ofstream& dotfile) const {
 };
 
 void Number::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for Number::");
+
     dotfile << "id" << this << "[label=\"{ Number | {" << this->getValue() << "} }\"];" << std::endl;
 };
 
@@ -138,11 +129,35 @@ void Number::draw_tree_node(std::ofstream& dotfile) const {
 //////////////////////////////////////////////
 
 void returnState::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for returnState::");
+
+    dotfile << "id" << this << "[label=\"{ returnState |{<expression> expression}}\"];" << std::endl;
+
+    if(expression!=nullptr) {
+        dotfile << "id" << this << ":expression -> id" << expression << ";" << std::endl;
+        expression->draw_tree_node(dotfile);
+    }
+
 };
 
 void IfElseState::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for IfElseState::");
+
+    dotfile << "id" << this << "[label=\"{ IfElseState |{<condition> condition | <If> If| <Else> Else}}\"];" << std::endl;
+
+    if(condition!=nullptr) {
+        dotfile << "id" << this << ":condition -> id" << condition << ";" << std::endl;
+        condition->draw_tree_node(dotfile);
+    }
+
+    if(If!=nullptr) {
+        dotfile << "id" << this << ":If -> id" << If << ";" << std::endl;
+        If->draw_tree_node(dotfile);
+    }
+
+    if(Else!=nullptr) {
+        dotfile << "id" << this << ":Else -> id" << Else << ";" << std::endl;
+        Else->draw_tree_node(dotfile);
+    }
+
 };
 
 
@@ -152,13 +167,12 @@ void IfElseState::draw_tree_node(std::ofstream& dotfile) const {
 //////////////////////////////////////////////
 
 void Unary::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for Unary::");
-};
 
-void NegOperator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for NegOperator::");
-};
+    dotfile << "id" << this << "[label=\"{ Unary " << this->getOpcode() << "|{<expr> expr}}\"];" << std::endl;
 
-void UnaryExpression::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for UnaryExpression::");
+    if(expr!=nullptr) {
+        dotfile << "id" << this << ":expr -> id" << expr << ";" << std::endl;
+        expr->draw_tree_node(dotfile);
+    }
+
 };
