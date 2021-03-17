@@ -224,6 +224,105 @@ void SubOperator::codegen(
 }
 
 
+void MulOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of mul and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of mul and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+
+   
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    // Will need to change for different types
+
+    std::cout << "mul $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
+void DivOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+
+   
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    // Will need to change for different types
+
+    std::cout << "div $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "mflo $3" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
+
+void LShiftOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "sllv $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
 //////////////////////////////////////////////
 // ast_primitives.hpp
 //////////////////////////////////////////////
