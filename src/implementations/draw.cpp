@@ -176,3 +176,15 @@ void Unary::draw_tree_node(std::ofstream& dotfile) const {
     }
 
 };
+
+
+
+//////////////////////////////////////////////
+// ast_type.hpp
+//////////////////////////////////////////////
+
+void Type::draw_tree_node(std::ofstream& dotfile) const {
+
+throw std::runtime_error("Type not implemented in draw");
+
+};
