@@ -113,7 +113,7 @@ L?\"(\\.|[^\\"])*\"	    { yylval.string=new std::string(yytext); return(STRING_L
 "?"			    { return('?'); }
 
 [ \t\v\n\f]		{ ; }
-.			    { fprintf(stderr, "Invalid token\n"); exit(1); }
+.			    { fprintf(stderr, "Invalid token %s\n",yytext); }
 
 %%
 

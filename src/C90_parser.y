@@ -423,7 +423,7 @@ selection_statement
 	;
 
 iteration_statement
-    : WHILE '(' expression ')' statement
+    : WHILE '(' expression ')' statement				{;}
 	| DO statement WHILE '(' expression ')' ';'
 	| FOR '(' expression_statement expression_statement ')' statement
 	| FOR '(' expression_statement expression_statement expression ')' statement

@@ -215,7 +215,7 @@ void SubOperator::codegen(
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
-    std::cout << "sub $s3, $s1, $s0" << std::endl;
+    std::cout << "sub $s3, $s0, $s1" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;

@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Check if the desired compiler is gcc, this flag is passed to test test cases.
 if [[ $1 == "gcc" ]]; then
     echo "[Test] Using GCC to compile tests. Only the test-cases will be tested!"
