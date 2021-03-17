@@ -51,6 +51,9 @@ public:
     double getValue() const
     { return value; }
 
+    //NodePtr getDeclValue() const
+      //  { return value; }
+
     // Function Declarations
     virtual void print(std::ostream &dst) const override;
 

@@ -14,7 +14,7 @@ void FuncDecl::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_map<std::string,struct varData> &variables
 ) const {
-    name->print(std::cout);
+    initDeclarator->print(std::cout);
     std::cout << ":" <<std::endl;
     std::cout<< "addiu " << "$sp, " << "$sp, " << "-8000"  << std::endl;
     std::cout<<"nop"<<std::endl;
@@ -65,8 +65,8 @@ void FuncDecl::codegen(
 	stack  = 60;
 
     // check if a code is nullptr for f(){} case
-	if(code != nullptr)
-	{code->codegen(destReg, stack,  bindings, variables); }
+	if(compoundStatement != nullptr)
+	{compoundStatement->codegen(destReg, stack,  bindings, variables); }
 
     std::cout << "nop" << std::endl;
     std::cout << "lw $s0, 12($sp)" << std::endl;
@@ -93,7 +93,7 @@ void FuncDecl::codegen(
     std::cout << "jr $ra" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << ".global ";
-    name->print(std::cout);
+    initDeclarator->print(std::cout);
     std::cout << std::endl;
         
      } 
@@ -111,10 +111,10 @@ void VarDecl::codegen(
     // TO DO: impliment the types, then un comment this stuff
         
     //if(type != nullptr)
-    //{ type->codegen("$s0", stack, bindings, variables); }
+    //{ declarationSpecifiers->codegen("$s0", stack, bindings, variables); }
         
-    if(name != nullptr)
-    { name->codegen("$s0", stack,  bindings, variables); }
+    if(initDeclarator != nullptr)
+    { initDeclarator->codegen("$s0", stack,  bindings, variables); }
 
     //std::cout << "sw $s0, " << stack  << "($sp)" << std::endl;
 
@@ -122,7 +122,7 @@ void VarDecl::codegen(
     struct varData a; 
     a.offset = stack - 4 ; 
     a.memSize = 1;
-    variables[name->getName()] = a;
+    variables[initDeclarator->getName()] = a;
 
     stack  += 4;
 
@@ -271,15 +271,6 @@ void Number::codegen(
 //////////////////////////////////////////////
 // ast_statement.hpp
 //////////////////////////////////////////////
-
-void Statement::codegen(
-     std::string destReg,
-     int &stack,
-     std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("Not implemented.");
-}
 
 void returnState::codegen(
      std::string destReg,

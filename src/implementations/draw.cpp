@@ -12,18 +12,18 @@ void Decl::draw_tree_node(std::ofstream& dotfile) const {
 }
 
 void FuncDecl::draw_tree_node(std::ofstream& dotfile) const {
-
+/*
     dotfile << "id" << this << "[label=\"{ Decl |{<type> type|<name> name|<value> value|<code> code|<next> next}}\"];" << std::endl;
 
-    if(type) {
+    if(declarationSpecifiers) {
         dotfile << "id" << this << ":type -> id" << type << ";" << std::endl;
         type->draw_tree_node(dotfile);
     }
 
     std::string name = this->getName();
     if(name.length()!=0) {
-        dotfile << "id" << this << ":name -> id" << name << ";" << std::endl;
-        dotfile << "id" << name << "[label=\"{ " << name << " }\"];" << std::endl;
+        dotfile << "id" << this << ":name -> id" << declarationSpecifiers << ";" << std::endl;
+        dotfile << "id" << declarationSpecifiers << "[label=\"{ " << declarationSpecifiers << " }\"];" << std::endl;
     }
 
     if(value) {
@@ -35,15 +35,13 @@ void FuncDecl::draw_tree_node(std::ofstream& dotfile) const {
         dotfile << "id" << this << ":code -> id" << code << ";" << std::endl;
         code->draw_tree_node(dotfile);
     }
+*/
 
-    if(next) {
-        dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
-        next->draw_tree_node(dotfile);
-    }
+  throw std::runtime_error("Not implemented.");
 };
 
 void VarDecl::draw_tree_node(std::ofstream& dotfile) const {
-    dotfile << "id" << this << "[label=\"{ Decl |{<type> type|<name> name|<value> value|<code> code|<next> next}}\"];" << std::endl;
+   /* dotfile << "id" << this << "[label=\"{ Decl |{<type> type|<name> name|<value> value|<code> code|<next> next}}\"];" << std::endl;
 
     if(type) {
         dotfile << "id" << this << ":type -> id" << type << ";" << std::endl;
@@ -70,6 +68,8 @@ void VarDecl::draw_tree_node(std::ofstream& dotfile) const {
         dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
         next->draw_tree_node(dotfile);
     }
+*/
+  throw std::runtime_error("Not implemented.");
 };
 
 void initDecl::draw_tree_node(std::ofstream& dotfile) const {
@@ -136,10 +136,6 @@ void Number::draw_tree_node(std::ofstream& dotfile) const {
 //////////////////////////////////////////////
 // ast_statement.hpp
 //////////////////////////////////////////////
-
-void Statement::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("draw_tree_node() is not implemented for Statement::");
-};
 
 void returnState::draw_tree_node(std::ofstream& dotfile) const {
     throw std::runtime_error("draw_tree_node() is not implemented for returnState::");

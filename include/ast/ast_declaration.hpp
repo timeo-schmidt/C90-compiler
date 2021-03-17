@@ -16,46 +16,38 @@ class Decl
 public:
 
     // Members
-    NodePtr type;
-    NodePtr name;
-    NodePtr value;
-    NodePtr code;
-    NodePtr next;
+    NodePtr declarationSpecifiers;
+    NodePtr initDeclarator;
+    NodePtr compoundStatement;
 
     // Constructor
-    Decl( NodePtr _type,  NodePtr _name, NodePtr _value, NodePtr _code, NodePtr _next):
-        type(_type),
-        name(_name),
-        value(_value),
-        code(_code),
-        next(_next)
+    Decl( NodePtr _declarationSpecifiers,  NodePtr _initDeclarator, NodePtr _compoundStatement):
+        declarationSpecifiers(_declarationSpecifiers),
+        initDeclarator(_initDeclarator),
+        compoundStatement(_compoundStatement)
     {}
 
     // Destructor
     virtual ~Decl()
     {
-        delete type;
-        delete name;
-        delete value;
-        delete code;
-        delete next;
+        delete declarationSpecifiers;
+        delete initDeclarator;
+        delete compoundStatement;
     }
 
     // Getters and Setters
-    NodePtr getType() const
-        { return type; }
+    
+   virtual NodePtr getDeclarationSpecifiers() const override
+        { return declarationSpecifiers; }
 
-    NodePtr getDeclValue() const
-        { return value; }
-
-    NodePtr getCode() const
-        { return next; }
-
-    NodePtr getNext() const
-        { return next; }
+   virtual NodePtr getInitDeclarator() const override
+        { return initDeclarator; }
+    
+   virtual NodePtr getCompoundStatement() const override
+        { return compoundStatement; }
 
     virtual std::string getName() const override {
-        return name->getName();
+        return initDeclarator->getName();
     }
 
     // Function declarations
@@ -81,8 +73,8 @@ class FuncDecl
 public:
 
     // Constructor
-    FuncDecl(NodePtr _type,  NodePtr _name, NodePtr _value, NodePtr _code, NodePtr _next)
-        : Decl(_type, _name, _value, _code, _next) {}
+    FuncDecl(NodePtr _declarationSpecifiers,  NodePtr _initDeclarator, NodePtr _compoundStatement)
+        : Decl(_declarationSpecifiers, _initDeclarator, _compoundStatement) {}
 
 
     // Member function declarations
@@ -106,10 +98,9 @@ class VarDecl
 {
 public:
     // Constructor
-    VarDecl(NodePtr _type,  NodePtr _name, NodePtr _value, NodePtr _code, NodePtr _next)
-        : Decl(_type, _name, _value, _code, _next) {}
-
-
+    VarDecl(NodePtr _declarationSpecifiers,  NodePtr _initDeclarator)
+        : Decl(_declarationSpecifiers, _initDeclarator, nullptr) {}
+    
     // Function declarations
     virtual void print(std::ostream &dst) const override;
 
@@ -149,10 +140,10 @@ public:
     }
 
     // Getters & Setters
-    NodePtr getDeclerator() const
+   virtual NodePtr getDeclerator() const override
         { return declarator; }
-
-    NodePtr getInitilizer() const
+  
+   virtual NodePtr getInitializer() const override
         { return initializer; }
 
     virtual std::string getName() const override {

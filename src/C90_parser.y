@@ -193,8 +193,8 @@ constant_expression
 
 
 declaration
-    : declaration_specifiers ';'									 { $$=new VarDecl($1, nullptr, nullptr, nullptr, nullptr); }
-	| declaration_specifiers init_declarator_list ';'          		 { $$=new VarDecl($1, $2, nullptr, nullptr, nullptr);  }
+    : declaration_specifiers ';'									 { $$=new VarDecl($1, nullptr); }
+	| declaration_specifiers init_declarator_list ';'          		 { $$=new VarDecl($1, $2);  }
 	;
 
 declaration_specifiers
@@ -449,8 +449,8 @@ external_declaration
 
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement     { ; }
-	| declaration_specifiers declarator compound_statement                      { $$= new FuncDecl($1, $2, nullptr, $3, nullptr); }
-	| declaration_specifiers declarator '{' '}'                                 { $$ = new FuncDecl($1, $2, nullptr, nullptr, nullptr); }
+	| declaration_specifiers declarator compound_statement                      { $$= new FuncDecl($1, $2, $3); }
+	| declaration_specifiers declarator '{' '}'                                 { $$ = new FuncDecl($1, $2, nullptr); }
 	| declarator declaration_list compound_statement                            { ; }
 	| declarator compound_statement                                             { ; }
 	;

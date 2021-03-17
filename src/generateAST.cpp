@@ -1,7 +1,7 @@
 #include "ast.hpp"
 #include <fstream>
 
-
+/*
 void print_tree(Program prog) {
     std::cout << "PRINTING TREE!" << std::endl;
     std::cout << prog.size() << " top-level declarations found." << std::endl;
@@ -26,7 +26,7 @@ void draw_tree(Program prog, std::string file_name="program_ast.dot") {
     dotfile << std::endl << "}";
     dotfile.close();
 }
-
+*/
 int main()
 {
 
@@ -36,11 +36,12 @@ int main()
     Program ast=parseAST();
 
     //draw_tree(ast);
-    std::cout << ast[0]->getType() << std::endl;
-    std::cout << ast[0]->getDeclValue() << std::endl;
-    std::cout << ast[0]->getCode() << std::endl;
-    std::cout << ast[0]->getNext() << std::endl;
-    print_tree(ast);
+    //std::cout << ast[0]->getDeclerator() << std::endl;
+    std::cout << ast[0]->getDeclarationSpecifiers() << std::endl;
+    std::cout << ast[0]->getInitDeclarator()  << std::endl;
+    std::cout << ast[0]->getCompoundStatement() << std::endl;
+//    print_tree(ast);
+   
 
     return 0;
 

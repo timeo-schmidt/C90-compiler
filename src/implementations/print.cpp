@@ -11,7 +11,7 @@
 
 
 void FuncDecl::print(std::ostream &dst) const {
-    std::cout << "FuncDecl" << std::endl;
+    /*std::cout << "FuncDecl" << std::endl;
     if(type != nullptr)
     { std::cout<<"FromType"<<std::endl; type->print(dst); }
 
@@ -20,10 +20,13 @@ void FuncDecl::print(std::ostream &dst) const {
 
     if(code != nullptr)
     { std::cout<<"FromCode"<<std::endl; code->print(dst); }
+*/
+  throw std::runtime_error("Not implemented.");
+
 }
 
 void VarDecl::print(std::ostream &dst) const {
-    std::cout << "VarDecl" << std::endl;
+   /* std::cout << "VarDecl" << std::endl;
     if(type != nullptr) {
         type->print(dst);
     }
@@ -38,6 +41,8 @@ void VarDecl::print(std::ostream &dst) const {
     } else {
         dst << "0";
     }
+*/
+  throw std::runtime_error("Not implemented.");
 }
 
 void initDecl::print(std::ostream &dst) const {
@@ -97,9 +102,6 @@ void Number::print(std::ostream &dst) const {
 // ast_statement.hpp
 //////////////////////////////////////////////
 
-void Statement::print(std::ostream &dst) const {
-    throw std::runtime_error("Not implemented.");
-}
 
 void returnState::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
