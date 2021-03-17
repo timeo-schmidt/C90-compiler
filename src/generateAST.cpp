@@ -9,6 +9,7 @@ void print_tree(Program prog) {
         (decl_node->print(std::cout));
     }
 }
+*/
 
 // The goal of this function is to output a tree in the .dot format
 void draw_tree(Program prog, std::string file_name="program_ast.dot") {
@@ -26,7 +27,7 @@ void draw_tree(Program prog, std::string file_name="program_ast.dot") {
     dotfile << std::endl << "}";
     dotfile.close();
 }
-*/
+
 int main()
 {
 
@@ -35,13 +36,7 @@ int main()
     // Parse the AST
     Program ast=parseAST();
 
-    //draw_tree(ast);
-    //std::cout << ast[0]->getDeclerator() << std::endl;
-    std::cout << ast[0]->getDeclarationSpecifiers() << std::endl;
-    std::cout << ast[0]->getInitDeclarator()  << std::endl;
-    std::cout << ast[0]->getCompoundStatement() << std::endl;
-//    print_tree(ast);
-   
+    draw_tree(ast);
 
     return 0;
 

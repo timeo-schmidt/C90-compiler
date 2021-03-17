@@ -61,7 +61,6 @@ public:
 
     // Function declarations
 
-    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
@@ -89,7 +88,6 @@ public:
 
     // Function declarations
 
-    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 
