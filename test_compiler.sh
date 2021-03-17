@@ -1,3 +1,5 @@
+COMPILER_TARGET="bin/compiler"
+
 # Check if the desired compiler is gcc, this flag is passed to test test cases.
 if [[ $1 == "gcc" ]]; then
     echo "[Test] Using GCC to compile tests. Only the test-cases will be tested!"
@@ -70,7 +72,7 @@ for d in test/compiler_test_cases/*/ ; do
             mips-linux-gnu-gcc -mfp32 -static -o $compiler_target_file $testcase_file $driver_file
         else
             # Compiling the testcase using the C to MIPS compiler under test
-            bin/c_compiler -S $testcase_file -o ${compiler_target_file}.s
+            $COMPILER_TARGET -S $testcase_file -o ${compiler_target_file}.s
             # Assembling the MIPS Assembly using gcc
             mips-linux-gnu-gcc -mfp32 -o "${compiler_target_file}.o" -c ${compiler_target_file}.s
             # Linking the MIPS-Assembled object file with the driver file using gcc
