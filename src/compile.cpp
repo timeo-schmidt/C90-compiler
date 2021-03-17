@@ -5,28 +5,25 @@
 
 
 
-int main(int argc, char *argv[])
-{
-typedef std::vector<Node *> Program;
+int main(int argc, char *argv[]) {
 
-    // Parse the AST
+    // Parsing and AST Generation
+    typedef std::vector<Node *> Program;
     Program ast=parseAST();
 
-
-
-
+    // Code Generation
     std::map<std::string,double> bindings;
     std::unordered_map<std::string,struct varData> variables;
 
-   int stack;
+    int stack;
 
-for(auto const& decl_node: ast) {
-         (decl_node->codegen("$s0", stack, bindings, variables));
-}
+    for(auto const& decl_node: ast) {
+        (decl_node->codegen("$s0", stack, bindings, variables));
+    }
 
-// extracting variable information
-//for(const auto& u : variables)
-//{ std::cout<<u.first << "  " << u.second.memSize << "  " << u.second.offset <<std::endl;}
+    // extracting variable information
+    //for(const auto& u : variables)
+    //{ std::cout<<u.first << "  " << u.second.memSize << "  " << u.second.offset <<std::endl;}
 
-    
+
 }

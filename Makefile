@@ -1,7 +1,7 @@
 CPPFLAGS += -std=c++11 -W -Wall -g -Wno-unused-parameter
 CPPFLAGS += -I include
 
-all : bin/generateAST bin/compiler
+all : bin/generateAST bin/c_compiler
 
 src/C90_parser.tab.cpp src/C90_parser.tab.hpp : src/C90_parser.y
 	bison -v -d src/C90_parser.y -o src/C90_parser.tab.cpp

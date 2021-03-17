@@ -1,4 +1,4 @@
-COMPILER_TARGET="bin/compiler"
+COMPILER_TARGET="bin/c_compiler"
 
 # Check if the desired compiler is gcc, this flag is passed to test test cases.
 if [[ $1 == "gcc" ]]; then
