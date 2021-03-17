@@ -161,6 +161,11 @@ void IfElseState::draw_tree_node(std::ofstream& dotfile) const {
 };
 
 
+void WhileState::draw_tree_node(std::ofstream& dotfile) const {
+
+    throw std::runtime_error("Type not implemented in draw");
+
+};
 
 //////////////////////////////////////////////
 // ast_unary.hpp
@@ -185,6 +190,16 @@ void Unary::draw_tree_node(std::ofstream& dotfile) const {
 
 void Type::draw_tree_node(std::ofstream& dotfile) const {
 
-throw std::runtime_error("Type not implemented in draw");
+    throw std::runtime_error("Type not implemented in draw");
 
 };
+
+
+//////////////////////////////////////////////
+// ast_assign.hpp
+//////////////////////////////////////////////
+/*
+void VarAssign::draw_tree_node(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+};
+*/

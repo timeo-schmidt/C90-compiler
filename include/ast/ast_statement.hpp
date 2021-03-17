@@ -83,7 +83,7 @@ public:
 
 };
 
-/*
+
 class WhileState
     : public Node
 {
@@ -97,7 +97,7 @@ public:
     // Constructors & Destructors
     WhileState(NodePtr _expr, NodePtr _statem):
         expr(_expr),
-        statem(_statem),
+        statem(_statem)
     {}
 
     virtual ~WhileState() {
@@ -119,6 +119,6 @@ public:
 
 };
 
-*/
+
 
 #endif

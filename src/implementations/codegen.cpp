@@ -108,7 +108,7 @@ void VarDecl::codegen(
 
     //Variable information:
     struct varData a; 
-    a.offset = stack - 4 ; 
+ 
     a.memSize = (declarationSpecifiers->getSize());
 
     // TO DO: impliment the types, then un comment this stuff  
@@ -121,10 +121,10 @@ void VarDecl::codegen(
     //std::cout << "sw $s0, " << stack  << "($sp)" << std::endl;
 
     // Storing variable name in variables 
-    
+    a.offset = stack-4;
     variables[initDeclarator->getName()] = a;
 
-    stack  += 4;
+   // stack  += 4;
 
 }
 
@@ -138,7 +138,10 @@ void initDecl::codegen(
     if(initializer != nullptr)
         { initializer->codegen("$s0", stack, bindings, variables); }
     else
-        { std::cout<<"addiu $s0, $0, $0"<<std::endl;}
+        { 
+            std::cout<<"sw $0, " << stack << "($sp)" << std::endl;
+            stack +=4;
+        }
 }
 
 void NextState::codegen(
@@ -173,12 +176,10 @@ void AddOperator::codegen(
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "nop" << std::endl;
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
 
    
-    std::cout << "nop" << std::endl;        
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -206,12 +207,10 @@ void SubOperator::codegen(
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "nop" << std::endl;
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
 
    
-    std::cout << "nop" << std::endl;        
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -244,14 +243,12 @@ void Variable::codegen(
         int32_t size = info.memSize;
         
         // load into register 
-        for(int i=0; i<=size; i++)
-        {
-        std::cout << "lw $s" << i << ", "<< location + (i*4) << "($sp)" << std::endl;
+        std::cout << "lw $s0, "<< location<< "($sp)" << std::endl;
         std::cout << "nop" << std::endl;
         std::cout << "sw $s0, " << stack  << "($sp)" << std::endl;
         std::cout << "nop" << std::endl;
         stack += 4;
-        }
+        
 }
 
 void Number::codegen(
@@ -329,8 +326,40 @@ void IfElseState::codegen(
 
  }
 
+void WhileState::codegen(
+     std::string destReg,
+     int &stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
 
+    // Individual names for jumps 
+    std::string START = makeName("START");
+    std::string EXIT = makeName("EXIT");
 
+    // START
+    std::cout << START << ":" << std::endl;
+    
+    // Evaulating expression
+    expr->codegen(destReg, stack, bindings, variables);
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s0, " << (stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    // Checking if expression is 0 (if not jumpt to exit)
+    std::cout<<"bnez $s0, " << EXIT << std::endl;
+    std::cout << "nop" << std::endl;
+
+    // Evaluating statement 
+    statem->codegen(destReg, stack, bindings, variables);
+
+    // Jumping to start 
+    std::cout << "j " << START << std::endl;
+
+    // EXIT 
+    std::cout << EXIT << ":" << std::endl;
+
+}
 //////////////////////////////////////////////
 // ast_unary.hpp
 //////////////////////////////////////////////
@@ -359,3 +388,33 @@ void Type::codegen(
 ) const {
     throw std::runtime_error("Not implemented.");
 }
+
+
+
+//////////////////////////////////////////////
+// ast_assign.hpp
+//////////////////////////////////////////////
+
+void VarAssign::codegen(
+     std::string destReg,
+     int &stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+    // Obtaining variable memory location (will need to be updated when types)
+    std::string name = var->getName();
+    struct varData info;
+    info = variables.at(name);
+    int32_t location = info.offset;
+    int32_t size = info.memSize;
+
+    // Get new value
+    expr->codegen(destReg, stack, bindings, variables);
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s0, " << (stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s0, " << location <<"($sp)" << std::endl;
+
+}
+
+        

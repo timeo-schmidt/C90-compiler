@@ -36,7 +36,7 @@ typedef std::vector<Node *> Program;
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <node> external_declaration iteration_statement function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
 %type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
 %type <number> CONSTANT
 
@@ -165,7 +165,7 @@ conditional_expression
 
 assignment_expression
     : conditional_expression													{$$ = $1;}
-	| unary_expression assignment_operator assignment_expression
+	| unary_expression assignment_operator assignment_expression				{$$ = new VarAssign($1, $3);}
 	;
 
 assignment_operator
@@ -423,7 +423,7 @@ selection_statement
 	;
 
 iteration_statement
-    : WHILE '(' expression ')' statement				{;}
+    : WHILE '(' expression ')' statement				{ $$ = new WhileState($3, $5);}
 	| DO statement WHILE '(' expression ')' ';'
 	| FOR '(' expression_statement expression_statement ')' statement
 	| FOR '(' expression_statement expression_statement expression ')' statement

@@ -111,14 +111,8 @@ void IfElseState::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
 
-
-
-//////////////////////////////////////////////
-// ast_type.hpp
-//////////////////////////////////////////////
-
-void Type::print(std::ostream &dst) const {
-    std::cout<<"Kind to be found"<<std::endl;
+void WhileState::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
 }
 
 
@@ -133,4 +127,21 @@ void Unary::print(std::ostream &dst) const {
     dst << " ";
     expr->print(dst);
     dst << " )";
+}
+
+
+//////////////////////////////////////////////
+// ast_type.hpp
+//////////////////////////////////////////////
+
+void Type::print(std::ostream &dst) const {
+    std::cout<<"Kind to be found"<<std::endl;
+}
+
+//////////////////////////////////////////////
+// ast_assign.hpp
+//////////////////////////////////////////////
+
+void VarAssign::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
 }
