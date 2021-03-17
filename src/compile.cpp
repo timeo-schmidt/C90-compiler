@@ -26,7 +26,7 @@ for(auto const& decl_node: ast) {
 
 // extracting variable information
 //for(const auto& u : variables)
-//{ std::cout<<u.first <<std::endl;}
+//{ std::cout<<u.first << u.second.memSize <<std::endl;}
 
     
 }

@@ -95,16 +95,14 @@ public:
     NodePtr statem;
 
     // Constructors & Destructors
-    WhileState(NodePtr _expr, NodePtr _If, NodePtr _Else):
-        condition(_condition),
-        If(_If),
-        Else(_Else)
+    WhileState(NodePtr _expr, NodePtr _statem):
+        expr(_expr),
+        statem(_statem),
     {}
 
     virtual ~WhileState() {
-        delete condition;
-        delete If;
-        delete Else;
+        delete expr;
+        delete statem;
     }
 
     // Function declarations

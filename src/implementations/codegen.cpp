@@ -106,10 +106,12 @@ void VarDecl::codegen(
      std::unordered_map<std::string,struct varData> &variables
 ) const {
 
-    //Putting assignment value in $s0
-        
-    // TO DO: impliment the types, then un comment this stuff
-        
+    //Variable information:
+    struct varData a; 
+    a.offset = stack - 4 ; 
+    a.memSize = (declarationSpecifiers->getSize());
+
+    // TO DO: impliment the types, then un comment this stuff  
     //if(type != nullptr)
     //{ declarationSpecifiers->codegen("$s0", stack, bindings, variables); }
         
@@ -118,10 +120,8 @@ void VarDecl::codegen(
 
     //std::cout << "sw $s0, " << stack  << "($sp)" << std::endl;
 
-    // Storing variable name in variables and type TODO
-    struct varData a; 
-    a.offset = stack - 4 ; 
-    a.memSize = 1;
+    // Storing variable name in variables 
+    
     variables[initDeclarator->getName()] = a;
 
     stack  += 4;
@@ -241,13 +241,17 @@ void Variable::codegen(
             
         info = variables.at(id);
         int32_t location = info.offset;
+        int32_t size = info.memSize;
+        
         // load into register 
-        std::cout << "lw $s0, "<< location << "($sp)" << std::endl;
+        for(int i=0; i<=size; i++)
+        {
+        std::cout << "lw $s" << i << ", "<< location + (i*4) << "($sp)" << std::endl;
         std::cout << "nop" << std::endl;
         std::cout << "sw $s0, " << stack  << "($sp)" << std::endl;
         std::cout << "nop" << std::endl;
-
         stack += 4;
+        }
 }
 
 void Number::codegen(
@@ -332,6 +336,22 @@ void IfElseState::codegen(
 //////////////////////////////////////////////
 
 void Unary::codegen(
+     std::string destReg,
+     int &stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+
+
+
+//////////////////////////////////////////////
+// ast_type.hpp
+//////////////////////////////////////////////
+
+void Type::codegen(
      std::string destReg,
      int &stack,
      std::map<std::string,double> &bindings,

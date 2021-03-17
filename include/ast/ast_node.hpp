@@ -66,7 +66,7 @@ public:
     virtual NodePtr         getInitDeclarator()          const { throw std::runtime_error("getInitDeclarator() is not implemented."); }
     virtual NodePtr         getCompoundStatement()       const { throw std::runtime_error("getCompoundStatement() is not implemented."); }
     virtual NodePtr         getInitializer()             const { throw std::runtime_error("getInitializer() is not implemented."); }
-   
+    virtual int             getSize()                    const { throw std::runtime_error("getSize() is not implemented."); }
 
     // Function declarations (being overriden by child)
     virtual void print(std::ostream &dst) const { throw std::runtime_error("print() is not implemented."); }
