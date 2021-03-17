@@ -17,10 +17,10 @@ public:
 
     // Getters & Setters
     const std::string getId() const
-        { return id; }
+        { return this->id; }
 
     virtual std::string getName() const override
-        { return id; }
+        { return this->id; }
 
     // Function Declarations
     virtual void print(std::ostream &dst) const override;

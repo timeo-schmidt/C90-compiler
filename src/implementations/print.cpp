@@ -11,28 +11,33 @@
 
 
 void FuncDecl::print(std::ostream &dst) const {
-   if(type != nullptr)
-   { type->print(dst);}
+    std::cout << "FuncDecl" << std::endl;
+    if(type != nullptr)
+    { std::cout<<"FromType"<<std::endl; type->print(dst); }
 
     if(name != nullptr)
-   { name->print(dst);}
+    { std::cout<<"FromName"<<std::endl; name->print(dst); }
 
     if(code != nullptr)
-   { code->print(dst);}
-
+    { std::cout<<"FromCode"<<std::endl; code->print(dst); }
 }
 
 void VarDecl::print(std::ostream &dst) const {
-  if(type != nullptr)
-  { type->print(dst); }
+    std::cout << "VarDecl" << std::endl;
+    if(type != nullptr) {
+        type->print(dst);
+    }
 
-  if(name != nullptr)
-  { name->print(dst);
-    dst <<  " = "; }
+    if(name != nullptr) {
+        name->print(dst);
+        dst <<  " = ";
+    }
 
-  if(value != nullptr)
-  { value->print(dst); }
-  else{ dst << "0"; }
+    if(value != nullptr) {
+        value->print(dst);
+    } else {
+        dst << "0";
+    }
 }
 
 void initDecl::print(std::ostream &dst) const {

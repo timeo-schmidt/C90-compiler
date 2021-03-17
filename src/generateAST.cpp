@@ -17,6 +17,7 @@ void draw_tree(Program prog, std::string file_name="program_ast.dot") {
 
     dotfile << "digraph ast_graph" << std::endl;
     dotfile << "{" << std::endl;
+    dotfile << "node[shape=record];" << std::endl;
 
     for(const auto& node: prog) {
         node->draw_tree_node(dotfile);
@@ -34,7 +35,12 @@ int main()
     // Parse the AST
     Program ast=parseAST();
 
-    draw_tree(ast);
+    //draw_tree(ast);
+    std::cout << ast[0]->getType() << std::endl;
+    std::cout << ast[0]->getDeclValue() << std::endl;
+    std::cout << ast[0]->getCode() << std::endl;
+    std::cout << ast[0]->getNext() << std::endl;
+    print_tree(ast);
 
     return 0;
 

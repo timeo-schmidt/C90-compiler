@@ -43,6 +43,8 @@ struct varData
 	int32_t memSize;
 };
 
+class Node;
+typedef const Node *NodePtr;
 
 // Base Node class
 class Node
@@ -52,13 +54,20 @@ public:
     // Constructor
     virtual ~Node() {}
 
-    // Function declarations
-    virtual void print(std::ostream &dst) const =0;
+    // Getters and Setters implemented by child
+    virtual NodePtr         getType()           const { throw std::runtime_error("getType() is not implemented."); }
+    virtual NodePtr         getDeclValue()      const { throw std::runtime_error("getDeclValue() is not implemented."); }
+    virtual double          getValue()          const { throw std::runtime_error("getValue() is not implemented."); }
+    virtual NodePtr         getCode()           const { throw std::runtime_error("getCode() is not implemented."); }
+    virtual NodePtr         getNext()           const { throw std::runtime_error("getNext() is not implemented."); }
+    virtual std::string     getName()           const { throw std::runtime_error("getName() is not implemented."); }
+    virtual NodePtr         getDeclerator()     const { throw std::runtime_error("getDeclerator() is not implemented."); }
+    virtual NodePtr         getInitilizer()     const { throw std::runtime_error("getInitilizer() is not implemented."); }
 
-    virtual std::string getName() const { throw std::runtime_error("getName() is not implemented."); }
 
+    // Function declarations (being overriden by child)
+    virtual void print(std::ostream &dst) const { throw std::runtime_error("print() is not implemented."); }
     virtual void draw_tree_node(std::ofstream& dotfile) const { throw std::runtime_error("draw_tree_node() is not implemented."); }
-
     virtual void codegen(
          std::string destReg,
          int &stack,
@@ -67,8 +76,6 @@ public:
     ) const { throw std::runtime_error("codegen() is not implemented."); };
 
 };
-
-typedef const Node *NodePtr;
 
 
 #endif

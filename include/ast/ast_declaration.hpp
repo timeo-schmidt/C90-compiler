@@ -43,17 +43,20 @@ public:
 
     // Getters and Setters
     NodePtr getType() const
-    { return type; }
+        { return type; }
 
-    NodePtr getValue() const
-    { return value; }
+    NodePtr getDeclValue() const
+        { return value; }
 
     NodePtr getCode() const
-    { return next; }
+        { return next; }
 
     NodePtr getNext() const
-    { return next; }
+        { return next; }
 
+    virtual std::string getName() const override {
+        return name->getName();
+    }
 
     // Function declarations
     virtual void print(std::ostream &dst) const override
@@ -147,13 +150,12 @@ public:
 
     // Getters & Setters
     NodePtr getDeclerator() const
-    { return declarator; }
+        { return declarator; }
 
     NodePtr getInitilizer() const
-    { return initializer; }
+        { return initializer; }
 
-    virtual std::string getName() const override
-    {
+    virtual std::string getName() const override {
         return declarator->getName();
     }
 
@@ -173,7 +175,7 @@ public:
 
 class NextState
     : public Node
-{      
+{
 
 public:
 
