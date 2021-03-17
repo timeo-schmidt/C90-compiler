@@ -163,7 +163,17 @@ void IfElseState::draw_tree_node(std::ofstream& dotfile) const {
 
 void WhileState::draw_tree_node(std::ofstream& dotfile) const {
 
-    throw std::runtime_error("Type not implemented in draw");
+    dotfile << "id" << this << "[label=\"{ WhileState |{<expr> expression | <statem> statement}}\"];" << std::endl;
+
+    if(expr!=nullptr) {
+        dotfile << "id" << this << ":expr -> id" << expr << ";" << std::endl;
+        expr->draw_tree_node(dotfile);
+    }
+
+    if(statem!=nullptr) {
+        dotfile << "id" << this << ":statem -> id" << statem << ";" << std::endl;
+        statem->draw_tree_node(dotfile);
+    }
 
 };
 
@@ -190,16 +200,29 @@ void Unary::draw_tree_node(std::ofstream& dotfile) const {
 
 void Type::draw_tree_node(std::ofstream& dotfile) const {
 
-    throw std::runtime_error("Type not implemented in draw");
+    dotfile << "id" << this << "[label=\"{ Type |{<kind> "<< kind <<" | <subType> (subType)| <paramList> (paramList)}}\"];" << std::endl;
+
+    if(subType!=nullptr) {
+        dotfile << "id" << this << ":subType -> id" << subType << ";" << std::endl;
+        subType->draw_tree_node(dotfile);
+    }
+
+    if(paramList!=nullptr) {
+        dotfile << "id" << this << ":paramList -> id" << paramList << ";" << std::endl;
+        paramList->draw_tree_node(dotfile);
+    }
 
 };
+
 
 
 //////////////////////////////////////////////
 // ast_assign.hpp
 //////////////////////////////////////////////
-/*
-void VarAssign::draw_tree_node(std::ostream &dst) const {
-    throw std::runtime_error("Not implemented.");
+
+
+void VarAssign::draw_tree_node(std::ofstream& dotfile) const {
+
+    throw std::runtime_error("Not implemented for VarAssign::");
+
 };
-*/

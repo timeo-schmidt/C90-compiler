@@ -41,7 +41,7 @@ public:
         std::unordered_map<std::string,struct varData> &variables
     ) const override;
 
-  //  virtual void draw_tree_node(std::ofstream& dotfile) const override;
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
 

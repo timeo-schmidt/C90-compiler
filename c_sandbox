@@ -1,3 +1,9 @@
 int f() {
     int x = 5;
+    int y = (x-1)+10;
+    if(x==y) {
+        return 1;
+    } else {
+        return 5;
+    }
 }

@@ -48,8 +48,8 @@ public:
     {}
 
     // Getters & Setters
-    double getValue() const
-    { return value; }
+    double getValue() const override
+        { return value; }
 
     //NodePtr getDeclValue() const
       //  { return value; }
