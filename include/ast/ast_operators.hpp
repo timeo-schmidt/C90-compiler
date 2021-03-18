@@ -202,7 +202,7 @@ class RShiftOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "\\>\\>"; }
 public:
     // Constructors
     RShiftOperator(NodePtr  _left, NodePtr  _right)
@@ -227,7 +227,7 @@ class LThanOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "\\<"; }
 public:
     // Constructors
     LThanOperator(NodePtr  _left, NodePtr  _right)
@@ -251,7 +251,7 @@ class GThanOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "\\>"; }
 public:
     // Constructors
     GThanOperator(NodePtr  _left, NodePtr  _right)
@@ -275,7 +275,7 @@ class LEThanOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "\\<="; }
 public:
     // Constructors
     LEThanOperator(NodePtr  _left, NodePtr  _right)
@@ -299,7 +299,7 @@ class GEThanOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "\\>="; }
 public:
     // Constructors
     GEThanOperator(NodePtr  _left, NodePtr  _right)
@@ -325,7 +325,7 @@ class EQOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "=="; }
 public:
     // Constructors
     EQOperator(NodePtr  _left, NodePtr  _right)
@@ -350,7 +350,7 @@ class NEOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "!="; }
 public:
     // Constructors
     NEOperator(NodePtr  _left, NodePtr  _right)
@@ -377,7 +377,7 @@ class ANDOperator
 protected:
     // Getters & Setters
     virtual const char *getOpcode() const override
-        { return ">>"; }
+        { return "&&"; }
 public:
     // Constructors
     ANDOperator(NodePtr  _left, NodePtr  _right)

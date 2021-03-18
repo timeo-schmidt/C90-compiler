@@ -308,7 +308,7 @@ direct_declarator
 	| '(' declarator ')'                                { ; }
 	| direct_declarator '[' constant_expression ']'     { ; }
 	| direct_declarator '[' ']'                         { ; }
-	| direct_declarator '(' parameter_type_list ')'     { ; /*$$ = new funcDeclarator($1, $3);*/ }
+	| direct_declarator '(' parameter_type_list ')'     { $$ = new funcDeclarator($1, $3); }
 	| direct_declarator '(' identifier_list ')'         { ; }
     | direct_declarator '(' ')'                         { $$= $1; }
 	;
@@ -331,17 +331,12 @@ parameter_type_list
 	;
 
 parameter_list
-<<<<<<< HEAD
     : parameter_declaration								{ $$ = $1; }
 	| parameter_declaration ',' parameter_list			{ $1->setNext($3); $$ = $1; }
-=======
-    : parameter_declaration								{$$ = $1;}
-	| parameter_declaration ',' parameter_list			{; /*$1->setNext($3); $$ = $1;*/ } 
->>>>>>> 0088b5d8c4454264cb910131b9a51db5c25d0049
 	;
 
 parameter_declaration
-    : declaration_specifiers declarator					{; /*$$ = new paramDecl($1, $2, nullptr);*/}
+    : declaration_specifiers declarator					{; $$ = new paramDecl($1, $2, nullptr); }
 	| declaration_specifiers abstract_declarator
 	| declaration_specifiers
 	;

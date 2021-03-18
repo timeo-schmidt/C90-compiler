@@ -34,7 +34,7 @@ void FuncDecl::draw_tree_node(std::ofstream& dotfile) const {
 
 void VarDecl::draw_tree_node(std::ofstream& dotfile) const {
 
-    dotfile << "id" << this << "[label=\"{ VarDecl |{<declarationSpecifiers> declarationSpecifiers|<initDeclarator> initDeclarator|<compoundStatement> compoundStatement}}\"];" << std::endl;
+    dotfile << "id" << this << "[label=\"{ VarDecl |{<declarationSpecifiers> declarationSpecifiers|<initDeclarator> initDeclarator}}\"];" << std::endl;
 
     if(declarationSpecifiers!=nullptr) {
         dotfile << "id" << this << ":declarationSpecifiers -> id" << declarationSpecifiers << ";" << std::endl;
@@ -44,11 +44,6 @@ void VarDecl::draw_tree_node(std::ofstream& dotfile) const {
     if(initDeclarator!=nullptr) {
         dotfile << "id" << this << ":initDeclarator -> id" << initDeclarator << ";" << std::endl;
         initDeclarator->draw_tree_node(dotfile);
-    }
-
-    if(compoundStatement!=nullptr) {
-        dotfile << "id" << this << ":compoundStatement -> id" << compoundStatement << ";" << std::endl;
-        compoundStatement->draw_tree_node(dotfile);
     }
 
 };
