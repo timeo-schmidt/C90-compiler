@@ -121,21 +121,21 @@ shift_expression
 
 relational_expression
     : shift_expression											{$$ = $1;}
-	| relational_expression '<' shift_expression
-	| relational_expression '>' shift_expression
-	| relational_expression LE_OP shift_expression
-	| relational_expression GE_OP shift_expression
+	| relational_expression '<' shift_expression				{$$ = new LThanOperator($1, $3);}
+	| relational_expression '>' shift_expression				{$$ = new GThanOperator($1, $3);}
+	| relational_expression LE_OP shift_expression				{$$ = new LEThanOperator($1, $3);}
+	| relational_expression GE_OP shift_expression				{$$ = new GEThanOperator($1, $3);}
 	;
 
 equality_expression
     : relational_expression										{$$ = $1;}
-	| equality_expression EQ_OP relational_expression
-	| equality_expression NE_OP relational_expression
+	| equality_expression EQ_OP relational_expression			{$$ = new EQOperator($1, $3);}
+	| equality_expression NE_OP relational_expression			{$$ = new NEOperator($1, $3);}
 	;
 
 and_expression
     : equality_expression										{$$ = $1;}
-	| and_expression '&' equality_expression
+	| and_expression '&' equality_expression					{$$ = new ANDOperator($1, $3);}
 	;
 
 exclusive_or_expression
@@ -309,7 +309,7 @@ direct_declarator
 	| '(' declarator ')'                                { ; }
 	| direct_declarator '[' constant_expression ']'     { ; }
 	| direct_declarator '[' ']'                         { ; }
-	| direct_declarator '(' parameter_type_list ')'     { $$ = new funcDeclarator($1, $3); }
+	| direct_declarator '(' parameter_type_list ')'     { ; /*$$ = new funcDeclarator($1, $3);*/ }
 	| direct_declarator '(' identifier_list ')'         { ; }
 	;
 
@@ -332,11 +332,11 @@ parameter_type_list
 
 parameter_list
     : parameter_declaration								{$$ = $1;}
-	| parameter_declaration ',' parameter_list			{$1->setNext($3); $$ = $1; } 
+	| parameter_declaration ',' parameter_list			{; /*$1->setNext($3); $$ = $1;*/ } 
 	;
 
 parameter_declaration
-    : declaration_specifiers declarator					{$$ = new paramDecl($1, $2, nullptr);}
+    : declaration_specifiers declarator					{; /*$$ = new paramDecl($1, $2, nullptr);*/}
 	| declaration_specifiers abstract_declarator
 	| declaration_specifiers
 	;
