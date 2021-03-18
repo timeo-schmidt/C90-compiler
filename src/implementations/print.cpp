@@ -45,6 +45,14 @@ void VarDecl::print(std::ostream &dst) const {
   throw std::runtime_error("Not implemented.");
 }
 
+void funcDeclarator::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void paramDecl::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
 void initDecl::print(std::ostream &dst) const {
     if(declarator != nullptr)
         { declarator->print(dst); }

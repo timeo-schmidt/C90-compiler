@@ -54,7 +54,7 @@ public:
     // Constructor
     virtual ~Node() {}
 
-    // Getters and Setters implemented by child
+    // Getters implemented by child
     virtual NodePtr         getType()                    const { throw std::runtime_error("getType() is not implemented."); }
     virtual double          getValue()                   const { throw std::runtime_error("getValue() is not implemented."); }
     virtual NodePtr         getCode()                    const { throw std::runtime_error("getCode() is not implemented."); }
@@ -67,6 +67,12 @@ public:
     virtual NodePtr         getCompoundStatement()       const { throw std::runtime_error("getCompoundStatement() is not implemented."); }
     virtual NodePtr         getInitializer()             const { throw std::runtime_error("getInitializer() is not implemented."); }
     virtual int             getSize()                    const { throw std::runtime_error("getSize() is not implemented."); }
+    virtual NodePtr         getFunctionName()            const { throw std::runtime_error("getFunctionName() is not implemented."); }
+    virtual NodePtr         getParameterList()           const { throw std::runtime_error("getParameterList() is not implemented."); }
+    virtual NodePtr         getParamType()               const { throw std::runtime_error("getParamType() is not implemented."); }
+    virtual NodePtr         getParamName()               const { throw std::runtime_error("getParamName() is not implemented."); }
+    // Setters implemented by child
+    virtual void            setNext(NodePtr _nextptr)          { throw std::runtime_error("setNext() is not implemented."); }
 
     // Function declarations (being overriden by child)
     virtual void print(std::ostream &dst) const { throw std::runtime_error("print() is not implemented."); }

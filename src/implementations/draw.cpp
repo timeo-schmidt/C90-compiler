@@ -69,6 +69,43 @@ void initDecl::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
+void funcDeclarator::draw_tree_node(std::ofstream& dotfile) const {
+
+    dotfile << "id" << this << "[label=\"{ funcDeclarator |{<functionName> functionName|<parameterList> parameterList}}\"];" << std::endl;
+
+    if(functionName!=nullptr) {
+        dotfile << "id" << this << ":functionName -> id" << functionName << ";" << std::endl;
+        functionName->draw_tree_node(dotfile);
+    }
+
+    if(parameterList!=nullptr) {
+        dotfile << "id" << this << ":parameterList -> id" << parameterList << ";" << std::endl;
+        parameterList->draw_tree_node(dotfile);
+    }
+
+};
+
+void paramDecl::draw_tree_node(std::ofstream& dotfile) const {
+
+    dotfile << "id" << this << "[label=\"{ paramDecl |{<paramType> paramType|<paramName> paramName|<next> next}}\"];" << std::endl;
+
+    if(paramType!=nullptr) {
+        dotfile << "id" << this << ":paramType -> id" << paramType << ";" << std::endl;
+        paramType->draw_tree_node(dotfile);
+    }
+
+    if(paramName!=nullptr) {
+        dotfile << "id" << this << ":paramName -> id" << paramName << ";" << std::endl;
+        paramName->draw_tree_node(dotfile);
+    }
+
+    if(next!=nullptr) {
+        dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
+        next->draw_tree_node(dotfile);
+    }
+
+};
+
 void NextState::draw_tree_node(std::ofstream& dotfile) const {
 
     dotfile << "id" << this << "[label=\"{ initDecl |{<state> state|<next> next}}\"];" << std::endl;
