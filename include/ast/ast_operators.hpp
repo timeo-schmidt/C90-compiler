@@ -210,6 +210,187 @@ public:
     {}
 
     // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+
+class LThanOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    LThanOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+class GThanOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    GThanOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+class LEThanOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    LEThanOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+class GEThanOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    GEThanOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+
+
+class EQOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    EQOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+
+class NEOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    NEOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+
+};
+
+
+
+
+class ANDOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return ">>"; }
+public:
+    // Constructors
+    ANDOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
 
 
 };

@@ -341,6 +341,308 @@ void LShiftOperator::codegen(
 
 }
 
+void RShiftOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "srlv $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
+// NOTE: slt doesnt seem to work for either 10>10 or 10<10, passes for both ???????
+
+void LThanOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "slt $s3, $s1, $s0" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
+void GThanOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "slt $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
+// FOR NOW works cause slt is broken ...
+
+void LEThanOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    // Check if equal
+    std::string EQUAL = makeName("EQUAL");
+    std::string END = makeName("END");
+
+    std::cout << "beq $s1, $s0, " << EQUAL << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "slt $s3, $s1, $s0" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "j " << END << std::endl;
+    std::cout << EQUAL << ":" << std::endl;
+    std::cout << "add $s3, $0, $0" << std::endl;
+    std::cout << END << ":" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    stack  += 4;
+
+}
+
+void GEThanOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::string EQUAL = makeName("EQUAL");
+    std::string END = makeName("END");
+
+    std::cout << "beq $s1, $s0, " << EQUAL << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "slt $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "j " << END << std::endl;
+    std::cout << EQUAL << ":" << std::endl;
+    std::cout << "add $s3, $0, $0" << std::endl;
+    std::cout << END << ":" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    stack  += 4;
+
+}
+
+void EQOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::string EQUAL = makeName("EQUAL");
+    std::string END = makeName("END");
+
+    std::cout << "beq $s1, $s0, " << EQUAL << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "j " << END << std::endl;
+    std::cout << EQUAL << ":" << std::endl;
+    std::cout << "add $s3, $0, $0" << std::endl;
+    std::cout << END << ":" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    stack  += 4;
+
+}
+
+void NEOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::string EQUAL = makeName("EQUAL");
+    std::string END = makeName("END");
+
+    std::cout << "beq $s1, $s0, " << EQUAL << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "addi $s3, $0, 0" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "j " << END << std::endl;
+    std::cout << EQUAL << ":" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
+    std::cout << END << ":" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    stack  += 4;
+
+}
+
+
+void ANDOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, stack, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, stack, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "and $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    stack  += 4;
+
+}
+
 //////////////////////////////////////////////
 // ast_primitives.hpp
 //////////////////////////////////////////////
