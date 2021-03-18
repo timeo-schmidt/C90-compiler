@@ -305,12 +305,12 @@ declarator
 
 direct_declarator
     : identifier_type                                   { $$= $1; }
-    | identifier_type '(' ')'                           { $$= $1; /* Check later! */}
 	| '(' declarator ')'                                { ; }
 	| direct_declarator '[' constant_expression ']'     { ; }
 	| direct_declarator '[' ']'                         { ; }
 	| direct_declarator '(' parameter_type_list ')'     { $$ = new funcDeclarator($1, $3); }
 	| direct_declarator '(' identifier_list ')'         { ; }
+    | direct_declarator '(' ')'                         { $$= $1; }
 	;
 
 pointer
@@ -325,14 +325,14 @@ type_qualifier_list
 	| type_qualifier_list type_qualifier
 	;
 
-parameter_type_list 
+parameter_type_list
     : parameter_list									{$$ = $1;}
 	| parameter_list ',' ELLIPSIS
 	;
 
 parameter_list
-    : parameter_declaration								{$$ = $1;}
-	| parameter_declaration ',' parameter_list			{$1->setNext($3); $$ = $1; } 
+    : parameter_declaration								{ $$ = $1; }
+	| parameter_declaration ',' parameter_list			{ $1->setNext($3); $$ = $1; }
 	;
 
 parameter_declaration
@@ -396,7 +396,8 @@ labeled_statement
 	;
 
 compound_statement
-    : '{' statement_list '}'                    { $$ = $2; }
+    : '{' '}'                                   { $$=nullptr; }
+    | '{' statement_list '}'                    { $$ = $2; }
 	| '{' declaration_list '}'                  { $$ = $2; }
 	| '{' declaration_list statement_list '}'   { $$ = new NextState($2, $3); }
 	;
@@ -450,7 +451,6 @@ external_declaration
 function_definition
     : declaration_specifiers declarator declaration_list compound_statement     { ; }
 	| declaration_specifiers declarator compound_statement                      { $$= new FuncDecl($1, $2, $3); }
-	| declaration_specifiers declarator '{' '}'                                 { $$ = new FuncDecl($1, $2, nullptr); }
 	| declarator declaration_list compound_statement                            { ; }
 	| declarator compound_statement                                             { ; }
 	;
