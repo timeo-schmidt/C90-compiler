@@ -234,8 +234,8 @@ type_specifier
 	| DOUBLE                        { $$=new std::string("double"); }
 	| SIGNED                        { $$=new std::string("signed"); }
 	| UNSIGNED                      { $$=new std::string("unsigned"); }
-	| struct_or_union_specifier     { $$=new std::string("placeholder"); }
-	| enum_specifier                { $$=new std::string("placeholder"); }
+	| struct_or_union_specifier     { $$=new std::string("struct_or_union_specifier"); }
+	| enum_specifier                { $$=new std::string("enum_specifier"); }
 	| TYPE_NAME                     { $$=new std::string("type_name"); }
 	;
 
@@ -385,7 +385,7 @@ statement
 	| compound_statement
 	| expression_statement									{ $$ = $1; }
 	| selection_statement
-	| iteration_statement
+	| iteration_statement                                   { $$ = $1; }
 	| jump_statement
 	;
 
@@ -413,7 +413,7 @@ statement_list
 	;
 
 expression_statement
-    : ';'
+    : ';'                           { $$=nullptr; }
 	| expression ';'				{ $$ = $1; }
 	;
 
@@ -424,10 +424,10 @@ selection_statement
 	;
 
 iteration_statement
-    : WHILE '(' expression ')' statement				{ $$ = new WhileState($3, $5);}
-	| DO statement WHILE '(' expression ')' ';'
-	| FOR '(' expression_statement expression_statement ')' statement
-	| FOR '(' expression_statement expression_statement expression ')' statement
+    : WHILE '(' expression ')' statement				                            { $$ = new WhileState($3, $5); }
+	| DO statement WHILE '(' expression ')' ';'                                     { $$ = new WhileState($5, $2); }
+	| FOR '(' expression_statement expression_statement ')' statement               { ; }
+	| FOR '(' expression_statement expression_statement expression ')' statement    { ; }
 	;
 
 jump_statement

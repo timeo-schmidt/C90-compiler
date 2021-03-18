@@ -248,10 +248,10 @@ void MulOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of mul and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of mul and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
@@ -259,7 +259,7 @@ void MulOperator::codegen(
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
 
-   
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -280,10 +280,10 @@ void DivOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
@@ -291,7 +291,7 @@ void DivOperator::codegen(
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
 
-   
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -315,17 +315,17 @@ void LShiftOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -347,17 +347,17 @@ void RShiftOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -381,17 +381,17 @@ void LThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -413,17 +413,17 @@ void GThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -447,17 +447,17 @@ void LEThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -490,17 +490,17 @@ void GEThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -521,7 +521,7 @@ void GEThanOperator::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;
-    
+
     stack  += 4;
 
 }
@@ -532,17 +532,17 @@ void EQOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -563,7 +563,7 @@ void EQOperator::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;
-    
+
     stack  += 4;
 
 }
@@ -574,17 +574,17 @@ void NEOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -605,7 +605,7 @@ void NEOperator::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;
-    
+
     stack  += 4;
 
 }
@@ -617,17 +617,17 @@ void ANDOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, stack, bindings, variables);
-  
+
     // Getting left side of div and loading into register
     getRight()->codegen(destReg, stack, bindings, variables);
 
     // getting sum and storing destReg
     std::cout << "lw $s0, " << (stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
- 
+
     std::cout << "lw $s1, " << (stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -638,7 +638,7 @@ void ANDOperator::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;
-    
+
     stack  += 4;
 
 }
@@ -779,6 +779,18 @@ void WhileState::codegen(
     std::cout << EXIT << ":" << std::endl;
 
 }
+
+void ForState::codegen(
+     std::string destReg,
+     int &stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+
+
 //////////////////////////////////////////////
 // ast_unary.hpp
 //////////////////////////////////////////////

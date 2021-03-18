@@ -192,7 +192,6 @@ void IfElseState::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
-
 void WhileState::draw_tree_node(std::ofstream& dotfile) const {
 
     dotfile << "id" << this << "[label=\"{ WhileState |{<expr> expression | <statem> statement}}\"];" << std::endl;
@@ -208,6 +207,34 @@ void WhileState::draw_tree_node(std::ofstream& dotfile) const {
     }
 
 };
+
+void ForState::draw_tree_node(std::ofstream& dotfile) const {
+
+    dotfile << "id" << this << "[label=\"{ ForState |{<init_expr> init_expr | <cond_expr> cond_expr| <next_expr> next_expr| <code> code}}\"];" << std::endl;
+
+    if(init_expr!=nullptr) {
+        dotfile << "id" << this << ":init_expr -> id" << init_expr << ";" << std::endl;
+        init_expr->draw_tree_node(dotfile);
+    }
+
+    if(cond_expr!=nullptr) {
+        dotfile << "id" << this << ":cond_expr -> id" << cond_expr << ";" << std::endl;
+        cond_expr->draw_tree_node(dotfile);
+    }
+
+    if(next_expr!=nullptr) {
+        dotfile << "id" << this << ":next_expr -> id" << next_expr << ";" << std::endl;
+        next_expr->draw_tree_node(dotfile);
+    }
+
+    if(code!=nullptr) {
+        dotfile << "id" << this << ":code -> id" << code << ";" << std::endl;
+        code->draw_tree_node(dotfile);
+    }
+
+};
+
+
 
 //////////////////////////////////////////////
 // ast_unary.hpp
