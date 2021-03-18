@@ -1,0 +1,272 @@
+2c2
+<     : IDENTIFIER
+---
+> 	: IDENTIFIER
+4c4
+< 	| string_literal_type
+---
+> 	| STRING_LITERAL
+9c9
+<     : primary_expression
+---
+> 	: primary_expression
+20c20
+<     : assignment_expression
+---
+> 	: assignment_expression
+25c25
+<     : postfix_expression
+---
+> 	: postfix_expression
+34c34
+<     : '&'
+---
+> 	: '&'
+43c43
+<     : unary_expression
+---
+> 	: unary_expression
+48c48
+<     : cast_expression
+---
+> 	: cast_expression
+55c55
+<     : multiplicative_expression
+---
+> 	: multiplicative_expression
+61c61
+<     : additive_expression
+---
+> 	: additive_expression
+67c67
+<     : shift_expression
+---
+> 	: shift_expression
+75c75
+<     : relational_expression
+---
+> 	: relational_expression
+81c81
+<     : equality_expression
+---
+> 	: equality_expression
+86c86
+<     : and_expression
+---
+> 	: and_expression
+91c91
+<     : exclusive_or_expression
+---
+> 	: exclusive_or_expression
+96c96
+<     : inclusive_or_expression
+---
+> 	: inclusive_or_expression
+101c101
+<     : logical_and_expression
+---
+> 	: logical_and_expression
+106c106
+<     : logical_or_expression
+---
+> 	: logical_or_expression
+111c111
+<     : conditional_expression
+---
+> 	: conditional_expression
+116c116
+<     : '='
+---
+> 	: '='
+130c130
+<     : assignment_expression
+---
+> 	: assignment_expression
+135c135
+<     : conditional_expression
+---
+> 	: conditional_expression
+139c139
+<     : declaration_specifiers ';'
+---
+> 	: declaration_specifiers ';'
+144c144
+<     : storage_class_specifier
+---
+> 	: storage_class_specifier
+153c153
+<     : init_declarator
+---
+> 	: init_declarator
+158c158
+<     : declarator
+---
+> 	: declarator
+163c163
+<     : TYPEDEF
+---
+> 	: TYPEDEF
+171c171
+<     : VOID
+---
+> 	: VOID
+186c186
+<     : struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+---
+> 	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+192c192
+<     : STRUCT
+---
+> 	: STRUCT
+197c197
+<     : struct_declaration
+---
+> 	: struct_declaration
+202c202
+<     : specifier_qualifier_list struct_declarator_list ';'
+---
+> 	: specifier_qualifier_list struct_declarator_list ';'
+206c206
+<     : type_specifier specifier_qualifier_list
+---
+> 	: type_specifier specifier_qualifier_list
+213c213
+<     : struct_declarator
+---
+> 	: struct_declarator
+218c218
+<     : declarator
+---
+> 	: declarator
+224c224
+<     : ENUM '{' enumerator_list '}'
+---
+> 	: ENUM '{' enumerator_list '}'
+230c230
+<     : enumerator
+---
+> 	: enumerator
+235c235
+<     : IDENTIFIER
+---
+> 	: IDENTIFIER
+240c240
+<     : CONST
+---
+> 	: CONST
+245c245
+<     : pointer direct_declarator
+---
+> 	: pointer direct_declarator
+250,251c250
+<     : identifier_type
+<     | identifier_type '(' ')'
+---
+> 	: IDENTIFIER
+256a256
+> 	| direct_declarator '(' ')'
+260c260
+<     : '*'
+---
+> 	: '*'
+267c267
+<     : type_qualifier
+---
+> 	: type_qualifier
+272c272
+<     : parameter_list
+---
+> 	: parameter_list
+277,278c277,278
+<     : parameter_declaration
+< 	| parameter_declaration ',' parameter_list
+---
+> 	: parameter_declaration
+> 	| parameter_list ',' parameter_declaration
+282c282
+<     : declaration_specifiers declarator
+---
+> 	: declaration_specifiers declarator
+288c288
+<     : IDENTIFIER
+---
+> 	: IDENTIFIER
+293c293
+<     : specifier_qualifier_list
+---
+> 	: specifier_qualifier_list
+298c298
+<     : pointer
+---
+> 	: pointer
+304c304
+<     : '(' abstract_declarator ')'
+---
+> 	: '(' abstract_declarator ')'
+316c316
+<     : assignment_expression
+---
+> 	: assignment_expression
+322c322
+<     : initializer
+---
+> 	: initializer
+327c327
+<     : labeled_statement
+---
+> 	: labeled_statement
+336c336
+<     : IDENTIFIER ':' statement
+---
+> 	: IDENTIFIER ':' statement
+342c342,343
+<     : '{' statement_list '}'
+---
+> 	: '{' '}'
+> 	| '{' statement_list '}'
+348,349c349,350
+<     : declaration
+< 	| declaration declaration_list
+---
+> 	: declaration
+> 	| declaration_list declaration
+353,354c354,355
+<     : statement
+<     | statement statement_list
+---
+> 	: statement
+> 	| statement_list statement
+358c359
+<     : ';'
+---
+> 	: ';'
+363c364
+<     : IF '(' expression ')' statement
+---
+> 	: IF '(' expression ')' statement
+369c370
+<     : WHILE '(' expression ')' statement
+---
+> 	: WHILE '(' expression ')' statement
+376c377
+<     : GOTO IDENTIFIER ';'
+---
+> 	: GOTO IDENTIFIER ';'
+383,385c384,386
+< program_start
+<     : external_declaration
+< 	| program_start external_declaration
+---
+> translation_unit
+> 	: external_declaration
+> 	| translation_unit external_declaration
+389c390
+<     : function_definition
+---
+> 	: function_definition
+394c395
+<     : declaration_specifiers declarator declaration_list compound_statement
+---
+> 	: declaration_specifiers declarator declaration_list compound_statement
+396d396
+< 	| declaration_specifiers declarator '{' '}'

@@ -24,6 +24,8 @@ bin/compiler : src/compile.o src/C90_parser.tab.o src/C90_lexer.yy.o src/C90_par
 
 
 clean :
+	rm -f program_ast.dot
+	rm -f program_ast.png
 	rm -rf src/*.o
 	rm -rf bin/*
 	rm -rf src/*.tab.cpp

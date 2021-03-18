@@ -1,4 +1,4 @@
-int f() {
+int f(int a, int b) {
     int x = 5;
     int y = (x-1)+10;
     if(x==y) {
