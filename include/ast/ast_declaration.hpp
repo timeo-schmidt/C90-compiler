@@ -193,6 +193,9 @@ public:
     virtual NodePtr getParameterList() const override
         { return parameterList; }
 
+    virtual std::string getName() const override
+        {return functionName->getName();}
+    
     // Member function declarations
     virtual void print(std::ostream &dst) const override;
 

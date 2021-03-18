@@ -14,7 +14,7 @@ void FuncDecl::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_map<std::string,struct varData> &variables
 ) const {
-    initDeclarator->print(std::cout);
+    std::cout << initDeclarator->getName();
     std::cout << ":" <<std::endl;
     std::cout<< "addiu " << "$sp, " << "$sp, " << "-8000"  << std::endl;
     std::cout<<"nop"<<std::endl;
@@ -39,30 +39,15 @@ void FuncDecl::codegen(
     std::cout << "sw $s7, 40($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "move $fp, $sp" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    stack  = 44;
 
-    // store location & name of argument variables //
-    // this will need to be updated when argument variables can be other types //
-    std::cout << "nop" << std::endl;
-    std::cout << "sw $a0, 44($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "sw $a1, 48($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "sw $a2, 52($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "sw $a3, 56($sp)" << std::endl;
+    // Evaluating arguments 
 
-	// storing argument variables to memory
-	// will need to change when arguments can be of different types
-    struct varData a; a.offset = 36; a.memSize = 1;
-	variables["argument_0"] = a;
-	a.offset = 40; a.memSize = 1;
-	variables["argument_1"] = a;
-	a.offset = 44; a.memSize = 1;
-	variables["argument_2"] = a;
-	a.offset = 48; a.memSize = 1;
-	variables["argument_3"] = a;
-
-	stack  = 60;
+    if(initDeclarator != nullptr)
+	{initDeclarator->codegen(destReg, stack,  bindings, variables); }
+	
 
     // check if a code is nullptr for f(){} case
 	if(compoundStatement != nullptr)
@@ -93,7 +78,7 @@ void FuncDecl::codegen(
     std::cout << "jr $ra" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << ".global ";
-    initDeclarator->print(std::cout);
+    std::cout << initDeclarator->getName() << std::endl;
     std::cout << std::endl;
 
      }
@@ -134,7 +119,8 @@ void funcDeclarator::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_map<std::string,struct varData> &variables
 ) const {
-    throw std::runtime_error("Not implemented.");
+    if(parameterList != nullptr)
+    {parameterList->codegen("$a0", stack,  bindings, variables);}
 }
 
 void paramDecl::codegen(
@@ -143,7 +129,26 @@ void paramDecl::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_map<std::string,struct varData> &variables
 ) const {
-    throw std::runtime_error("Not implemented.");
+    // Storing parameter information
+    struct varData a; 
+    a.offset = stack; 
+    a.memSize = paramType->getSize();
+	variables[paramName->getName()] = a;
+
+    // Storing parameter value
+    std::cout << "sw " << destReg << ", " << stack << "($sp)" << std::endl;
+    stack += 4;
+
+    // Checking and doing next parameter 
+    if(next != nullptr)
+    {
+        int reg = ((destReg[2]) - '0');
+        reg += 1;
+        std::string x = "$a";
+        x += reg + '0';
+
+        next->codegen(x, stack,  bindings, variables);
+    }
 }
 
 void initDecl::codegen(
