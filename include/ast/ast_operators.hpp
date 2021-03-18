@@ -368,9 +368,6 @@ public:
 
 };
 
-
-
-
 class ANDOperator
     : public Operator
 {
@@ -392,6 +389,98 @@ public:
         std::unordered_map<std::string,struct varData> &variables
     ) const override;
 
+};
+
+class OROperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return "LogicalOR"; }
+public:
+    // Constructors
+    OROperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+};
+
+
+class BW_ANDOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return "&"; }
+public:
+    // Constructors
+    BW_ANDOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+};
+
+class BW_ExclusiveOrOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return "BW_ExclusiveOr"; }
+public:
+    // Constructors
+    BW_ExclusiveOrOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+};
+
+class BW_InclusiveOrOperator
+    : public Operator
+{
+protected:
+    // Getters & Setters
+    virtual const char *getOpcode() const override
+        { return "BW_InclusiveOr"; }
+public:
+    // Constructors
+    BW_InclusiveOrOperator(NodePtr  _left, NodePtr  _right)
+        : Operator(_left, _right)
+    {}
+
+    // Function declarations
+    virtual void codegen(
+        std::string destReg,
+        int &stack,
+        std::map<std::string,double> &bindings,
+        std::unordered_map<std::string,struct varData> &variables
+    ) const override;
 
 };
 

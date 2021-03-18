@@ -40,14 +40,14 @@ void FuncDecl::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "move $fp, $sp" << std::endl;
     std::cout << "nop" << std::endl;
-    
+
     stack  = 44;
 
-    // Evaluating arguments 
+    // Evaluating arguments
 
     if(initDeclarator != nullptr)
 	{initDeclarator->codegen(destReg, stack,  bindings, variables); }
-	
+
 
     // check if a code is nullptr for f(){} case
 	if(compoundStatement != nullptr)
@@ -130,8 +130,8 @@ void paramDecl::codegen(
      std::unordered_map<std::string,struct varData> &variables
 ) const {
     // Storing parameter information
-    struct varData a; 
-    a.offset = stack; 
+    struct varData a;
+    a.offset = stack;
     a.memSize = paramType->getSize();
 	variables[paramName->getName()] = a;
 
@@ -139,7 +139,7 @@ void paramDecl::codegen(
     std::cout << "sw " << destReg << ", " << stack << "($sp)" << std::endl;
     stack += 4;
 
-    // Checking and doing next parameter 
+    // Checking and doing next parameter
     if(next != nullptr)
     {
         int reg = ((destReg[2]) - '0');
@@ -647,6 +647,44 @@ void ANDOperator::codegen(
     stack  += 4;
 
 }
+
+void OROperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("OROperator::codegen not implemented.");
+}
+
+void BW_ANDOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("BW_ANDOperator::codegen not implemented.");
+}
+
+void BW_ExclusiveOrOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("BW_ExclusiveOrOperator::codegen not implemented.");
+}
+
+void BW_InclusiveOrOperator::codegen(
+    std::string destReg,
+    int &stack,
+    std::map<std::string,double> &bindings,
+    std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("BW_InclusiveOrOperator::codegen not implemented.");
+}
+
+
 
 //////////////////////////////////////////////
 // ast_primitives.hpp
