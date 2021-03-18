@@ -15,10 +15,10 @@ int main(int argc, char *argv[]) {
     std::map<std::string,double> bindings;
     std::unordered_map<std::string,struct varData> variables;
 
-    int stack;
+    struct Data data;
 
     for(auto const& decl_node: ast) {
-        (decl_node->codegen("$s0", stack, bindings, variables));
+        (decl_node->codegen("$s0", data, bindings, variables));
     }
 
     // extracting variable information

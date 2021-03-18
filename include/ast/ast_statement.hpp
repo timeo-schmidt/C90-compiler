@@ -35,7 +35,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         int &stack,
+         struct Data &data,
          std::map<std::string,double> &bindings,
          std::unordered_map<std::string,struct varData> &variables
     ) const override;
@@ -74,7 +74,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         int &stack,
+         struct Data &data,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override;
@@ -110,7 +110,7 @@ public:
 
     virtual void codegen(
          std::string destReg,
-         int &stack,
+         struct Data &data,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const override;

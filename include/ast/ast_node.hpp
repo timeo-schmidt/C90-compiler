@@ -31,17 +31,19 @@ struct param_list {
     }
 };
 
-struct stackData
+struct Data
 {
-	int32_t stackSize;   // Stores size of stack frame, need to find way of determining this
-	int32_t stackOffset; // Stores offset value of the lowest free memory
+	int32_t stack;   // Stores size of stack frame, need to find way of determining this
+	int32_t scope; // Stores offset value of the lowest free memory
 };
 
 struct varData
 {
 	int32_t offset;
 	int32_t memSize;
+    int scope; 
 };
+
 
 class Node;
 typedef const Node *NodePtr;
@@ -79,7 +81,7 @@ public:
     virtual void draw_tree_node(std::ofstream& dotfile) const { throw std::runtime_error("draw_tree_node() is not implemented."); }
     virtual void codegen(
          std::string destReg,
-         int &stack,
+         struct Data &data,
          std::map<std::string,double> &bindings,
 	     std::unordered_map<std::string,struct varData> &variables
     ) const { throw std::runtime_error("codegen() is not implemented."); };
