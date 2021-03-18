@@ -237,17 +237,13 @@ void Unary::draw_tree_node(std::ofstream& dotfile) const {
 
 void Type::draw_tree_node(std::ofstream& dotfile) const {
 
-    dotfile << "id" << this << "[label=\"{ Type |{<kind> "<< kind <<" | <subType> (subType)| <paramList> (paramList)}}\"];" << std::endl;
+    dotfile << "id" << this << "[label=\"{ Type |{<kind> "<< kind <<" | <subType> (subType)}}\"];" << std::endl;
 
     if(subType!=nullptr) {
         dotfile << "id" << this << ":subType -> id" << subType << ";" << std::endl;
         subType->draw_tree_node(dotfile);
     }
 
-    if(paramList!=nullptr) {
-        dotfile << "id" << this << ":paramList -> id" << paramList << ";" << std::endl;
-        paramList->draw_tree_node(dotfile);
-    }
 
 };
 

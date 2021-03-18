@@ -200,7 +200,7 @@ declaration
 declaration_specifiers
     : storage_class_specifier
 	| storage_class_specifier declaration_specifiers
-	| type_specifier                                       { $$=new Type( *$1, nullptr, nullptr); delete $1; }
+	| type_specifier                                                { $$=new Type( *$1, nullptr); delete $1; }
 	| type_specifier declaration_specifiers
 	| type_qualifier
 	| type_qualifier declaration_specifiers
