@@ -310,7 +310,7 @@ direct_declarator
 	| direct_declarator '[' ']'                         { ; }
 	| direct_declarator '(' parameter_type_list ')'     { $$ = new funcDeclarator($1, $3); }
 	| direct_declarator '(' identifier_list ')'         { ; }
-    | direct_declarator '(' ')'                         { $$= $1; }
+    | direct_declarator '(' ')'                         { $$= new funcDeclarator($1, nullptr); }
 	;
 
 pointer
