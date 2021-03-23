@@ -278,6 +278,16 @@ void Type::draw_tree_node(std::ofstream& dotfile) const {
 
 void VarAssign::draw_tree_node(std::ofstream& dotfile) const {
 
-    throw std::runtime_error("Not implemented for VarAssign::");
+    dotfile << "id" << this << "[label=\"{ VarAssign |{<var> var | <expr> expr}}\"];" << std::endl;
+
+    if(var!=nullptr) {
+        dotfile << "id" << this << ":var -> id" << var << ";" << std::endl;
+        var->draw_tree_node(dotfile);
+    }
+
+    if(expr!=nullptr) {
+        dotfile << "id" << this << ":expr -> id" << expr << ";" << std::endl;
+        expr->draw_tree_node(dotfile);
+    }
 
 };

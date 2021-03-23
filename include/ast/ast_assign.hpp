@@ -21,17 +21,17 @@ public:
     NodePtr expr;
 
     VarAssign(NodePtr _var, NodePtr _expr):
-     var(_var),
-     expr(_expr)
+        var(_var),
+        expr(_expr)
     {}
 
-  virtual ~VarAssign()
-  {
-    delete var;
-    delete expr;
-  }
+    virtual ~VarAssign()
+    {
+        delete var;
+        delete expr;
+    }
 
-   // Member function declarations
+    // Member function declarations
     virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(

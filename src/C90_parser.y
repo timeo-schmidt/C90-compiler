@@ -68,8 +68,8 @@ postfix_expression
 	| postfix_expression '(' argument_expression_list ')'
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
-	| postfix_expression INC_OP
-	| postfix_expression DEC_OP
+	| postfix_expression INC_OP                                    { $$ = new UnaryExpression("++", $1); }
+	| postfix_expression DEC_OP                                    { $$ = new UnaryExpression("--", $1); }
 	;
 
 argument_expression_list
@@ -78,7 +78,7 @@ argument_expression_list
 	;
 
 unary_expression
-    : postfix_expression									   { $$ = $1; }
+    : postfix_expression
 	| INC_OP unary_expression
 	| DEC_OP unary_expression
 	| unary_operator cast_expression                           { $$ = new UnaryExpression(*$1, $2); delete $1; }
@@ -87,16 +87,16 @@ unary_expression
 	;
 
 unary_operator
-    : '&'													{$$=new std::string("&");}
-	| '*'													{$$=new std::string("*");}
-	| '+'													{$$=new std::string("+");}
-	| '-'													{$$=new std::string("-");}
-	| '~'													{$$=new std::string("~");}
-	| '!'													{$$=new std::string("!");}
+    : '&'													{ $$=new std::string("&"); }
+	| '*'													{ $$=new std::string("*"); }
+	| '+'													{ $$=new std::string("+"); }
+	| '-'													{ $$=new std::string("-"); }
+	| '~'													{ $$=new std::string("~"); }
+	| '!'													{ $$=new std::string("!"); }
 	;
 
 cast_expression
-    : unary_expression											{$$ = $1;}
+    : unary_expression											{ $$ = $1; }
 	| '(' type_name ')' cast_expression
 	;
 
@@ -108,68 +108,68 @@ multiplicative_expression
 	;
 
 additive_expression
-    : multiplicative_expression									{$$ = $1;}
-	| additive_expression '+' multiplicative_expression 		{$$ = new AddOperator($1, $3);}
-	| additive_expression '-' multiplicative_expression			{$$ = new SubOperator($1, $3);}
+    : multiplicative_expression									{ $$ = $1; }
+	| additive_expression '+' multiplicative_expression 		{ $$ = new AddOperator($1, $3); }
+	| additive_expression '-' multiplicative_expression			{ $$ = new SubOperator($1, $3); }
 	;
 
 shift_expression
-    : additive_expression										{$$ = $1;}
-	| shift_expression LEFT_OP additive_expression				{$$ = new LShiftOperator($1, $3);}
-	| shift_expression RIGHT_OP additive_expression				{$$ = new RShiftOperator($1, $3);}
+    : additive_expression										{ $$ = $1; }
+	| shift_expression LEFT_OP additive_expression				{ $$ = new LShiftOperator($1, $3); }
+	| shift_expression RIGHT_OP additive_expression				{ $$ = new RShiftOperator($1, $3); }
 	;
 
 relational_expression
-    : shift_expression											{$$ = $1;}
-	| relational_expression '<' shift_expression				{$$ = new LThanOperator($1, $3);}
-	| relational_expression '>' shift_expression				{$$ = new GThanOperator($1, $3);}
-	| relational_expression LE_OP shift_expression				{$$ = new LEThanOperator($1, $3);}
-	| relational_expression GE_OP shift_expression				{$$ = new GEThanOperator($1, $3);}
+    : shift_expression											{ $$ = $1; }
+	| relational_expression '<' shift_expression				{ $$ = new LThanOperator($1, $3); }
+	| relational_expression '>' shift_expression				{ $$ = new GThanOperator($1, $3); }
+	| relational_expression LE_OP shift_expression				{ $$ = new LEThanOperator($1, $3); }
+	| relational_expression GE_OP shift_expression				{ $$ = new GEThanOperator($1, $3); }
 	;
 
 equality_expression
-    : relational_expression										{$$ = $1;}
-	| equality_expression EQ_OP relational_expression			{$$ = new EQOperator($1, $3);}
-	| equality_expression NE_OP relational_expression			{$$ = new NEOperator($1, $3);}
+    : relational_expression										{ $$ = $1; }
+	| equality_expression EQ_OP relational_expression			{ $$ = new EQOperator($1, $3); }
+	| equality_expression NE_OP relational_expression			{ $$ = new NEOperator($1, $3); }
 	;
 
 and_expression
-    : equality_expression										{$$ = $1;}
-	| and_expression '&' equality_expression					{$$ = new ANDOperator($1, $3);}
+    : equality_expression										{ $$ = $1; }
+	| and_expression '&' equality_expression					{ $$ = new BW_ANDOperator($1, $3); }
 	;
 
 exclusive_or_expression
-    : and_expression											{$$ = $1;}
-	| exclusive_or_expression '^' and_expression
+    : and_expression											{ $$ = $1; }
+	| exclusive_or_expression '^' and_expression                { $$ = new BW_ExclusiveOrOperator($1, $3); }
 	;
 
 inclusive_or_expression
-    : exclusive_or_expression									{$$ = $1;}
-	| inclusive_or_expression '|' exclusive_or_expression
+    : exclusive_or_expression									{ $$ = $1; }
+	| inclusive_or_expression '|' exclusive_or_expression       { $$ = new BW_InclusiveOrOperator($1, $3); }
 	;
 
 logical_and_expression
-    : inclusive_or_expression									{$$ = $1;}
-	| logical_and_expression AND_OP inclusive_or_expression
+    : inclusive_or_expression									{ $$ = $1; }
+	| logical_and_expression AND_OP inclusive_or_expression     { $$ = new ANDOperator($1, $3); }
 	;
 
 logical_or_expression
-    : logical_and_expression									{$$ = $1;}
-	| logical_or_expression OR_OP logical_and_expression
+    : logical_and_expression									{ $$ = $1; }
+	| logical_or_expression OR_OP logical_and_expression        { $$ = new OROperator($1, $3); }
 	;
 
 conditional_expression
-    : logical_or_expression														{$$ = $1;}
+    : logical_or_expression														{ $$ = $1; }
 	| logical_or_expression '?' expression ':' conditional_expression
 	;
 
 assignment_expression
-    : conditional_expression													{$$ = $1;}
-	| unary_expression assignment_operator assignment_expression				{$$ = new VarAssign($1, $3);}
+    : conditional_expression													{ $$ = $1; }
+	| unary_expression assignment_operator assignment_expression				{ $$ = new VarAssign($1, $3); }
 	;
 
 assignment_operator
-    : '='															{  $$=new std::string("="); }
+    : '='															{ $$=new std::string("="); }
 	| MUL_ASSIGN
 	| DIV_ASSIGN
 	| MOD_ASSIGN
@@ -212,8 +212,8 @@ init_declarator_list
 	;
 
 init_declarator
-    : declarator													{$$ = new initDecl($1, nullptr);}
-	| declarator '=' initializer									{$$ = new initDecl($1, $3); }
+    : declarator													{ $$ = new initDecl($1, nullptr); }
+	| declarator '=' initializer									{ $$ = new initDecl($1, $3); }
 	;
 
 storage_class_specifier
@@ -426,8 +426,10 @@ selection_statement
 iteration_statement
     : WHILE '(' expression ')' statement				                            { $$ = new WhileState($3, $5); }
 	| DO statement WHILE '(' expression ')' ';'                                     { $$ = new WhileState($5, $2); }
-	| FOR '(' expression_statement expression_statement ')' statement               { ; }
-	| FOR '(' expression_statement expression_statement expression ')' statement    { ; }
+	| FOR '(' expression_statement expression_statement ')' statement               { $$ = new ForState($3, $4, nullptr, $6); }
+	| FOR '(' declaration expression_statement ')' statement                        { $$ = new ForState($3, $4, nullptr, $6); }
+	| FOR '(' expression_statement expression_statement expression ')' statement    { $$ = new ForState($3, $4, $5, $7); }
+	| FOR '(' declaration expression_statement expression ')' statement             { $$ = new ForState($3, $4, $5, $7); }
 	;
 
 jump_statement
