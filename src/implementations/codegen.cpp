@@ -255,7 +255,7 @@ void MulOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of mul and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -287,7 +287,7 @@ void DivOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -322,7 +322,7 @@ void LShiftOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -354,7 +354,7 @@ void RShiftOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -388,7 +388,7 @@ void LThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -420,7 +420,7 @@ void GThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -454,7 +454,7 @@ void LEThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -497,7 +497,7 @@ void GEThanOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -539,7 +539,7 @@ void EQOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -581,7 +581,7 @@ void NEOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -624,7 +624,7 @@ void ANDOperator::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_map<std::string,struct varData> &variables
 ) const {
-    
+
     // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
@@ -786,6 +786,18 @@ void WhileState::codegen(
     std::cout << EXIT << ":" << std::endl;
 
 }
+
+void ForState::codegen(
+     std::string destReg,
+     int &stack,
+     std::map<std::string,double> &bindings,
+     std::unordered_map<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+
+
 //////////////////////////////////////////////
 // ast_unary.hpp
 //////////////////////////////////////////////

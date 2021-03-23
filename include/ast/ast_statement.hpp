@@ -119,6 +119,44 @@ public:
 
 };
 
+class ForState
+    : public Node
+{
 
+public:
+
+    // Members
+    // for(int i=0; i<10; i++) { code }
+    NodePtr init_expr;  // int i=0;
+    NodePtr cond_expr;  // i<10
+    NodePtr next_expr;  // i++ (this is optional, the initialiser can be modified in the for-body)
+    NodePtr code;       // { code }
+
+    // Constructors & Destructors
+    ForState(NodePtr _init_expr, NodePtr _cond_expr, NodePtr _next_expr, NodePtr _code):
+        init_expr(_init_expr),
+        cond_expr(_cond_expr),
+        next_expr(_next_expr),
+        code(_code)
+    {}
+
+    virtual ~ForState() {
+        delete init_expr;
+        delete cond_expr;
+        delete next_expr;
+        delete code;
+    }
+
+    // Function declarations
+    virtual void codegen(
+         std::string destReg,
+         struct Data &data,
+         std::map<std::string,double> &bindings,
+	     std::unordered_map<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
 
 #endif
