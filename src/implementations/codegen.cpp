@@ -1,5 +1,5 @@
 #include "ast.hpp"
-
+#include <utility>
 // This file contains all function definitions for the code generation functionality.
 
 
@@ -12,7 +12,7 @@ void FuncDecl::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     std::cout << initDeclarator->getName();
     std::cout << ":" <<std::endl;
@@ -42,7 +42,7 @@ void FuncDecl::codegen(
     std::cout << "nop" << std::endl;
     
     data.stack  = 44;
-
+    data.scope  += 1;
     // Evaluating arguments
 
     if(initDeclarator != nullptr)
@@ -52,6 +52,10 @@ void FuncDecl::codegen(
     // check if a code is nullptr for f(){} case
 	if(compoundStatement != nullptr)
 	{compoundStatement->codegen(destReg, data,  bindings, variables); }
+    
+   // std::cout<<data.scope<<std::endl;
+   //scopeDecrement(data.scope, variables);
+   // std::cout<<data.scope<<std::endl;
 
     std::cout << "nop" << std::endl;
     std::cout << "lw $s0, 12($sp)" << std::endl;
@@ -88,7 +92,7 @@ void VarDecl::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     //Variable information:
@@ -107,7 +111,13 @@ void VarDecl::codegen(
 
     // Storing variable name in variables
     a.offset = data.stack - 4;
-    variables[initDeclarator->getName()] = a;
+    a.scope = data.scope;
+    //variables[initDeclarator->getName()] = a;
+    std::pair <std::string,struct varData> b;
+    b = std::make_pair(initDeclarator->getName(),a);
+    variables.insert(b);
+    //variables.insert(std::pair<std::string,struct varData>(initDeclarator->getName(),a));
+    //variables[initDeclarator->getName()] = a;
 
    // stack  += 4;
 
@@ -117,7 +127,7 @@ void funcDeclarator::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     if(parameterList != nullptr)
     {parameterList->codegen("$a0", data,  bindings, variables);}
@@ -127,13 +137,19 @@ void paramDecl::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     // Storing parameter information
     struct varData a; 
     a.offset = data.stack; 
     a.memSize = paramType->getSize();
-	variables[paramName->getName()] = a;
+    a.scope = data.scope;
+    //variables.insert(std::make_pair<std::string,struct varData>(paramName->getName(),a));
+    std::pair <std::string,struct varData> b;
+    b = std::make_pair(paramName->getName(),a);
+    variables.insert(b);
+
+
 
     // Storing parameter value
     std::cout << "sw " << destReg << ", " << data.stack<< "($sp)" << std::endl;
@@ -155,7 +171,7 @@ void initDecl::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     // Getting initiliser and loading into $s0
     if(initializer != nullptr)
@@ -164,7 +180,7 @@ void initDecl::codegen(
         {
             std::cout<<"sw $0, " << data.stack<< "($sp)" << std::endl;
             data.stack +=4;
-            std::cout<< "addiu " << "$sp, " << "$sp, " << 8  << std::endl;
+            //std::cout<< "addiu " << "$sp, " << "$sp, " << 8  << std::endl;
 
         }
 }
@@ -173,7 +189,7 @@ void NextState::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     // Evaluate current statement
     state->codegen(destReg, data, bindings, variables);
@@ -191,7 +207,7 @@ void AddOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
     ) const {
 
     // Getting left side of addition and loading into register
@@ -222,7 +238,7 @@ void SubOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of addition and loading into register
@@ -253,7 +269,7 @@ void MulOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of mul and loading into register
@@ -285,7 +301,7 @@ void DivOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -320,7 +336,7 @@ void LShiftOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -352,7 +368,7 @@ void RShiftOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -386,7 +402,7 @@ void LThanOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -418,7 +434,7 @@ void GThanOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -452,7 +468,7 @@ void LEThanOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -495,7 +511,7 @@ void GEThanOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -517,9 +533,9 @@ void GEThanOperator::codegen(
     std::string EQUAL = makeName("EQUAL");
     std::string END = makeName("END");
 
-    std::cout << "beq $s1, $s1, " << EQUAL << std::endl;
+    std::cout << "beq $s0, $s1, " << EQUAL << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout << "slt $s3, $s0, $s1" << std::endl;
+    std::cout << "slt $s3, $s1, $s0" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "j " << END << std::endl;
     std::cout << EQUAL << ":" << std::endl;
@@ -537,7 +553,7 @@ void EQOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -561,11 +577,11 @@ void EQOperator::codegen(
 
     std::cout << "beq $s1, $s0, " << EQUAL << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout << "addi $s3, $0, 1" << std::endl;
+    std::cout << "add $s3, $0, $0" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "j " << END << std::endl;
     std::cout << EQUAL << ":" << std::endl;
-    std::cout << "add $s3, $0, $0" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
     std::cout << END << ":" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
@@ -579,7 +595,7 @@ void NEOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
@@ -603,11 +619,11 @@ void NEOperator::codegen(
 
     std::cout << "beq $s1, $s0, " << EQUAL << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout << "addi $s3, $0, 0" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "j " << END << std::endl;
     std::cout << EQUAL << ":" << std::endl;
-    std::cout << "addi $s3, $0, 1" << std::endl;
+    std::cout << "addi $s3, $0, 0" << std::endl;
     std::cout << END << ":" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
@@ -617,15 +633,88 @@ void NEOperator::codegen(
 
 }
 
+//&& (logical and operator)
 
 void ANDOperator::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
     // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, data, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, data, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    std::string FALSE = makeName("FALSE");
+    std::string END = makeName("END");
+
+    std::cout << "beq $s0, $0, " << FALSE << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "beq $s1, $0, " << FALSE << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "j " << END << std::endl;
+    std::cout << FALSE << ":" << std::endl;
+    std::cout << "addi $s3, $0, 0" << std::endl;
+    std::cout << END << ":" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    data.stack  += 4;
+
+}
+void OROperator::codegen(
+    std::string destReg,
+    struct Data &data, 
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("OROperator::codegen not implemented.");
+}
+
+void BW_ANDOperator::codegen(
+    std::string destReg,
+    struct Data &data, 
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("BW_ANDOperator::codegen not implemented.");
+}
+
+void BW_ExclusiveOrOperator::codegen(
+    std::string destReg,
+    struct Data &data, 
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("BW_ExclusiveOrOperator::codegen not implemented.");
+}
+
+void BW_InclusiveOrOperator::codegen(
+    std::string destReg,
+    struct Data &data, 
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    throw std::runtime_error("BW_InclusiveOrOperator::codegen not implemented.");
+}
+
+// & bitwise operator:
+/*
+// Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
     // Getting left side of div and loading into register
@@ -648,44 +737,7 @@ void ANDOperator::codegen(
     
     data.stack  += 4;
 
-}
-
-void OROperator::codegen(
-    std::string destReg,
-    int &stack,
-    std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("OROperator::codegen not implemented.");
-}
-
-void BW_ANDOperator::codegen(
-    std::string destReg,
-    int &stack,
-    std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("BW_ANDOperator::codegen not implemented.");
-}
-
-void BW_ExclusiveOrOperator::codegen(
-    std::string destReg,
-    int &stack,
-    std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("BW_ExclusiveOrOperator::codegen not implemented.");
-}
-
-void BW_InclusiveOrOperator::codegen(
-    std::string destReg,
-    int &stack,
-    std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("BW_InclusiveOrOperator::codegen not implemented.");
-}
-
+*/
 
 
 //////////////////////////////////////////////
@@ -696,15 +748,31 @@ void Variable::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
        // find variable stack location and TO DO:check size of variable but should check type...
-        struct varData info;
-
-        info = variables.at(id);
-        int32_t location = info.offset;
-        int32_t size = info.memSize;
+        int kitkat = 0;
+        int32_t location;
+        int32_t size;
+        for(int i = data.scope; i > -1; i--)
+        {
+            for(const auto& u : variables)
+            {
+                if( u.first == id && u.second.scope == i )
+                {
+                    location = u.second.offset;
+                    size = u.second.memSize;
+                    kitkat = 1;
+                    break;
+                } 
+            }
+        if(kitkat == 1)
+        { break; }
+        }
+    
+        //info = variables.at(id) ;
+       
 
         // load into register
         std::cout << "lw $s0, "<< location<< "($sp)" << std::endl;
@@ -719,7 +787,7 @@ void Number::codegen(
     std::string destReg,
     struct Data &data,
     std::map<std::string,double> &bindings,
-    std::unordered_map<std::string,struct varData> &variables
+    std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
         // load into register
@@ -741,7 +809,7 @@ void returnState::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
      // check if a expression is nullptr, not sure what to do if its return ; ???
@@ -759,9 +827,10 @@ void IfElseState::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
+    data.scope += 1;
 
     // Individual names for jumps
     std::string ELSE = makeName("ELSE");
@@ -772,7 +841,7 @@ void IfElseState::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout<<"bnez $s0, " << ELSE << std::endl;
+    std::cout<<"beq $s0, $0, " << ELSE << std::endl;
     std::cout << "nop" << std::endl;
 
     // If condition is true: evaluate If
@@ -788,14 +857,18 @@ void IfElseState::codegen(
 
     std::cout << L << ":" << std::endl;
 
+    scopeDecrement(data.scope, variables);
+
  }
 
 void WhileState::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
+
+    data.scope += 1;
 
     // Individual names for jumps
     std::string START = makeName("START");
@@ -810,8 +883,8 @@ void WhileState::codegen(
     std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
-    // Checking if expression is 0 (if not jumpt to exit)
-    std::cout<<"bnez $s0, " << EXIT << std::endl;
+    // Checking if expression is true (if not jumpt to exit)
+    std::cout<<"beq $s0, $0, " << EXIT << std::endl;
     std::cout << "nop" << std::endl;
 
     // Evaluating statement
@@ -823,15 +896,19 @@ void WhileState::codegen(
     // EXIT
     std::cout << EXIT << ":" << std::endl;
 
+   // scopeDecrement(data.scope, variables);
 }
+
 
 void ForState::codegen(
      std::string destReg,
-     int &stack,
+     struct Data &data, 
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
+    data.scope += 1;    
     throw std::runtime_error("Not implemented.");
+    scopeDecrement(data.scope, variables);
 }
 
 
@@ -844,7 +921,7 @@ void Unary::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     throw std::runtime_error("Not implemented.");
 }
@@ -860,7 +937,7 @@ void Type::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     throw std::runtime_error("Not implemented.");
 }
@@ -875,14 +952,30 @@ void VarAssign::codegen(
      std::string destReg,
      struct Data &data,
      std::map<std::string,double> &bindings,
-     std::unordered_map<std::string,struct varData> &variables
+     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
+      int kitkat = 0;
+        int32_t location;
+        int32_t size;
+        std::string name = var->getName();
+        for(int i = data.scope; i > -1; i--)
+        {
+            for(const auto& u : variables)
+            {
+                if( u.first == name && u.second.scope == i )
+                {
+                    location = u.second.offset;
+                    size = u.second.memSize;
+                    kitkat = 1;
+                    break;
+                } 
+            }
+        if(kitkat == 1)
+        { break; }
+        }
+
     // Obtaining variable memory location (will need to be updated when types)
-    std::string name = var->getName();
-    struct varData info;
-    info = variables.at(name);
-    int32_t location = info.offset;
-    int32_t size = info.memSize;
+   
 
     // Get new value
     expr->codegen(destReg, data, bindings, variables);

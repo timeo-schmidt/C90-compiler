@@ -382,7 +382,7 @@ initializer_list
 
 statement
     : labeled_statement
-	| compound_statement
+	| compound_statement									{ $$ = $1; }
 	| expression_statement									{ $$ = $1; }
 	| selection_statement
 	| iteration_statement                                   { $$ = $1; }

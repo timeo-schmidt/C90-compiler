@@ -37,7 +37,7 @@ public:
          std::string destReg,
          struct Data &data,
          std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
+	     std::unordered_multimap<std::string,struct varData> &variables
     ) const override;
 
     virtual void draw_tree_node(std::ofstream& dotfile) const override;

@@ -83,7 +83,7 @@ public:
          std::string destReg,
          struct Data &data,
          std::map<std::string,double> &bindings,
-	     std::unordered_map<std::string,struct varData> &variables
+	     std::unordered_multimap<std::string,struct varData> &variables
     ) const { throw std::runtime_error("codegen() is not implemented."); };
 
 };

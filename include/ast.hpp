@@ -13,7 +13,9 @@
 #include "ast/ast_statement.hpp"
 #include "ast/ast_type.hpp"
 #include "ast/ast_unary.hpp"
+
 #include "ast/unique_name.hpp"
+#include "ast/scope.hpp"
 
 typedef std::vector<Node *> Program;
 

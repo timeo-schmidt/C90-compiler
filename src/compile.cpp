@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
     // Code Generation
     std::map<std::string,double> bindings;
-    std::unordered_map<std::string,struct varData> variables;
+    std::unordered_multimap<std::string,struct varData> variables;
 
     struct Data data;
 
@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
     }
 
     // extracting variable information
-    //for(const auto& u : variables)
-    //{ std::cout<<u.first << "  " << u.second.memSize << "  " << u.second.offset <<std::endl;}
+    for(const auto& u : variables)
+    { std::cout<<u.first << "  " << u.second.memSize << "  " << u.second.offset << " " <<u.second.scope <<std::endl;}
 
 
 }
