@@ -291,3 +291,12 @@ void VarAssign::draw_tree_node(std::ofstream& dotfile) const {
     }
 
 };
+
+
+void functionCall::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void storeParams::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+}

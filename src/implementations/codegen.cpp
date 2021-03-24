@@ -979,9 +979,58 @@ void VarAssign::codegen(
 
     // Get new value
     expr->codegen(destReg, data, bindings, variables);
-    std::cout << "nop" << std::endl;
     std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s0, " << location <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
 
+}
+
+
+void functionCall::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    
+    // Loading parameter values to argument registers 
+    if(params != nullptr)
+    { params->codegen("$a0", data, bindings, variables);}
+
+
+
+    // Calling function
+    std::cout << "jal " << functName->getName() << std::endl;
+    
+    std::cout << "sw $v0, " << data.stack <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    data.stack += 4;
+
+
+}
+
+void storeParams::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    
+    if(param != nullptr)
+    { param->codegen(destReg, data, bindings, variables); }
+   
+    std::cout << "lw " << destReg << ", " << (data.stack-4) << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    if(next != nullptr)
+        {
+            int reg = ((destReg[2]) - '0');
+            reg += 1;
+            std::string x = "$a";
+            x += reg + '0';
+
+            next->codegen(x, data,  bindings, variables);
+        }
 }

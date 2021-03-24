@@ -153,3 +153,11 @@ void Type::print(std::ostream &dst) const {
 void VarAssign::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
+
+void functionCall::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void storeParams::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}

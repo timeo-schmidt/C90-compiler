@@ -36,7 +36,7 @@ typedef std::vector<Node *> Program;
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration iteration_statement parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression postfix_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <node> external_declaration iteration_statement assignment_expression_intermediate argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
 %type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
 %type <number> CONSTANT
 
@@ -64,8 +64,8 @@ string_literal_type
 postfix_expression
     : primary_expression											{ $$=$1; }
 	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')'
-	| postfix_expression '(' argument_expression_list ')'
+	| postfix_expression '(' ')'									{ $$ = new functionCall($1, nullptr);}
+	| postfix_expression '(' argument_expression_list ')'			{ $$ = new functionCall($1, $3);}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
 	| postfix_expression INC_OP                                    { $$ = new UnaryExpression("++", $1); }
@@ -73,9 +73,12 @@ postfix_expression
 	;
 
 argument_expression_list
-    : assignment_expression
-	| argument_expression_list ',' assignment_expression
+    : assignment_expression_intermediate											{ $$ = $1; }
+	| assignment_expression_intermediate ',' argument_expression_list				{ $1->setNext($3); $$ = $1;	}
 	;
+
+assignment_expression_intermediate
+	: assignment_expression											{ $$= new storeParams($1, nullptr); }
 
 unary_expression
     : postfix_expression
