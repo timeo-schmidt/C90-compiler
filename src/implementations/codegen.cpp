@@ -56,36 +56,12 @@ void FuncDecl::codegen(
    // std::cout<<data.scope<<std::endl;
    //scopeDecrement(data.scope, variables);
    // std::cout<<data.scope<<std::endl;
-
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s0, 12($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s1, 16($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s2, 20($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s3, 24($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s4, 28($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s5, 32($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s6, 36($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s7, 40($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $ra, 4($sp)" <<std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $fp, 8($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "move $sp, $fp" << std::endl;
-    std::cout << "jr $ra" << std::endl;
-    std::cout << "nop" << std::endl;
+    
     std::cout << ".global ";
     std::cout << initDeclarator->getName() << std::endl;
     std::cout << std::endl;
-
-     }
+    
+    }
 
 
 void VarDecl::codegen(
@@ -820,6 +796,31 @@ void returnState::codegen(
     std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "move $v0, $s0" << std::endl;
+
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s0, 12($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s1, 16($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s2, 20($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s3, 24($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s4, 28($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s5, 32($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s6, 36($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s7, 40($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $ra, 4($sp)" <<std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $fp, 8($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "move $sp, $fp" << std::endl;
+    std::cout << "jr $ra" << std::endl;
+    std::cout << "nop" << std::endl;
 
 }
 
