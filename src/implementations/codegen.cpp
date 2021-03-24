@@ -372,7 +372,6 @@ void RShiftOperator::codegen(
 
 }
 
-// NOTE: slt doesnt seem to work for either 10>10 or 10<10, passes for both ???????
 
 void LThanOperator::codegen(
     std::string destReg,
@@ -437,8 +436,6 @@ void GThanOperator::codegen(
     data.stack  += 4;
 
 }
-
-// FOR NOW works cause slt is broken ...
 
 void LEThanOperator::codegen(
     std::string destReg,
@@ -609,6 +606,106 @@ void NEOperator::codegen(
 
 }
 
+// & bitwise operator:
+void BW_ANDOperator::codegen(
+    std::string destReg,
+    struct Data &data,
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, data, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, data, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "and $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    data.stack  += 4;
+
+}
+
+
+void BW_ExclusiveOrOperator::codegen(
+    std::string destReg,
+    struct Data &data, 
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, data, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, data, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "and $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "nor $s3, $s3, $0" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "or $s4, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "and $s3, $s3, $s4" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    data.stack  += 4;
+    }
+
+void BW_InclusiveOrOperator::codegen(
+    std::string destReg,
+    struct Data &data, 
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    // Getting left side of div and loading into register
+    getLeft()->codegen(destReg, data, bindings, variables);
+  
+    // Getting left side of div and loading into register
+    getRight()->codegen(destReg, data, bindings, variables);
+
+    // getting sum and storing destReg
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "nop" << std::endl;
+ 
+    std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+
+    // Will need to change for different types
+
+    std::cout << "or $s3, $s0, $s1" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    
+    data.stack  += 4;
+}
+
 //&& (logical and operator)
 
 void ANDOperator::codegen(
@@ -652,45 +749,16 @@ void ANDOperator::codegen(
     data.stack  += 4;
 
 }
+
+
 void OROperator::codegen(
     std::string destReg,
     struct Data &data, 
     std::map<std::string,double> &bindings,
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-    throw std::runtime_error("OROperator::codegen not implemented.");
-}
-
-void BW_ANDOperator::codegen(
-    std::string destReg,
-    struct Data &data, 
-    std::map<std::string,double> &bindings,
-    std::unordered_multimap<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("BW_ANDOperator::codegen not implemented.");
-}
-
-void BW_ExclusiveOrOperator::codegen(
-    std::string destReg,
-    struct Data &data, 
-    std::map<std::string,double> &bindings,
-    std::unordered_multimap<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("BW_ExclusiveOrOperator::codegen not implemented.");
-}
-
-void BW_InclusiveOrOperator::codegen(
-    std::string destReg,
-    struct Data &data, 
-    std::map<std::string,double> &bindings,
-    std::unordered_multimap<std::string,struct varData> &variables
-) const {
-    throw std::runtime_error("BW_InclusiveOrOperator::codegen not implemented.");
-}
-
-// & bitwise operator:
-/*
-// Getting left side of div and loading into register
+    
+    // Getting left side of div and loading into register
     getLeft()->codegen(destReg, data, bindings, variables);
   
     // Getting left side of div and loading into register
@@ -704,17 +772,25 @@ void BW_InclusiveOrOperator::codegen(
     std::cout << "nop" << std::endl;
 
 
-    // Will need to change for different types
+    std::string TRUE = makeName("TRUE");
+    std::string END = makeName("END");
 
-    std::cout << "and $s3, $s0, $s1" << std::endl;
+    std::cout << "bne $s0, $0, " << TRUE << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "bne $s0, $0, " << TRUE << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "addi $s3, $0, 0" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "j " << END << std::endl;
+    std::cout << TRUE << ":" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
+    std::cout << END << ":" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     
     data.stack  += 4;
-
-*/
-
+}
 
 //////////////////////////////////////////////
 // ast_primitives.hpp
@@ -822,6 +898,9 @@ void returnState::codegen(
     std::cout << "jr $ra" << std::endl;
     std::cout << "nop" << std::endl;
 
+   scopeDecrement(data.scope, variables);
+
+
 }
 
 void IfElseState::codegen(
@@ -862,6 +941,8 @@ void IfElseState::codegen(
 
  }
 
+
+
 void WhileState::codegen(
      std::string destReg,
      struct Data &data,
@@ -897,7 +978,7 @@ void WhileState::codegen(
     // EXIT
     std::cout << EXIT << ":" << std::endl;
 
-   // scopeDecrement(data.scope, variables);
+   scopeDecrement(data.scope, variables);
 }
 
 
