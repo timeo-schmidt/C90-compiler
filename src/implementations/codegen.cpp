@@ -989,7 +989,6 @@ void ForState::codegen(
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
     data.scope += 1;
-    throw std::runtime_error("Not implemented.");
 
     // for(int i=0; i<10; i++) { code }
 
