@@ -485,7 +485,7 @@ void LEThanOperator::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "j " << END << std::endl;
     std::cout << EQUAL << ":" << std::endl;
-    std::cout << "add $s3, $0, $0" << std::endl;
+    std::cout << "addi $s3, $0, 1" << std::endl;
     std::cout << END << ":" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
@@ -527,7 +527,7 @@ void GEThanOperator::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "j " << END << std::endl;
     std::cout << EQUAL << ":" << std::endl;
-    std::cout << "add $s3, $0, $0" << std::endl;
+    std::cout << "add $s3, $0, 1" << std::endl;
     std::cout << END << ":" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
