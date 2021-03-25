@@ -970,7 +970,8 @@ void WhileState::codegen(
     std::cout << "nop" << std::endl;
 
     // Evaluating statement
-    statem->codegen(destReg, data, bindings, variables);
+    if(statem != nullptr)
+    {statem->codegen(destReg, data, bindings, variables);}
 
     // Jumping to start
     std::cout << "j " << START << std::endl;
