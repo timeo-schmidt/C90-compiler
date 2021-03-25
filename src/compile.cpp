@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
     }
 
     // extracting variable information
-   // for(const auto& u : variables)
-   // { std::cout<<u.first << "  " << u.second.memSize << "  " << u.second.offset << " " <<u.second.scope <<std::endl;}
+    //for(const auto& u : variables)
+    //{ std::cout<<u.first << "  " << u.second.memSize << "  " << u.second.offset << " " <<u.second.scope <<std::endl;}
 
 
 }

@@ -11,6 +11,8 @@ static void scopeDecrement(int32_t &scope, std::unordered_multimap<std::string,s
     {  
         if(it->second.scope == scope) { variables.erase(it); }
     }    
+
+   
     scope -= 1;
 }
 /*

@@ -60,7 +60,8 @@ void FuncDecl::codegen(
     std::cout << ".global ";
     std::cout << initDeclarator->getName() << std::endl;
     std::cout << std::endl;
-    
+    //scopeDecrement(data.scope, variables);
+
     }
 
 
@@ -302,18 +303,18 @@ void DivOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "lw $t0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
 
    
-    std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
+    std::cout << "lw $t1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
     // Will need to change for different types
 
-    std::cout << "div $s0, $s1" << std::endl;
+    std::cout << "div $3, $t0, $t1" << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout << "mflo $3" << std::endl;
+    // std::cout << "mflo $3" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -792,7 +793,7 @@ void OROperator::codegen(
 
     std::cout << "bne $s0, $0, " << TRUE << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout << "bne $s0, $0, " << TRUE << std::endl;
+    std::cout << "bne $s1, $0, " << TRUE << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "addi $s3, $0, 0" << std::endl;
     std::cout << "nop" << std::endl;
@@ -913,7 +914,7 @@ void returnState::codegen(
     std::cout << "jr $ra" << std::endl;
     std::cout << "nop" << std::endl;
 
-   scopeDecrement(data.scope, variables);
+  // scopeDecrement(data.scope, variables);
 
 
 }
