@@ -1014,8 +1014,12 @@ void ForState::codegen(
     std::cout<<"beq $s0, $0, " << EXIT << std::endl;
     std::cout << "nop" << std::endl;
 
-    code->codegen(destReg, data, bindings, variables);
-    next_expr->codegen(destReg, data, bindings, variables);
+    if(code!=nullptr) {
+      code->codegen(destReg, data, bindings, variables);
+    }
+    if(next_expr!=nullptr) {
+        next_expr->codegen(destReg, data, bindings, variables);
+    }
 
     // Jumping to start
     std::cout << "j " << START << std::endl;
