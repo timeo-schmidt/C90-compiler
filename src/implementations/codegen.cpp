@@ -135,10 +135,25 @@ void paramDecl::codegen(
     if(next != nullptr)
     {
         int reg = ((destReg[2]) - '0');
-        reg += 1;
-        std::string x = "$a";
+        char nam;
+        if(reg < 3 &&  destReg[1] == 'a')
+        {
+            reg += 1;
+            nam = 'a';
+        }
+        else if(reg == 3 &&  destReg[1] == 'a')
+        {
+            reg =   0;
+            nam = 's';
+        }
+        else 
+        {
+            reg += 1;
+            nam = 's';
+        }
+        std::string x = "$";
+        x += nam;
         x += reg + '0';
-
         next->codegen(x, data,  bindings, variables);
     }
 }
@@ -1108,12 +1123,28 @@ void storeParams::codegen(
     std::cout << "nop" << std::endl;
 
     if(next != nullptr)
+    {
+        int reg = ((destReg[2]) - '0');
+        char nam;
+        if(reg < 3 &&  destReg[1] == 'a')
         {
-            int reg = ((destReg[2]) - '0');
             reg += 1;
-            std::string x = "$a";
-            x += reg + '0';
-
-            next->codegen(x, data,  bindings, variables);
+            nam = 'a';
         }
+        else if(reg == 3 &&  destReg[1] == 'a')
+        {
+            reg =   0;
+            nam = 's';
+        }
+        else 
+        {
+            reg += 1;
+            nam = 's';
+        }
+        std::string x = "$";
+        x += nam;
+        x += reg + '0';
+        next->codegen(x, data,  bindings, variables);
+    }
 }
+
