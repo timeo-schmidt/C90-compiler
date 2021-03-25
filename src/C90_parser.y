@@ -36,7 +36,7 @@ typedef std::vector<Node *> Program;
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration iteration_statement assignment_expression_intermediate argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <node> external_declaration iteration_statement assignment_operator_expression assignment_expression_intermediate argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
 %type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
 %type <number> CONSTANT
 
@@ -168,21 +168,21 @@ conditional_expression
 
 assignment_expression
     : conditional_expression													{ $$ = $1; }
-	| unary_expression assignment_operator assignment_expression				{ $$ = new VarAssign($1, $3); }
+	| assignment_operator_expression											{ $$ = $1; }
 	;
 
-assignment_operator
-    : '='															{ $$=new std::string("="); }
-	| MUL_ASSIGN
-	| DIV_ASSIGN
-	| MOD_ASSIGN
-	| ADD_ASSIGN
-	| SUB_ASSIGN
-	| LEFT_ASSIGN
-	| RIGHT_ASSIGN
-	| AND_ASSIGN
-	| XOR_ASSIGN
-	| OR_ASSIGN
+assignment_operator_expression
+    : unary_expression '=' assignment_expression 								{  $$ = new VarAssign($1, $3); }
+	| unary_expression MUL_ASSIGN assignment_expression							{  $$ = new VarAssign($1, new MulOperator($1, $3)); }
+	| unary_expression DIV_ASSIGN assignment_expression							{  $$ = new VarAssign($1, new DivOperator($1, $3)); }
+	| unary_expression MOD_ASSIGN assignment_expression							{ ; }
+	| unary_expression ADD_ASSIGN assignment_expression							{  $$ = new VarAssign($1, new AddOperator($1, $3)); }
+	| unary_expression SUB_ASSIGN assignment_expression							{  $$ = new VarAssign($1, new SubOperator($1, $3)); }
+	| unary_expression LEFT_ASSIGN assignment_expression						{ ; }
+	| unary_expression RIGHT_ASSIGN assignment_expression						{ ; }
+	| unary_expression AND_ASSIGN assignment_expression							{ $$ = new VarAssign($1, new BW_ANDOperator($1, $3)); }
+	| unary_expression XOR_ASSIGN assignment_expression							{ $$ = new VarAssign($1, new BW_ExclusiveOrOperator($1, $3)); }
+	| unary_expression OR_ASSIGN assignment_expression							{ $$ = new VarAssign($1, new BW_InclusiveOrOperator($1, $3)); }
 	;
 
 expression
