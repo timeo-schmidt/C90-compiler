@@ -221,7 +221,6 @@ void AddOperator::codegen(
     std::cout << "nop" << std::endl;
 
     data.stack  += 4;
-
 }
 
 
@@ -1058,10 +1057,77 @@ void Unary::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-    throw std::runtime_error("Not implemented.");
+    // Get the operator
+
+    std::string op_str = getOpcode();
+
+    if(op_str=="++") {
+
+        // Evaluate the expression that needs to be incremented
+        expr->codegen(destReg, data, bindings, variables);
+
+        // Load the result into the register
+        std::cout << "lw $s0, " << (data.stack - 4) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+        std::cout << "nop" << std::endl;
+
+        // Increment by 1
+        std::cout << "addi $s1,$s0,1" << std::endl;
+        std::cout << "nop" << std::endl;
+
+        // Load data into the stack pointer location
+        std::cout << "sw $s1, " << data.stack  << "($sp)" << std::endl;
+
+        std::cout << "nop" << std::endl;
+
+        data.stack  += 4;
+    }
+
+    if(op_str=="--") {
+
+        // Evaluate the expression that needs to be incremented
+        expr->codegen(destReg, data, bindings, variables);
+
+        // Load the result into the register
+        std::cout << "lw $s0, " << (data.stack - 4) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+        std::cout << "nop" << std::endl;
+
+        // Decrement by 1
+        std::cout << "addi $s1,$s0,-1" << std::endl;
+        std::cout << "nop" << std::endl;
+
+        // Load data into the stack pointer location
+        std::cout << "sw $s1, " << data.stack  << "($sp)" << std::endl;
+
+        std::cout << "nop" << std::endl;
+
+        data.stack  += 4;
+    }
+
+
 }
 
+/*
+// Getting left side of addition and loading into register
+getLeft()->codegen(destReg, data, bindings, variables);
 
+// Getting left side of addition
+getRight()->codegen(destReg, data, bindings, variables);
+
+// getting sum and storing destReg
+std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+std::cout << "nop" << std::endl;
+
+
+std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
+std::cout << "nop" << std::endl;
+
+std::cout << "add $s3, $s1, $s0" << std::endl;
+std::cout << "nop" << std::endl;
+std::cout << "sw $s3, " << data.stack  << "($sp)" << std::endl;
+std::cout << "nop" << std::endl;
+
+data.stack  += 4;
+*/
 
 
 //////////////////////////////////////////////
@@ -1173,7 +1239,7 @@ void storeParams::codegen(
             reg =   0;
             nam = 's';
         }
-        else 
+        else
         {
             reg += 1;
             nam = 's';
