@@ -68,8 +68,8 @@ postfix_expression
 	| postfix_expression '(' argument_expression_list ')'			{ $$ = new functionCall($1, $3);}
 	| postfix_expression '.' IDENTIFIER
 	| postfix_expression PTR_OP IDENTIFIER
-	| postfix_expression INC_OP                                    { $$ = new UnaryExpression("++", $1); }
-	| postfix_expression DEC_OP                                    { $$ = new UnaryExpression("--", $1); }
+	| postfix_expression INC_OP                                    { $$ = new VarAssign($1, new AddOperator($1, $$ = new Number( 1 ))); }
+	| postfix_expression DEC_OP                                    { $$ = new VarAssign($1, new SubOperator($1, $$ = new Number( 1 ))); }
 	;
 
 argument_expression_list
