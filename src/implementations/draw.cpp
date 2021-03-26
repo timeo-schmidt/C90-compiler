@@ -308,4 +308,7 @@ void arrayAssign::draw_tree_node(std::ofstream& dotfile) const {
     throw std::runtime_error("Not implemented.");
 }
 
+void newScope::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+}
 

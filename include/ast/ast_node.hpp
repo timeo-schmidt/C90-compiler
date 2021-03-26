@@ -42,6 +42,7 @@ struct varData
 	int32_t offset;
 	int32_t memSize;
     int scope; 
+    int arraySize;
 };
 
 
