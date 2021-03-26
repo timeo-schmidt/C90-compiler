@@ -210,4 +210,72 @@ public:
 
 };
 
+class SwitchState
+    : public Node
+{
+
+public:
+
+    NodePtr expression;
+    NodePtr statement;
+
+    // Constructors & Destructors
+    SwitchState(NodePtr _expression, NodePtr _statement):
+        expression(_expression),
+        statement(_statement)
+    {}
+
+    virtual ~SwitchState() {
+        delete expression;
+        delete statement;
+    }
+
+    // Function declarations
+    virtual void codegen(
+         std::string destReg,
+         struct Data &data,
+         std::map<std::string,double> &bindings,
+	     std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
+class LabeledStatement
+    : public Node
+{
+
+public:
+
+    NodePtr constant_expression;
+    NodePtr statement;
+
+    // Constructors & Destructors
+    LabeledStatement(NodePtr _constant_expression, NodePtr _statement):
+        constant_expression(_constant_expression),
+        statement(_statement)
+    {}
+
+    virtual ~LabeledStatement() {
+        delete constant_expression;
+        delete statement;
+    }
+
+    // Function declarations
+    virtual void codegen(
+         std::string destReg,
+         struct Data &data,
+         std::map<std::string,double> &bindings,
+	     std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
+
+
+
+
 #endif

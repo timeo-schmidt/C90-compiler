@@ -964,7 +964,6 @@ void IfElseState::codegen(
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-    data.scope += 1;
 
     // Individual names for jumps
     std::string ELSE = makeName("ELSE");
@@ -991,7 +990,6 @@ void IfElseState::codegen(
 
     std::cout << L << ":" << std::endl;
 
-    scopeDecrement(data.scope, variables);
 
  }
 
@@ -1085,6 +1083,55 @@ void ForState::codegen(
     std::cout << EXIT << ":" << std::endl;
 
     scopeDecrement(data.scope, variables);
+}
+
+void SwitchState::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+    // Create a scoped SwitchState EXIT label
+    std::string START = makeStartLabel();
+    std::string EXIT = makeExitLabel();
+    destReg = makeCombinedLabel(START, EXIT);
+
+    // Evaluate the condition and store in data.stack-4
+    expression->codegen(destReg, data, bindings, variables);
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    // Generate the following expressions, which should check for the value in $s0
+    statement->codegen(destReg, data, bindings, variables);
+    std::cout << "nop" << std::endl;
+}
+
+void LabeledStatement::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+    // Evaluate the case constant_expression and store to $s1
+    constant_expression->codegen(destReg, data, bindings, variables);
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s1, " << (data.stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    // Create endstatement of case
+    std::string END = makeExitLabel();
+
+    // Skip to end label, if bne
+    std::cout << "bne $s0, $s1, " << END << std::endl;
+
+    // Code to be executed if case is true
+    statement->codegen(destReg, data, bindings, variables);
+
+    // End label
+    std::cout << END << ":" << std::endl;
 }
 
 

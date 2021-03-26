@@ -249,6 +249,14 @@ void ForState::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
+void SwitchState::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+};
+
+void LabeledStatement::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+};
+
 
 
 //////////////////////////////////////////////
@@ -323,4 +331,3 @@ void arrayAssign::draw_tree_node(std::ofstream& dotfile) const {
 void newScope::draw_tree_node(std::ofstream& dotfile) const {
     throw std::runtime_error("Not implemented.");
 }
-

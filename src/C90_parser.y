@@ -36,7 +36,7 @@ typedef std::vector<Node *> Program;
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration iteration_statement assignment_operator_expression assignment_expression_intermediate initializer_list argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <node> external_declaration iteration_statement assignment_operator_expression assignment_expression_intermediate initializer_list argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer labeled_statement
 %type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator
 %type <number> CONSTANT
 
@@ -374,7 +374,7 @@ direct_abstract_declarator
 
 initializer
     : assignment_expression									{ $$ = $1; }
-	| '{' initializer_list '}'								{ $$ =  new newScope($2);}
+	| '{' initializer_list '}'								{ $$ =  new newScope($2); }
 	| '{' initializer_list ',' '}'
 	;
 
@@ -384,7 +384,7 @@ initializer_list
 	;
 
 statement
-    : labeled_statement
+    : labeled_statement                                     { $$ = $1; }
 	| compound_statement									{ $$ = $1; }
 	| expression_statement									{ $$ = $1; }
 	| selection_statement
@@ -394,7 +394,7 @@ statement
 
 labeled_statement
     : IDENTIFIER ':' statement
-	| CASE constant_expression ':' statement
+	| CASE constant_expression ':' statement               { $$ = new LabeledStatement($2, $4); }
 	| DEFAULT ':' statement
 	;
 
@@ -423,7 +423,7 @@ expression_statement
 selection_statement
     : IF '(' expression ')' statement					{ $$ = new IfElseState($3, $5, nullptr); }
 	| IF '(' expression ')' statement ELSE statement	{ $$ = new IfElseState($3, $5, $7); }
-	| SWITCH '(' expression ')' statement
+	| SWITCH '(' expression ')' statement               { $$ = new SwitchState($3, $5); }
 	;
 
 iteration_statement

@@ -134,8 +134,6 @@ void WhileState::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
 
-
-
 //////////////////////////////////////////////
 // ast_unary.hpp
 //////////////////////////////////////////////
