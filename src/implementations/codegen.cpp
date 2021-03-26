@@ -1151,9 +1151,9 @@ void LabeledStatement::codegen(
         statement->codegen(destReg, data, bindings, variables);
     }
 
-    // if(breakAfter) {
-    //     std::cout << "j " << getExitLabel(destReg) << std::endl;
-    // }
+    if(breakAfter) {
+        std::cout << "j " << getExitLabel(destReg) << std::endl;
+    }
 }
 
 
