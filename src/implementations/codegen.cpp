@@ -1142,6 +1142,10 @@ void LabeledStatement::codegen(
         // Code to be executed if case is true
         statement->codegen(destReg, data, bindings, variables);
 
+        if(breakAfter) {
+            std::cout << "j " << getExitLabel(destReg) << std::endl;
+        }
+
         // End label
         std::cout << END << ":" << std::endl;
     }
@@ -1149,10 +1153,10 @@ void LabeledStatement::codegen(
     else {
         // Default statement code-block is always executed
         statement->codegen(destReg, data, bindings, variables);
-    }
 
-    if(breakAfter) {
-        std::cout << "j " << getExitLabel(destReg) << std::endl;
+        if(breakAfter) {
+            std::cout << "j " << getExitLabel(destReg) << std::endl;
+        }
     }
 }
 
