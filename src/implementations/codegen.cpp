@@ -1120,23 +1120,31 @@ void LabeledStatement::codegen(
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-    // Evaluate the case constant_expression and store to $s1
-    constant_expression->codegen(destReg, data, bindings, variables);
-    std::cout << "nop" << std::endl;
-    std::cout << "lw $s2, " << (data.stack  - 4) <<"($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
+    // Case Statement
+    if(constant_expression!=nullptr) {
+        // Evaluate the case constant_expression and store to $s1
+        constant_expression->codegen(destReg, data, bindings, variables);
+        std::cout << "nop" << std::endl;
+        std::cout << "lw $s2, " << (data.stack  - 4) <<"($sp)" << std::endl;
+        std::cout << "nop" << std::endl;
 
-    // Create endstatement of case
-    std::string END = makeExitLabel();
+        // Create endstatement of case
+        std::string END = makeExitLabel();
 
-    // Skip to end label, if bne
-    std::cout << "bne $s1, $s2, " << END << std::endl;
+        // Skip to end label, if bne
+        std::cout << "bne $s1, $s2, " << END << std::endl;
 
-    // Code to be executed if case is true
-    statement->codegen(destReg, data, bindings, variables);
+        // Code to be executed if case is true
+        statement->codegen(destReg, data, bindings, variables);
 
-    // End label
-    std::cout << END << ":" << std::endl;
+        // End label
+        std::cout << END << ":" << std::endl;
+    }
+    // Default statement
+    else {
+        // Default statement code-block is always executed
+        statement->codegen(destReg, data, bindings, variables);
+    }
 }
 
 

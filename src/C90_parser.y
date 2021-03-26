@@ -395,7 +395,7 @@ statement
 labeled_statement
     : IDENTIFIER ':' statement
 	| CASE constant_expression ':' statement               { $$ = new LabeledStatement($2, $4); }
-	| DEFAULT ':' statement                                /*{ $$ = new LabeledStatement(nullptr, $3); }*/
+	| DEFAULT ':' statement                                { $$ = new LabeledStatement(nullptr, $3); }
 	;
 
 compound_statement
