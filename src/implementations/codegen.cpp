@@ -943,10 +943,10 @@ void breakState::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-
-  // To be implemented
-
+    std::cout << "j " << getExitLabel(destReg) << std::endl;
 }
+
+
 
 void continueState::codegen(
      std::string destReg,
@@ -954,9 +954,7 @@ void continueState::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-
-  // To be implemented
-
+    std::cout << "j " << getStartLabel(destReg) << std::endl;
 }
 
 void IfElseState::codegen(
@@ -1011,6 +1009,7 @@ void WhileState::codegen(
     // Individual names for jumps
     std::string START = makeStartLabel();
     std::string EXIT = makeExitLabel();
+    destReg = makeCombinedLabel(START, EXIT);
 
     // START
     std::cout << START << ":" << std::endl;
@@ -1052,6 +1051,7 @@ void ForState::codegen(
     // Individual names for jumps
     std::string START = makeStartLabel();
     std::string EXIT = makeExitLabel();
+    destReg = makeCombinedLabel(START, EXIT);
 
 
     // Declare the variable

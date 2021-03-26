@@ -12,18 +12,30 @@ static std::string makeName(std::string base)
     return "_"+base+"_"+std::to_string(makeNameUnq++);
 }
 
-static std::vector<std::string> start_labels;
+
+// These are auxillary functions to manage scoped start and exit labels in the codegeneration
 static std::string makeStartLabel() {
     std::string start_lbl = "_START_"+std::to_string(makeNameUnq++);
-    start_labels.push_back(start_lbl);
     return start_lbl;
 }
 
-static std::vector<std::string> exit_labels;
 static std::string makeExitLabel() {
     std::string exit_lbl =  "_EXIT_"+std::to_string(makeNameUnq++);
-    exit_labels.push_back(exit_lbl);
     return exit_lbl;
+}
+
+static std::string makeCombinedLabel(std::string start_lbl, std::string exit_lbl) {
+    return start_lbl + "," + exit_lbl;
+}
+
+static std::string getStartLabel(std::string combined_str) {
+    int split_pos = combined_str.find(",");
+    return combined_str.substr(0,split_pos);
+}
+
+static std::string getExitLabel(std::string combined_str) {
+    int split_pos = combined_str.find(",");
+    return combined_str.substr(split_pos+1);
 }
 
 #endif
