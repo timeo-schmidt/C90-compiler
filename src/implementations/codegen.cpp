@@ -1100,8 +1100,10 @@ void SwitchState::codegen(
     // Evaluate the condition and store in data.stack-4
     expression->codegen(destReg, data, bindings, variables);
     std::cout << "nop" << std::endl;
-    std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "lw $s1, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
+
+    std::cout << START << ":" << std::endl; // For debugging
 
     // Generate the following expressions, which should check for the value in $s0
     statement->codegen(destReg, data, bindings, variables);
@@ -1121,14 +1123,14 @@ void LabeledStatement::codegen(
     // Evaluate the case constant_expression and store to $s1
     constant_expression->codegen(destReg, data, bindings, variables);
     std::cout << "nop" << std::endl;
-    std::cout << "lw $s1, " << (data.stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "lw $s2, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
     // Create endstatement of case
     std::string END = makeExitLabel();
 
     // Skip to end label, if bne
-    std::cout << "bne $s0, $s1, " << END << std::endl;
+    std::cout << "bne $s1, $s2, " << END << std::endl;
 
     // Code to be executed if case is true
     statement->codegen(destReg, data, bindings, variables);
