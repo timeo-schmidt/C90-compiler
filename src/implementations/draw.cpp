@@ -174,6 +174,18 @@ void returnState::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
+void breakState::draw_tree_node(std::ofstream& dotfile) const {
+
+    throw std::runtime_error("Not implemented.");
+
+};
+
+void continueState::draw_tree_node(std::ofstream& dotfile) const {
+
+    throw std::runtime_error("Not implemented.");
+
+};
+
 void IfElseState::draw_tree_node(std::ofstream& dotfile) const {
 
     dotfile << "id" << this << "[label=\"{ IfElseState |{<condition> condition | <If> If| <Else> Else}}\"];" << std::endl;

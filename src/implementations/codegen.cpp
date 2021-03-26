@@ -75,7 +75,7 @@ void VarDecl::codegen(
 ) const {
 
     //Variable information:
-    
+
     struct varData a;
 
     //Checking if array
@@ -84,13 +84,13 @@ void VarDecl::codegen(
     else
     { a.arraySize = 0;}
 
- 
+
 
     // TO DO: impliment the types, then un comment this stuff
     //if(type != nullptr)
     //{ declarationSpecifiers->codegen("$s0", data, bindings, variables); }
-    
-    
+
+
     a.memSize = (declarationSpecifiers->getSize());
     if(initDeclarator != nullptr)
     { initDeclarator->codegen("$s0", data,  bindings, variables); }
@@ -104,7 +104,7 @@ void VarDecl::codegen(
     std::pair <std::string,struct varData> b;
     b = std::make_pair(initDeclarator->getName(),a);
     variables.insert(b);
-   
+
    data.stack += a.arraySize * 4;
 
 }
@@ -937,6 +937,28 @@ void returnState::codegen(
 
 }
 
+void breakState::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+  // To be implemented
+
+}
+
+void continueState::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+  // To be implemented
+
+}
+
 void IfElseState::codegen(
      std::string destReg,
      struct Data &data,
@@ -987,8 +1009,8 @@ void WhileState::codegen(
     data.scope += 1;
 
     // Individual names for jumps
-    std::string START = makeName("START");
-    std::string EXIT = makeName("EXIT");
+    std::string START = makeStartLabel();
+    std::string EXIT = makeExitLabel();
 
     // START
     std::cout << START << ":" << std::endl;
@@ -1028,8 +1050,8 @@ void ForState::codegen(
     // for(int i=0; i<10; i++) { code }
 
     // Individual names for jumps
-    std::string START = makeName("START");
-    std::string EXIT = makeName("EXIT");
+    std::string START = makeStartLabel();
+    std::string EXIT = makeExitLabel();
 
 
     // Declare the variable
@@ -1307,7 +1329,7 @@ void arrayAssign::codegen(
         }
 
     // Obtaining variable memory location (will need to be updated when types)
-   
+
     std::cout << "lw $s0, " << location  <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s0, " << data.stack <<"($sp)" << std::endl;
@@ -1324,9 +1346,9 @@ void newScope::codegen(
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-      
+
     data.scope += 1;
-    expr->codegen(destReg, data, bindings, variables); 
+    expr->codegen(destReg, data, bindings, variables);
     scopeDecrement(data.scope, variables);
 
 

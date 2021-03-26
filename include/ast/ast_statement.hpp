@@ -45,6 +45,57 @@ public:
 };
 
 
+class breakState
+    : public Node
+{
+
+public:
+
+    // Constructor and Destructor
+    breakState() {}
+
+    virtual ~breakState() { }
+
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
+
+    virtual void codegen(
+         std::string destReg,
+         struct Data &data,
+         std::map<std::string,double> &bindings,
+         std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
+class continueState
+    : public Node
+{
+
+public:
+
+    // Constructor and Destructor
+    continueState() {}
+
+    virtual ~continueState() { }
+
+    // Function Declarations
+    virtual void print(std::ostream &dst) const override;
+
+    virtual void codegen(
+         std::string destReg,
+         struct Data &data,
+         std::map<std::string,double> &bindings,
+         std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
+
 class IfElseState
     : public Node
 {

@@ -118,6 +118,14 @@ void returnState::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
 
+void breakState::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+void continueState::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
 void IfElseState::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }

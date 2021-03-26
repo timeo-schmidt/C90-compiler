@@ -437,8 +437,8 @@ iteration_statement
 
 jump_statement
     : GOTO IDENTIFIER ';'
-	| CONTINUE ';'
-	| BREAK ';'
+	| CONTINUE ';'                          { $$ = new continueState(); }
+	| BREAK ';'                             { $$ = new breakState(); }
 	| RETURN ';'							{ $$ = new returnState(nullptr); }
 	| RETURN expression ';'					{ $$ = new returnState($2); }
 	;
