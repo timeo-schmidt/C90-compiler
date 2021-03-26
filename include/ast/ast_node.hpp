@@ -35,6 +35,7 @@ struct Data
 {
 	int32_t stack;   // Stores size of stack frame, need to find way of determining this
 	int32_t scope; // Stores offset value of the lowest free memory
+    int32_t arraystack;
 };
 
 struct varData
@@ -59,7 +60,7 @@ public:
 
     // Getters implemented by child
     virtual NodePtr         getType()                    const { throw std::runtime_error("getType() is not implemented."); }
-    virtual int          getValue()                   const { throw std::runtime_error("getValue() is not implemented."); }
+    virtual int             getValue()                   const { throw std::runtime_error("getValue() is not implemented."); }
     virtual NodePtr         getCode()                    const { throw std::runtime_error("getCode() is not implemented."); }
     virtual NodePtr         getNext()                    const { throw std::runtime_error("getNext() is not implemented."); }
     virtual std::string     getName()                    const { throw std::runtime_error("getName() is not implemented."); }
@@ -74,6 +75,7 @@ public:
     virtual NodePtr         getParameterList()           const { throw std::runtime_error("getParameterList() is not implemented."); }
     virtual NodePtr         getParamType()               const { throw std::runtime_error("getParamType() is not implemented."); }
     virtual NodePtr         getParamName()               const { throw std::runtime_error("getParamName() is not implemented."); }
+   
     // Setters implemented by child
     virtual void            setNext(NodePtr _nextptr)          { throw std::runtime_error("setNext() is not implemented."); }
 
@@ -90,6 +92,13 @@ public:
          std::map<std::string,double> &bindings,
 	     std::unordered_multimap<std::string,struct varData> &variables
     ) const { throw std::runtime_error("codegen() is not implemented."); };
+
+    virtual void getOffset(
+         std::string destReg,
+         struct Data &data,
+         std::map<std::string,double> &bindings,
+	     std::unordered_multimap<std::string,struct varData> &variables
+    ) const { throw std::runtime_error("getOffset() is not implemented."); };               
 
 };
 

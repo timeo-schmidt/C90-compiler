@@ -143,6 +143,8 @@ public:
         arrayLocation(_arrayLocation)
     {}
 
+
+
     virtual ~arrayAssign()
     {
         delete name;        
@@ -162,6 +164,15 @@ public:
         {return 1;}
 
     // Member function declarations
+
+    virtual void getOffset(
+        std::string destReg,
+        struct Data &data,
+        std::map<std::string,double> &bindings,
+        std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+
     virtual void print(std::ostream &dst) const override;
 
     virtual void codegen(
