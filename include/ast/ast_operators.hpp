@@ -65,6 +65,12 @@ public:
         : Operator(_left, _right)
     {}
 
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) + (getRight()->getValue());
+        return  in; 
+    }
+
     // Function declarations
      virtual void codegen(
          std::string destReg,
@@ -91,6 +97,12 @@ public:
     SubOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) - (getRight()->getValue());
+        return  in; 
+    }
 
     // Function declarations
     virtual void codegen(
@@ -119,6 +131,12 @@ public:
         : Operator(_left, _right)
     {}
 
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) * (getRight()->getValue());
+        return  in; 
+    }
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -142,6 +160,13 @@ public:
     DivOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) / (getRight()->getValue());
+        return  in; 
+    }
+
 
     // Function declarations
     virtual void codegen(
@@ -185,6 +210,12 @@ public:
         : Operator(_left, _right)
     {}
 
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) << (getRight()->getValue());
+        return  in; 
+    }
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -208,6 +239,12 @@ public:
     RShiftOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) >> (getRight()->getValue());
+        return  in; 
+    }
 
     // Function declarations
     virtual void codegen(
@@ -234,6 +271,12 @@ public:
         : Operator(_left, _right)
     {}
 
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) < (getRight()->getValue());
+        return  in; 
+    }
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -257,6 +300,12 @@ public:
     GThanOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) > (getRight()->getValue());
+        return  in; 
+    }
 
     // Function declarations
     virtual void codegen(
@@ -282,6 +331,12 @@ public:
         : Operator(_left, _right)
     {}
 
+   virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) <= (getRight()->getValue());
+        return  in; 
+    }
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -305,6 +360,14 @@ public:
     GEThanOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+   virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) >= (getRight()->getValue());
+        return  in; 
+    }
+
+
 
     // Function declarations
     virtual void codegen(
@@ -332,6 +395,13 @@ public:
         : Operator(_left, _right)
     {}
 
+   virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) == (getRight()->getValue());
+        return  in; 
+    }
+
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -357,6 +427,14 @@ public:
         : Operator(_left, _right)
     {}
 
+   virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) != (getRight()->getValue());
+        return  in; 
+    }
+
+
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -381,6 +459,13 @@ public:
         : Operator(_left, _right)
     {}
 
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) && (getRight()->getValue());
+        return  in; 
+    }
+
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -403,6 +488,12 @@ public:
     OROperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    virtual int getValue() const override
+        {   
+            int in = (getLeft()->getValue()) || (getRight()->getValue());
+            return  in; 
+        }
 
     // Function declarations
     virtual void codegen(
@@ -428,6 +519,14 @@ public:
         : Operator(_left, _right)
     {}
 
+       virtual int getValue() const override
+        {   
+            int in = (getLeft()->getValue()) & (getRight()->getValue());
+            return  in; 
+        }
+
+
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -451,6 +550,13 @@ public:
         : Operator(_left, _right)
     {}
 
+    virtual int getValue() const override
+    {   
+        int in = (getLeft()->getValue()) ^ (getRight()->getValue());
+        return  in; 
+    }
+
+
     // Function declarations
     virtual void codegen(
         std::string destReg,
@@ -473,6 +579,12 @@ public:
     BW_InclusiveOrOperator(NodePtr  _left, NodePtr  _right)
         : Operator(_left, _right)
     {}
+
+    virtual int getValue() const override
+        {   
+            int in = (getLeft()->getValue()) | (getRight()->getValue());
+            return  in; 
+        }
 
     // Function declarations
     virtual void codegen(

@@ -63,7 +63,7 @@ string_literal_type
 
 postfix_expression
     : primary_expression											{ $$=$1; }
-	| postfix_expression '[' expression ']'
+	| postfix_expression '[' expression ']'							{ $$ = new arrayAssign($1, $3);}
 	| postfix_expression '(' ')'									{ $$ = new functionCall($1, nullptr);}
 	| postfix_expression '(' argument_expression_list ')'			{ $$ = new functionCall($1, $3);}
 	| postfix_expression '.' IDENTIFIER
@@ -81,10 +81,10 @@ assignment_expression_intermediate
 	: assignment_expression											{ $$= new storeParams($1, nullptr); }
 
 unary_expression
-    : postfix_expression
+    : postfix_expression										{ $$ = $1; }
 	| INC_OP unary_expression
 	| DEC_OP unary_expression
-	| unary_operator cast_expression                           { $$ = new UnaryExpression(*$1, $2); delete $1; }
+	| unary_operator cast_expression                           	{ $$ = new UnaryExpression(*$1, $2); delete $1; }
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
 	;
@@ -309,11 +309,11 @@ declarator
 direct_declarator
     : identifier_type                                   { $$= $1; }
 	| '(' declarator ')'                                { ; }
-	| direct_declarator '[' constant_expression ']'     { ; }
+	| direct_declarator '[' constant_expression ']'     { $$ = new arrayDeclerator($1, $3); }
 	| direct_declarator '[' ']'                         { ; }
 	| direct_declarator '(' parameter_type_list ')'     { $$ = new funcDeclarator($1, $3); }
 	| direct_declarator '(' identifier_list ')'         { ; }
-    | direct_declarator '(' ')'                         { $$= new funcDeclarator($1, nullptr); }
+    | direct_declarator '(' ')'                         { $$ = new funcDeclarator($1, nullptr); }
 	;
 
 pointer

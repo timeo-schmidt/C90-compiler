@@ -150,6 +150,13 @@ public:
         return declarator->getName();
     }
 
+    virtual int getValue() const override
+        { return declarator->getValue(); }
+    
+    
+    virtual bool isArray() const override
+        {return declarator->isArray();}
+
     // Member function declarations
     virtual void print(std::ostream &dst) const override;
 
@@ -196,6 +203,9 @@ public:
     virtual std::string getName() const override
         {return functionName->getName();}
     
+    virtual bool isArray() const override
+        {return 0;}
+
     // Member function declarations
     virtual void print(std::ostream &dst) const override;
 
@@ -209,6 +219,64 @@ public:
     virtual void draw_tree_node(std::ofstream& dotfile) const override;
 
 };
+
+
+
+class arrayDeclerator
+    : public Node
+{
+public:
+
+    // Members
+    NodePtr functionName;
+    NodePtr arraySize;
+
+    // Constructor & Destructor
+    arrayDeclerator(NodePtr _functionName, NodePtr _arraySize ):
+        functionName(_functionName),
+        arraySize(_arraySize)
+    {}
+
+    virtual ~arrayDeclerator()
+    {
+        delete functionName;
+        delete arraySize;
+    }
+
+    // Getters & Setters
+    virtual NodePtr getFunctionName() const override
+        { return functionName; }
+
+    virtual std::string getName() const override
+        {return functionName->getName();}
+
+     virtual int getValue() const override
+        { return arraySize->getValue(); }
+    
+    virtual bool isArray() const override
+        {return 1;}
+    
+
+    // Member function declarations
+    virtual void print(std::ostream &dst) const override;
+
+    virtual void codegen(
+        std::string destReg,
+        struct Data &data,
+        std::map<std::string,double> &bindings,
+       std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
+
+
+
+
+
+
 
 class paramDecl
     : public Node

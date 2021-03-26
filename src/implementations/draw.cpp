@@ -118,6 +118,9 @@ void NextState::draw_tree_node(std::ofstream& dotfile) const {
 };
 
 
+void arrayDeclerator::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+}
 
 //////////////////////////////////////////////
 // ast_operators.hpp
@@ -300,3 +303,9 @@ void functionCall::draw_tree_node(std::ofstream& dotfile) const {
 void storeParams::draw_tree_node(std::ofstream& dotfile) const {
     throw std::runtime_error("Not implemented.");
 }
+
+void arrayAssign::draw_tree_node(std::ofstream& dotfile) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+

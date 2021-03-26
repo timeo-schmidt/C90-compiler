@@ -86,6 +86,9 @@ public:
         return ope.c_str();
     }
 
+    virtual bool isArray() const override
+        {return 0;}
+
     // Function declarations
 
 

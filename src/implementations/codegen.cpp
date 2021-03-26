@@ -75,19 +75,46 @@ void VarDecl::codegen(
     //Variable information:
     struct varData a;
 
-    a.memSize = (declarationSpecifiers->getSize());
+    //Checking if array
+    if(initDeclarator->isArray() == 1)
+    {
+        double size =  initDeclarator->getValue();
+        //std::cout<<"---------"<< size << "---------"<<std::endl;
+        for(int i = 0; i<size; i++)
+        {
+            // To be changed 
+            std::cout<<"sw $0, " << (data.stack-4)<< "($sp)" << std::endl;
+
+            a.memSize = (declarationSpecifiers->getSize());
+            a.offset = data.stack - 4;
+            a.scope = data.scope;
+            std::string nam = initDeclarator->getName();
+            nam += '[';
+            nam += i +'0';
+            nam += ']';
+            std::pair <std::string,struct varData> b;
+            b = std::make_pair(nam,a);
+            variables.insert(b);
+            data.stack  += 4;
+
+        }
+    
+        data.stack  -= 4;
+
+    }
+    
 
     // TO DO: impliment the types, then un comment this stuff
     //if(type != nullptr)
     //{ declarationSpecifiers->codegen("$s0", data, bindings, variables); }
-
+    a.memSize = (declarationSpecifiers->getSize());
     if(initDeclarator != nullptr)
     { initDeclarator->codegen("$s0", data,  bindings, variables); }
 
     //std::cout << "sw $s0, " << stack  << "($sp)" << std::endl;
 
     // Storing variable name in variables
-    a.offset = data.stack - 4;
+    a.offset = data.stack-4;
     a.scope = data.scope;
     //variables[initDeclarator->getName()] = a;
     std::pair <std::string,struct varData> b;
@@ -96,7 +123,7 @@ void VarDecl::codegen(
     //variables.insert(std::pair<std::string,struct varData>(initDeclarator->getName(),a));
     //variables[initDeclarator->getName()] = a;
 
-   // stack  += 4;
+    //stack  += 4;
 
 }
 
@@ -108,6 +135,15 @@ void funcDeclarator::codegen(
 ) const {
     if(parameterList != nullptr)
     {parameterList->codegen("$a0", data,  bindings, variables);}
+}
+
+void arrayDeclerator::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+        throw std::runtime_error("array declerator Not implemented.");
 }
 
 void paramDecl::codegen(
@@ -1053,10 +1089,23 @@ void VarAssign::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-      int kitkat = 0;
+        
+        //Checking if array
+        std::string name = var->getName();
+
+        if(var->isArray() == 1)
+        {
+
+            int index = var->getValue();
+            name += '[';
+            name += index + '0';
+            name += ']';
+
+        }
+
+        int kitkat = 0;
         int32_t location;
         int32_t size;
-        std::string name = var->getName();
         for(int i = data.scope; i > -1; i--)
         {
             for(const auto& u : variables)
@@ -1149,3 +1198,47 @@ void storeParams::codegen(
     }
 }
 
+
+
+void arrayAssign::codegen(
+    std::string destReg,
+    struct Data &data,
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+      
+        std::string nam = name->getName();
+        int index = arrayLocation->getValue();
+        nam += '[';
+        nam += index + '0';
+        nam += ']';
+
+        int kitkat = 0;
+        int32_t location;
+        int32_t size;
+        for(int i = data.scope; i > -1; i--)
+        {
+            for(const auto& u : variables)
+            {
+                if( u.first == nam && u.second.scope == i )
+                {
+                    location = u.second.offset;
+                    size = u.second.memSize;
+                    kitkat = 1;
+                    break;
+                } 
+            }
+        if(kitkat == 1)
+        { break; }
+        }
+
+    // Obtaining variable memory location (will need to be updated when types)
+   
+    std::cout << "lw $s0, " << location <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s0, " << data.stack <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+    data.stack += 4;
+
+}

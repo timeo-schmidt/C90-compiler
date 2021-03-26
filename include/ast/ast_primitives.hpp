@@ -22,6 +22,9 @@ public:
     virtual std::string getName() const override
         { return this->id; }
 
+    virtual bool isArray() const override
+        {return 0;}
+
     // Function Declarations
     virtual void print(std::ostream &dst) const override;
 
@@ -48,7 +51,7 @@ public:
     {}
 
     // Getters & Setters
-    double getValue() const override
+    int getValue() const override
         { return value; }
 
     //NodePtr getDeclValue() const

@@ -62,6 +62,9 @@ void NextState::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
 
+void arrayDeclerator::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
 
 
 //////////////////////////////////////////////
@@ -159,5 +162,10 @@ void functionCall::print(std::ostream &dst) const {
 }
 
 void storeParams::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
+
+
+void arrayAssign::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
