@@ -82,8 +82,8 @@ assignment_expression_intermediate
 
 unary_expression
     : postfix_expression										{ $$ = $1; }
-	| INC_OP unary_expression
-	| DEC_OP unary_expression
+	| INC_OP unary_expression									{ $$ = new VarAssign($2, new AddOperator($2, $$ = new Number( 1 ))); }
+	| DEC_OP unary_expression									{ $$ = new VarAssign($2, new SubOperator($2, $$ = new Number( 1 ))); }
 	| unary_operator cast_expression                           	{ $$ = new UnaryExpression(*$1, $2); delete $1; }
 	| SIZEOF unary_expression
 	| SIZEOF '(' type_name ')'
