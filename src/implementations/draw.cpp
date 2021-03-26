@@ -103,7 +103,7 @@ void paramDecl::draw_tree_node(std::ofstream& dotfile) const {
 
 void NextState::draw_tree_node(std::ofstream& dotfile) const {
 
-    dotfile << "id" << this << "[label=\"{ initDecl |{<state> state|<next> next}}\"];" << std::endl;
+    dotfile << "id" << this << "[label=\"{ NextState |{<state> state|<next> next}}\"];" << std::endl;
 
     if(state!=nullptr) {
         dotfile << "id" << this << ":state -> id" << state << ";" << std::endl;
@@ -117,9 +117,20 @@ void NextState::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
-
 void arrayDeclerator::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("Not implemented.");
+
+    dotfile << "id" << this << "[label=\"{ arrayDeclerator |{<functionName> functionName|<arraySize> arraySize}}\"];" << std::endl;
+
+    if(functionName!=nullptr) {
+        dotfile << "id" << this << ":functionName -> id" << functionName << ";" << std::endl;
+        functionName->draw_tree_node(dotfile);
+    }
+
+    if(arraySize!=nullptr) {
+        dotfile << "id" << this << ":arraySize -> id" << arraySize << ";" << std::endl;
+        arraySize->draw_tree_node(dotfile);
+    }
+
 }
 
 //////////////////////////////////////////////
@@ -171,6 +182,18 @@ void returnState::draw_tree_node(std::ofstream& dotfile) const {
         dotfile << "id" << this << ":expression -> id" << expression << ";" << std::endl;
         expression->draw_tree_node(dotfile);
     }
+
+};
+
+void breakState::draw_tree_node(std::ofstream& dotfile) const {
+
+    dotfile << "id" << this << "[label=\"{ breakState }\"];" << std::endl;
+
+};
+
+void continueState::draw_tree_node(std::ofstream& dotfile) const {
+
+    dotfile << "id" << this << "[label=\"{ continueState }\"];" << std::endl;
 
 };
 
@@ -237,6 +260,36 @@ void ForState::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
+void SwitchState::draw_tree_node(std::ofstream& dotfile) const {
+    dotfile << "id" << this << "[label=\"{ SwitchState |{<expression> expression | <statement> statement}}\"];" << std::endl;
+
+    if(expression!=nullptr) {
+        dotfile << "id" << this << ":expression -> id" << expression << ";" << std::endl;
+        expression->draw_tree_node(dotfile);
+    }
+
+    if(statement!=nullptr) {
+        dotfile << "id" << this << ":statement -> id" << statement << ";" << std::endl;
+        statement->draw_tree_node(dotfile);
+    }
+};
+
+void LabeledStatement::draw_tree_node(std::ofstream& dotfile) const {
+
+    dotfile << "id" << this << "[label=\"{ LabeledStatement |{<constant_expression> constant_expression | <statement> statement | breakAfter=" << breakAfter << "}}\"];" << std::endl;
+
+    if(constant_expression!=nullptr) {
+        dotfile << "id" << this << ":constant_expression -> id" << constant_expression << ";" << std::endl;
+        constant_expression->draw_tree_node(dotfile);
+    }
+
+    if(statement!=nullptr) {
+        dotfile << "id" << this << ":statement -> id" << statement << ";" << std::endl;
+        statement->draw_tree_node(dotfile);
+    }
+
+};
+
 
 
 //////////////////////////////////////////////
@@ -295,20 +348,53 @@ void VarAssign::draw_tree_node(std::ofstream& dotfile) const {
 
 };
 
-
 void functionCall::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("Not implemented.");
+    dotfile << "id" << this << "[label=\"{ functionCall |{<functName> functName | <params> params}}\"];" << std::endl;
+
+    if(functName!=nullptr) {
+        dotfile << "id" << this << ":functName -> id" << functName << ";" << std::endl;
+        functName->draw_tree_node(dotfile);
+    }
+
+    if(params!=nullptr) {
+        dotfile << "id" << this << ":params -> id" << params << ";" << std::endl;
+        params->draw_tree_node(dotfile);
+    }
 }
 
 void storeParams::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("Not implemented.");
+    dotfile << "id" << this << "[label=\"{ storeParams |{<param> param | <next> next}}\"];" << std::endl;
+
+    if(param!=nullptr) {
+        dotfile << "id" << this << ":param -> id" << param << ";" << std::endl;
+        param->draw_tree_node(dotfile);
+    }
+
+    if(next!=nullptr) {
+        dotfile << "id" << this << ":next -> id" << next << ";" << std::endl;
+        next->draw_tree_node(dotfile);
+    }
 }
 
 void arrayAssign::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("Not implemented.");
+    dotfile << "id" << this << "[label=\"{ arrayAssign |{<name> name | <arrayLocation> arrayLocation}}\"];" << std::endl;
+
+    if(name!=nullptr) {
+        dotfile << "id" << this << ":name -> id" << name << ";" << std::endl;
+        name->draw_tree_node(dotfile);
+    }
+
+    if(arrayLocation!=nullptr) {
+        dotfile << "id" << this << ":arrayLocation -> id" << arrayLocation << ";" << std::endl;
+        arrayLocation->draw_tree_node(dotfile);
+    }
 }
 
 void newScope::draw_tree_node(std::ofstream& dotfile) const {
-    throw std::runtime_error("Not implemented.");
-}
+    dotfile << "id" << this << "[label=\"{ newScope |{<expr> expr }}\"];" << std::endl;
 
+    if(expr!=nullptr) {
+        dotfile << "id" << this << ":expr -> id" << expr << ";" << std::endl;
+        expr->draw_tree_node(dotfile);
+    }
+}

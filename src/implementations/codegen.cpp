@@ -75,7 +75,7 @@ void VarDecl::codegen(
 ) const {
 
     //Variable information:
-    
+
     struct varData a;
 
     //Checking if array
@@ -84,13 +84,13 @@ void VarDecl::codegen(
     else
     { a.arraySize = 0;}
 
- 
+
 
     // TO DO: impliment the types, then un comment this stuff
     //if(type != nullptr)
     //{ declarationSpecifiers->codegen("$s0", data, bindings, variables); }
-    
-    
+
+
     a.memSize = (declarationSpecifiers->getSize());
     if(initDeclarator != nullptr)
     { initDeclarator->codegen("$s0", data,  bindings, variables); }
@@ -104,7 +104,7 @@ void VarDecl::codegen(
     std::pair <std::string,struct varData> b;
     b = std::make_pair(initDeclarator->getName(),a);
     variables.insert(b);
-   
+
    data.stack += a.arraySize * 4;
 
 }
@@ -201,11 +201,16 @@ void NextState::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-    // Evaluate current statement
-    state->codegen(destReg, data, bindings, variables);
 
-    // Evaluate next statement
-    next->codegen(destReg, data, bindings, variables);
+    if(state!=nullptr) {
+        // Evaluate current statement
+        state->codegen(destReg, data, bindings, variables);
+    }
+    if(next!=nullptr) {
+        // Evaluate next statement
+        next->codegen(destReg, data, bindings, variables);
+    }
+
 }
 
 
@@ -937,6 +942,26 @@ void returnState::codegen(
 
 }
 
+void breakState::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    std::cout << "j " << getExitLabel(destReg) << std::endl;
+}
+
+
+
+void continueState::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+    std::cout << "j " << getStartLabel(destReg) << std::endl;
+}
+
 void IfElseState::codegen(
      std::string destReg,
      struct Data &data,
@@ -944,7 +969,6 @@ void IfElseState::codegen(
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-    data.scope += 1;
 
     // Individual names for jumps
     std::string ELSE = makeName("ELSE");
@@ -971,7 +995,6 @@ void IfElseState::codegen(
 
     std::cout << L << ":" << std::endl;
 
-    scopeDecrement(data.scope, variables);
 
  }
 
@@ -987,8 +1010,9 @@ void WhileState::codegen(
     data.scope += 1;
 
     // Individual names for jumps
-    std::string START = makeName("START");
-    std::string EXIT = makeName("EXIT");
+    std::string START = makeStartLabel();
+    std::string EXIT = makeExitLabel();
+    destReg = makeCombinedLabel(START, EXIT);
 
     // START
     std::cout << START << ":" << std::endl;
@@ -1028,8 +1052,9 @@ void ForState::codegen(
     // for(int i=0; i<10; i++) { code }
 
     // Individual names for jumps
-    std::string START = makeName("START");
-    std::string EXIT = makeName("EXIT");
+    std::string START = makeStartLabel();
+    std::string EXIT = makeExitLabel();
+    destReg = makeCombinedLabel(START, EXIT);
 
 
     // Declare the variable
@@ -1063,6 +1088,76 @@ void ForState::codegen(
     std::cout << EXIT << ":" << std::endl;
 
     scopeDecrement(data.scope, variables);
+}
+
+void SwitchState::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+    // Create a scoped SwitchState EXIT label
+    std::string START = makeStartLabel(); // This should not be used in a switch statement
+    std::string EXIT = makeExitLabel();
+    destReg = makeCombinedLabel(START, EXIT);
+
+    // Evaluate the condition and store in data.stack-4
+    expression->codegen(destReg, data, bindings, variables);
+    std::cout << "nop" << std::endl;
+    std::cout << "lw $s1, " << (data.stack  - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+
+    std::cout << START << ":" << std::endl; // For debugging
+
+    // Generate the following expressions, which should check for the value in $s0
+    statement->codegen(destReg, data, bindings, variables);
+    std::cout << "nop" << std::endl;
+
+    // End of Switch Statement Label
+    std::cout << EXIT << ":" << std::endl;
+}
+
+void LabeledStatement::codegen(
+     std::string destReg,
+     struct Data &data,
+     std::map<std::string,double> &bindings,
+     std::unordered_multimap<std::string,struct varData> &variables
+) const {
+
+    // Case Statement
+    if(constant_expression!=nullptr) {
+        // Evaluate the case constant_expression and store to $s1
+        constant_expression->codegen(destReg, data, bindings, variables);
+        std::cout << "nop" << std::endl;
+        std::cout << "lw $s2, " << (data.stack  - 4) <<"($sp)" << std::endl;
+        std::cout << "nop" << std::endl;
+
+        // Create endstatement of case
+        std::string END = makeExitLabel();
+
+        // Skip to end label, if bne
+        std::cout << "bne $s1, $s2, " << END << std::endl;
+
+        // Code to be executed if case is true
+        statement->codegen(destReg, data, bindings, variables);
+
+        if(breakAfter) {
+            std::cout << "j " << getExitLabel(destReg) << std::endl;
+        }
+
+        // End label
+        std::cout << END << ":" << std::endl;
+    }
+    // Default statement
+    else {
+        // Default statement code-block is always executed
+        statement->codegen(destReg, data, bindings, variables);
+
+        if(breakAfter) {
+            std::cout << "j " << getExitLabel(destReg) << std::endl;
+        }
+    }
 }
 
 
@@ -1307,7 +1402,7 @@ void arrayAssign::codegen(
         }
 
     // Obtaining variable memory location (will need to be updated when types)
-   
+
     std::cout << "lw $s0, " << location  <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s0, " << data.stack <<"($sp)" << std::endl;
@@ -1324,9 +1419,9 @@ void newScope::codegen(
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-      
+
     data.scope += 1;
-    expr->codegen(destReg, data, bindings, variables); 
+    expr->codegen(destReg, data, bindings, variables);
     scopeDecrement(data.scope, variables);
 
 
