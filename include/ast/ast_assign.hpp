@@ -176,4 +176,46 @@ public:
 };
 
 
+
+
+
+
+class newScope
+    : public Node
+{
+
+public:
+
+    NodePtr expr;
+    
+    newScope(NodePtr _expr):
+        expr(_expr)
+       
+    {}
+
+    virtual ~newScope()
+    {
+        delete expr;        
+     
+    }
+
+
+
+    // Member function declarations
+    virtual void print(std::ostream &dst) const override;
+
+    virtual void codegen(
+        std::string destReg,
+        struct Data &data,
+        std::map<std::string,double> &bindings,
+       std::unordered_multimap<std::string,struct varData> &variables
+    ) const override;
+
+    virtual void draw_tree_node(std::ofstream& dotfile) const override;
+
+};
+
+
+
+
 #endif

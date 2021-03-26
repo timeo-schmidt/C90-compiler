@@ -36,8 +36,8 @@ typedef std::vector<Node *> Program;
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
 
-%type <node> external_declaration iteration_statement assignment_operator_expression assignment_expression_intermediate argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
-%type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator assignment_operator
+%type <node> external_declaration iteration_statement assignment_operator_expression assignment_expression_intermediate initializer_list argument_expression_list postfix_expression parameter_type_list parameter_declaration parameter_list function_definition selection_statement jump_statement declarator identifier_type direct_declarator compound_statement declaration_list statement declaration_specifiers expression_statement statement_list init_declarator_list constant_type primary_expression additive_expression multiplicative_expression unary_expression cast_expression shift_expression  relational_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression logical_or_expression conditional_expression assignment_expression expression constant_expression declaration init_declarator equality_expression initializer
+%type <string> STRING_LITERAL IDENTIFIER type_specifier  string_literal_type unary_operator
 %type <number> CONSTANT
 
 %start program_start
@@ -374,12 +374,12 @@ direct_abstract_declarator
 
 initializer
     : assignment_expression									{ $$ = $1; }
-	| '{' initializer_list '}'
+	| '{' initializer_list '}'								{ $$ =  new newScope($2);}
 	| '{' initializer_list ',' '}'
 	;
 
 initializer_list
-    : initializer
+    : initializer											{ $$ = $1;}
 	| initializer_list ',' initializer
 	;
 
@@ -400,8 +400,8 @@ labeled_statement
 
 compound_statement
     : '{' '}'                                   { $$=nullptr; }
-    | '{' statement_list '}'                    { $$ = $2; }
-	| '{' declaration_list '}'                  { $$ = $2; }
+    | '{' statement_list '}'                    { $$ = new newScope($2); }
+	| '{' declaration_list '}'                  { $$ = new newScope($2); }
 	| '{' declaration_list statement_list '}'   { $$ = new NextState($2, $3); }
 	;
 

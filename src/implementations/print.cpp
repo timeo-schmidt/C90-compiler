@@ -169,3 +169,7 @@ void storeParams::print(std::ostream &dst) const {
 void arrayAssign::print(std::ostream &dst) const {
     throw std::runtime_error("Not implemented.");
 }
+
+void newScope::print(std::ostream &dst) const {
+    throw std::runtime_error("Not implemented.");
+}
