@@ -201,11 +201,16 @@ void NextState::codegen(
     std::map<std::string,double> &bindings,
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-    // Evaluate current statement
-    state->codegen(destReg, data, bindings, variables);
 
-    // Evaluate next statement
-    next->codegen(destReg, data, bindings, variables);
+    if(state!=nullptr) {
+        // Evaluate current statement
+        state->codegen(destReg, data, bindings, variables);
+    }
+    if(next!=nullptr) {
+        // Evaluate next statement
+        next->codegen(destReg, data, bindings, variables);
+    }
+
 }
 
 
@@ -1145,6 +1150,10 @@ void LabeledStatement::codegen(
         // Default statement code-block is always executed
         statement->codegen(destReg, data, bindings, variables);
     }
+
+    // if(breakAfter) {
+    //     std::cout << "j " << getExitLabel(destReg) << std::endl;
+    // }
 }
 
 

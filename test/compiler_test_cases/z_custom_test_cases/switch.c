@@ -1,12 +1,20 @@
-int g(int x)
+int g()
 {
-    int y = 500;
-    switch(y) {
-        case 100:
-            y=1;
+    int x = 0;
+    int t = 500;
+    switch(t)
+    {
+        case 0:
+            x=5;
+            break;
         case 500:
-            y=2;
-        case 300:
-            y=3;
+            x=2;
+        case 99:
+            x=x+1;
+            break;
+        default:
+            x=t+1;
+
     }
+    return x;
 }

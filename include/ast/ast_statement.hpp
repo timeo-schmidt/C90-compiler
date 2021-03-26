@@ -250,11 +250,13 @@ public:
 
     NodePtr constant_expression;
     NodePtr statement;
+    bool breakAfter;
 
     // Constructors & Destructors
-    LabeledStatement(NodePtr _constant_expression, NodePtr _statement):
+    LabeledStatement(NodePtr _constant_expression, NodePtr _statement, bool _breakAfter):
         constant_expression(_constant_expression),
-        statement(_statement)
+        statement(_statement),
+        breakAfter(_breakAfter)
     {}
 
     virtual ~LabeledStatement() {

@@ -394,8 +394,10 @@ statement
 
 labeled_statement
     : IDENTIFIER ':' statement
-	| CASE constant_expression ':' statement               { $$ = new LabeledStatement($2, $4); }
-	| DEFAULT ':' statement                                { $$ = new LabeledStatement(nullptr, $3); }
+	| CASE constant_expression ':' statement               { $$ = new LabeledStatement($2, $4, false); }
+	| CASE constant_expression ':' statement BREAK         { $$ = new LabeledStatement($2, $4, true); }
+	| DEFAULT ':' statement                                { $$ = new LabeledStatement(nullptr, $3, false); }
+	| DEFAULT ':' statement BREAK                          { $$ = new LabeledStatement(nullptr, $3, true); }
 	;
 
 compound_statement
@@ -423,7 +425,7 @@ expression_statement
 selection_statement
     : IF '(' expression ')' statement					{ $$ = new IfElseState($3, $5, nullptr); }
 	| IF '(' expression ')' statement ELSE statement	{ $$ = new IfElseState($3, $5, $7); }
-	| SWITCH '(' expression ')' compound_statement      { $$ = new SwitchState($3, $5); }
+	| SWITCH '(' expression ')' statement               { $$ = new SwitchState($3, $5); }
 	;
 
 iteration_statement
