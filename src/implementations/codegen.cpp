@@ -1093,7 +1093,7 @@ void SwitchState::codegen(
 ) const {
 
     // Create a scoped SwitchState EXIT label
-    std::string START = makeStartLabel();
+    std::string START = makeStartLabel(); // This should not be used in a switch statement
     std::string EXIT = makeExitLabel();
     destReg = makeCombinedLabel(START, EXIT);
 
@@ -1106,6 +1106,9 @@ void SwitchState::codegen(
     // Generate the following expressions, which should check for the value in $s0
     statement->codegen(destReg, data, bindings, variables);
     std::cout << "nop" << std::endl;
+
+    // End of Switch Statement Label
+    std::cout << EXIT << ":" << std::endl;
 }
 
 void LabeledStatement::codegen(
