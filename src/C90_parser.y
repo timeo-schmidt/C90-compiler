@@ -4,8 +4,12 @@
   #include <cassert>
   #include <string>
 
-typedef std::vector<Node *> Program;
+  typedef std::vector<Node *> Program;
   extern Program g_root;
+
+  // Some C90 Grammar taken from:
+  // https://www.lysator.liu.se/c/ANSI-C-grammar-y.html
+
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so

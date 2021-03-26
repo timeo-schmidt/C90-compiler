@@ -1,6 +1,10 @@
 %option noyywrap
 
 %{
+
+// Some C90 parser contents taken from:
+// https://www.lysator.liu.se/c/ANSI-C-grammar-l.html
+
 // Avoid error "error: `fileno' was not declared in this scope"
 extern "C" int fileno(FILE *stream);
 #include "C90_parser.tab.hpp"
