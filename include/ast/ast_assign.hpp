@@ -189,7 +189,7 @@ public:
     NodePtr expr;
     
     newScope(NodePtr _expr):
-        expr(_expr),
+        expr(_expr)
        
     {}
 
