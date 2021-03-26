@@ -42,7 +42,7 @@ void FuncDecl::codegen(
     std::cout << "nop" << std::endl;
     
     data.stack  = 44;
-    data.scope  += 1;
+   // data.scope  += 1;
     // Evaluating arguments
 
     if(initDeclarator != nullptr)
@@ -60,7 +60,7 @@ void FuncDecl::codegen(
     std::cout << ".global ";
     std::cout << initDeclarator->getName() << std::endl;
     std::cout << std::endl;
-    scopeDecrement(data.scope, variables);
+    //scopeDecrement(data.scope, variables);
 
     }
 
