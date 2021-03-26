@@ -42,7 +42,7 @@ struct varData
 {
 	int32_t offset;
 	int32_t memSize;
-    int scope; 
+    int scope;
     int arraySize;
 };
 
@@ -79,7 +79,7 @@ public:
     // Setters implemented by child
     virtual void            setNext(NodePtr _nextptr)          { throw std::runtime_error("setNext() is not implemented."); }
 
-    // Checker implimented by child 
+    // Checker implimented by child
     virtual bool            isArray()                    const { throw std::runtime_error("isArray() is not implemented."); }
 
 
