@@ -60,7 +60,9 @@ void FuncDecl::codegen(
     std::cout << ".global ";
     std::cout << initDeclarator->getName() << std::endl;
     std::cout << std::endl;
-    //scopeDecrement(data.scope, variables);
+
+
+    scopeDecrement(data.scope, variables);
 
     }
 
@@ -82,7 +84,7 @@ void VarDecl::codegen(
         //std::cout<<"---------"<< size << "---------"<<std::endl;
         for(int i = 0; i<size; i++)
         {
-            // To be changed 
+            // To be changed
             std::cout<<"sw $0, " << (data.stack-4)<< "($sp)" << std::endl;
 
             a.memSize = (declarationSpecifiers->getSize());
@@ -98,11 +100,11 @@ void VarDecl::codegen(
             data.stack  += 4;
 
         }
-    
+
         data.stack  -= 4;
 
     }
-    
+
 
     // TO DO: impliment the types, then un comment this stuff
     //if(type != nullptr)
@@ -341,7 +343,7 @@ void DivOperator::codegen(
     std::cout << "lw $t0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
     std::cout << "nop" << std::endl;
 
-   
+
     std::cout << "lw $t1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
 
@@ -949,8 +951,9 @@ void returnState::codegen(
     std::cout << "jr $ra" << std::endl;
     std::cout << "nop" << std::endl;
 
-  // scopeDecrement(data.scope, variables);
-
+    // std::cout << "begfore call ret" << std::endl;
+    // scopeDecrement(data.scope, variables);
+    // std::cout << "after call ret" << std::endl;
 
 }
 
@@ -1030,7 +1033,7 @@ void WhileState::codegen(
     // EXIT
     std::cout << EXIT << ":" << std::endl;
 
-   scopeDecrement(data.scope, variables);
+    scopeDecrement(data.scope, variables);
 }
 
 
@@ -1192,7 +1195,7 @@ void VarAssign::codegen(
      std::map<std::string,double> &bindings,
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
-        
+
         //Checking if array
         std::string name = var->getName();
 
@@ -1310,7 +1313,7 @@ void arrayAssign::codegen(
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-      
+
         std::string nam = name->getName();
         int index = arrayLocation->getValue();
         nam += '[';
@@ -1330,14 +1333,14 @@ void arrayAssign::codegen(
                     size = u.second.memSize;
                     kitkat = 1;
                     break;
-                } 
+                }
             }
         if(kitkat == 1)
         { break; }
         }
 
     // Obtaining variable memory location (will need to be updated when types)
-   
+
     std::cout << "lw $s0, " << location <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     std::cout << "sw $s0, " << data.stack <<"($sp)" << std::endl;
