@@ -36,6 +36,12 @@ public:
     NodePtr getRight() const
     { return right; }
 
+
+    virtual bool isArray() const override
+        {
+           return getLeft()->isArray();
+        }
+
     // Function declarations
     virtual void print(std::ostream &dst) const override;
 

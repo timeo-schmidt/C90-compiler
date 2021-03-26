@@ -40,7 +40,7 @@ void FuncDecl::codegen(
     std::cout << "nop" << std::endl;
     std::cout << "move $fp, $sp" << std::endl;
     std::cout << "nop" << std::endl;
-
+    data.arraystack = 7000;
     data.stack  = 44;
    // data.scope  += 1;
     // Evaluating arguments
@@ -232,7 +232,8 @@ void AddOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
     std::cout << "nop" << std::endl;
 
 
@@ -262,9 +263,7 @@ void SubOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
-
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -293,7 +292,8 @@ void MulOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+ 
     std::cout << "nop" << std::endl;
 
 
@@ -360,8 +360,9 @@ void LShiftOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -392,8 +393,9 @@ void RShiftOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -425,8 +427,9 @@ void LThanOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -457,8 +460,9 @@ void GThanOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -489,8 +493,9 @@ void LEThanOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -532,8 +537,9 @@ void GEThanOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -574,8 +580,9 @@ void EQOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -616,8 +623,9 @@ void NEOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -659,8 +667,9 @@ void BW_ANDOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -691,8 +700,9 @@ void BW_ExclusiveOrOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -727,8 +737,9 @@ void BW_InclusiveOrOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -760,8 +771,9 @@ void ANDOperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -803,8 +815,11 @@ void OROperator::codegen(
     getRight()->codegen(destReg, data, bindings, variables);
 
     // getting sum and storing destReg
-    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl; // values will need to change when they start taking up more than one memory location
-    std::cout << "nop" << std::endl;
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
+
+
+    std::cout << "lw $s0, " << (data.stack - 8) <<"($sp)" << std::endl;
 
     std::cout << "lw $s1, " << (data.stack - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
@@ -1271,7 +1286,36 @@ void VarAssign::codegen(
      std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-        //Checking if array
+        
+       
+
+
+    if(var->isArray() == 1)
+    {
+        // Going into array working area
+        int stackholder = data.stack;
+        data.stack = data.arraystack;
+        
+        // Getting stack offset for array index
+        var->getOffset(destReg, data, bindings, variables);
+        std::cout << "lw $s5, " << (data.stack  - 4) <<"($sp)" << std::endl;
+        std::cout << "nop" << std::endl;
+
+         // Leaving array working area
+        data.arraystack = data.stack;
+        data.stack = stackholder;
+
+        // calculating expression
+        expr->codegen(destReg, data, bindings, variables);
+        std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl; //may cause issue 
+        std::cout << "nop" << std::endl;
+
+        // storring expression in array locaiton
+        std::cout << "sw $s0, ($s5)" << std::endl;
+        std::cout << "nop" << std::endl;
+    }
+    else
+    {
         std::string name = var->getName();
 
         int kitkat = 0;
@@ -1283,7 +1327,7 @@ void VarAssign::codegen(
             {
                 if( u.first == name && u.second.scope == i )
                 {
-                    location = u.second.offset + (u.second.arraySize*4);
+                    location = u.second.offset;
                     size = u.second.memSize;
                     kitkat = 1;
                     break;
@@ -1292,17 +1336,16 @@ void VarAssign::codegen(
         if(kitkat == 1)
         { break; }
         }
+    
 
-    // Obtaining variable memory location (will need to be updated when types)
-
-
-    // Get new value
-    expr->codegen(destReg, data, bindings, variables);
-    std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-    std::cout << "sw $s0, " << location <<"($sp)" << std::endl;
-    std::cout << "nop" << std::endl;
-
+        // Get new value
+        expr->codegen(destReg, data, bindings, variables);
+        std::cout << "lw $s0, " << (data.stack  - 4) <<"($sp)" << std::endl;
+        std::cout << "nop" << std::endl;
+        std::cout << "nop" << std::endl;
+        std::cout << "sw $s0, " << location <<"($sp)" << std::endl;
+        std::cout << "nop" << std::endl;
+    }
 }
 
 
@@ -1378,38 +1421,73 @@ void arrayAssign::codegen(
     std::unordered_multimap<std::string,struct varData> &variables
 ) const {
 
-
-        std::string nam = name->getName();
-        int index = arrayLocation->getValue();
-
-        int kitkat = 0;
-        int32_t location;
-        int32_t size;
-        for(int i = data.scope; i > -1; i--)
-        {
-            for(const auto& u : variables)
-            {
-                if( u.first == nam && u.second.scope == i )
-                {
-                    location = u.second.offset + (4*u.second.arraySize);
-                    size = u.second.memSize;
-                    kitkat = 1;
-                    break;
-                }
-            }
-        if(kitkat == 1)
-        { break; }
-        }
-
-    // Obtaining variable memory location (will need to be updated when types)
-
-    std::cout << "lw $s0, " << location  <<"($sp)" << std::endl;
+    // Going into array working area
+        int stackholder = data.stack;
+        data.stack = data.arraystack;
+    // Finding array offset 
+    getOffset(destReg, data,  bindings, variables);
+    std::cout << "lw $s5, " << (data.stack  - 4) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
-    std::cout << "sw $s0, " << data.stack <<"($sp)" << std::endl;
+
+    // Leaving array working area
+    data.arraystack = data.stack;
+    data.stack = stackholder;
+
+    // storing offset location in latest stack
+    std::cout << "lw $s0, ($s5)" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s0, " << (data.stack) <<"($sp)" << std::endl;
     std::cout << "nop" << std::endl;
     data.stack += 4;
-
 }
+
+void arrayAssign::getOffset(
+    std::string destReg,
+    struct Data &data,
+    std::map<std::string,double> &bindings,
+    std::unordered_multimap<std::string,struct varData> &variables
+) const{
+   
+    
+    std::string nam = name->getName();
+    // calculating index
+    arrayLocation->codegen(destReg, data, bindings, variables);
+    std::cout << "lw $s5, " << (data.stack  - 4) << "($sp)" << std::endl;
+    std::cout << "addi $s0, $0, 4" << std::endl;
+    std::cout << "mul $s3, $s0, $s5" << std::endl;
+    std::cout << "nop" << std::endl;
+    // calculating offset 
+    std::cout << "addi $s0, $s3, ";
+
+    int kitkat = 0;
+    int location=0;
+    int32_t size;
+    for(int i = data.scope; i > -2; i--)
+    {
+        for(const auto& u : variables)
+        {
+            if( u.first == nam && u.second.scope == i )
+            {              
+                std::cout << u.second.offset <<std::endl;
+                size = u.second.memSize;
+                kitkat = 1;
+                break;
+            }
+        }
+    if(kitkat == 1)
+    { break; }
+    }
+    
+    
+     // location <<std:: endl ;
+    // << location << std::endl;
+    std::cout << "add $s0, $s0, $sp" << std::endl;
+    std::cout << "nop" << std::endl;
+    std::cout << "sw $s0, " << (data.stack - 4) <<"($sp)" << std::endl;
+    std::cout << "nop" << std::endl;
+}
+
+
 
 
 void newScope::codegen(
